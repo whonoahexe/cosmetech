@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Playfair_Display, Space_Mono } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import Navbar from "@/components/layout/navbar";
 
 const bodyFont = Inter({
   variable: "--font-body",
@@ -34,6 +35,7 @@ export default function RootLayout({
       <body
         className={`${bodyFont.variable} ${headingFont.variable} ${monoFont.variable} antialiased`}
       >
+        <Navbar />
         {children}
       </body>
     </html>
