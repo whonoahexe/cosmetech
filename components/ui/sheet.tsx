@@ -44,11 +44,27 @@ function SheetContent({
   children,
   side = "right",
   showCloseButton = true,
+  title,
   ...props
 }: React.ComponentProps<typeof SheetPrimitive.Content> & {
   side?: "top" | "right" | "bottom" | "left";
   showCloseButton?: boolean;
+  title?: string;
 }) {
+  const hasTitle = (node: React.ReactNode): boolean => {
+    return React.Children.toArray(node).some((child) => {
+      if (!React.isValidElement(child)) {
+        return false;
+      }
+
+      if (child.type === SheetTitle || child.type === SheetPrimitive.Title) {
+        return true;
+      }
+
+      return hasTitle(child.props?.children);
+    });
+  };
+
   return (
     <SheetPortal>
       <SheetOverlay />
@@ -61,6 +77,9 @@ function SheetContent({
         )}
         {...props}
       >
+        {!hasTitle(children) && (
+          <SheetPrimitive.Title className="sr-only">{title ?? "Sheet"}</SheetPrimitive.Title>
+        )}
         {children}
         {showCloseButton && (
           <SheetPrimitive.Close data-slot="sheet-close" asChild>

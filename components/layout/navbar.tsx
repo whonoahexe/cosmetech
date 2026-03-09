@@ -62,7 +62,7 @@ const Navbar = () => {
                 <Menu className="size-5 text-foreground" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-72">
+            <SheetContent side="right" className="w-72" title="Desktop navigation menu">
               <nav className="flex flex-col gap-4 pt-8 px-2">
                 <p>This is a temporary navbar</p>
                 <Link
@@ -123,7 +123,7 @@ const Navbar = () => {
                 <Menu className="size-5" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-72">
+            <SheetContent side="right" className="w-72" title="Mobile navigation menu">
               <nav className="flex flex-col gap-4 pt-8 px-2">
                 <Link
                   href="/"
