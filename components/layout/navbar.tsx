@@ -34,7 +34,7 @@ const Navbar = () => {
           <InputGroup className="relative w-60 shadow-2xl">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 size-5 text-muted-foreground pointer-events-none" />
             {!desktopSearch && (
-              <div className="pointer-events-none absolute left-12 top-1/2 -translate-y-1/2 text-sm text-muted-foreground peer-focus:opacity-0">
+              <div className="pointer-events-none absolute left-12 top-1/2 -translate-y-1/2 text-sm text-foreground peer-focus:opacity-0">
                 Discover <span className="font-semibold">anything</span>
               </div>
             )}
@@ -59,7 +59,7 @@ const Navbar = () => {
                 className="size-14 rounded-full border-border cursor-pointer"
                 aria-label="Open menu"
               >
-                <Menu className="size-5" />
+                <Menu className="size-5 text-foreground" />
               </Button>
             </SheetTrigger>
             <SheetContent side="right" className="w-72">

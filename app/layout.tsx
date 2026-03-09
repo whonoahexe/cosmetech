@@ -36,7 +36,7 @@ export default function RootLayout({
         className={`${bodyFont.variable} ${headingFont.variable} ${monoFont.variable} antialiased`}
       >
         <Navbar />
-        {children}
+        <div className="px-6 md:px-14 ">{children}</div>
       </body>
     </html>
   );
