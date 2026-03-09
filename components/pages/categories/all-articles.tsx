@@ -71,7 +71,7 @@ const CATEGORY_ARTICLES: ArticleCardData[] = [
 
 export function AllArticlesSection() {
   return (
-    <section className="flex flex-col">
+    <section className="flex flex-col mb-12">
       <div className="flex items-end gap-6 py-4">
         <h2 className="type-heading-1 text-foreground">All Articles</h2>
         <Button variant="outline" className="h-9 rounded-full w-16" aria-label="Sort all articles">
