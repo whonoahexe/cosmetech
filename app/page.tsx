@@ -3,6 +3,7 @@ import {
   FilterBar,
   HighlightedCarousel,
   HighlightedCategories,
+  UpcomingEvents,
 } from "@/components/pages/home";
 
 export default function Home() {
@@ -12,6 +13,7 @@ export default function Home() {
       <HighlightedCarousel />
       <ArticleGrid />
       <HighlightedCategories />
+      <UpcomingEvents />
     </div>
   );
 }

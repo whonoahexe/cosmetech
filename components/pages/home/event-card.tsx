@@ -1,0 +1,77 @@
+"use client";
+
+import { motion } from "motion/react";
+import { ArrowUpRight } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+
+export interface EventCardData {
+  title: string;
+  location: string;
+  date: string;
+  image?: string | null;
+  isVirtual?: boolean;
+  isSponsored?: boolean;
+}
+
+interface EventCardProps extends EventCardData {
+  tilt?: number;
+  onHoverStart?: () => void;
+  onHoverEnd?: () => void;
+  className?: string;
+}
+
+export function EventCard({
+  title,
+  location,
+  date,
+  image,
+  isVirtual,
+  isSponsored,
+  tilt = 0,
+  onHoverStart,
+  onHoverEnd,
+  className,
+}: EventCardProps) {
+  return (
+    <motion.div
+      className={cn("cursor-pointer", className)}
+      initial={{ rotate: tilt }}
+      animate={{ rotate: tilt }}
+      whileHover={{ rotate: 0, y: -48 }}
+      transition={{ type: "spring", stiffness: 280, damping: 22 }}
+      onHoverStart={onHoverStart}
+      onHoverEnd={onHoverEnd}
+      style={{ originX: 0.5, originY: 0.5 }}
+    >
+      <div className="w-75 h-95 rounded-[24px] border border-border bg-[#D9D9D9] flex flex-col items-center justify-between px-6 py-16 gap-6">
+        {/* Thumbnail */}
+        <div className="w-24 h-24 rounded-xl bg-accent overflow-hidden shrink-0">
+          {image && <img src={image} alt={title} className="w-full h-full object-cover" />}
+        </div>
+
+        {/* Details */}
+        <div className="flex flex-col items-center gap-3 w-full">
+          <h4 className="type-heading-4 text-foreground text-center">{title}</h4>
+
+          {/* Metadata row */}
+          <div className="flex items-center gap-3 flex-wrap justify-center">
+            <Badge variant="secondary">{location}</Badge>
+            {isVirtual && <Badge variant="default">Virtual</Badge>}
+            {isSponsored && <Badge>Sponsored</Badge>}
+            <span className="type-paragraph-medium text-foreground">•</span>
+            <span className="type-paragraph-mini text-muted-foreground whitespace-nowrap">
+              {date}
+            </span>
+          </div>
+
+          {/* CTA */}
+          <Button variant="outline" className="rounded-full w-16" aria-label={`View ${title}`}>
+            <ArrowUpRight className="size-4" />
+          </Button>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
