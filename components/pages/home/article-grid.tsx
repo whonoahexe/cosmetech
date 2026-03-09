@@ -91,7 +91,9 @@ export function ArticleGrid({
           {leftBottom && <ArticleCard {...leftBottom} colSpan={2} />}
         </div>
 
-        <div className="col-span-4">{center && <ArticleCard {...center} colSpan={4} />}</div>
+        <div className="col-span-4">
+          {center && <ArticleCard {...center} colSpan={4} />}
+        </div>
 
         <div className="col-span-2 flex flex-col gap-5">
           {rightTop && <ArticleCard {...rightTop} colSpan={2} />}

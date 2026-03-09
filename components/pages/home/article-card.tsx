@@ -79,6 +79,18 @@ export function ArticleCard({
           </>
         ) : (
           <>
+            {isGrid && (
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Badge variant="secondary">{category}</Badge>
+                  {isSponsored && <Badge variant="default">Sponsored</Badge>}
+                </div>
+                <span className="type-paragraph-mini text-muted-foreground whitespace-nowrap">
+                  {readTime} min read
+                </span>
+              </div>
+            )}
+
             {isLargeGrid ? (
               <h2 className="type-heading-1 text-foreground">{title}</h2>
             ) : (
@@ -98,15 +110,17 @@ export function ArticleCard({
               {excerpt}
             </p>
 
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Badge variant="secondary">{category}</Badge>
-                {isSponsored && <Badge variant="default">Sponsored</Badge>}
+            {isList && (
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Badge variant="secondary">{category}</Badge>
+                  {isSponsored && <Badge variant="default">Sponsored</Badge>}
+                </div>
+                <span className="type-paragraph-mini text-muted-foreground whitespace-nowrap">
+                  {readTime} min read
+                </span>
               </div>
-              <span className="type-paragraph-mini text-muted-foreground whitespace-nowrap">
-                {readTime} min read
-              </span>
-            </div>
+            )}
           </>
         )}
 
