@@ -1,5 +1,10 @@
-import { FilterBar } from "@/components/pages/home";
+import { FilterBar, HighlightedCarousel } from "@/components/pages/home";
 
 export default function Home() {
-  return <FilterBar />;
+  return (
+    <>
+      <FilterBar />
+      <HighlightedCarousel />
+    </>
+  );
 }
