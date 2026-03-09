@@ -4,3 +4,6 @@ export { ArticleGrid } from "./article-grid";
 export { ArticleCard } from "./article-card";
 export type { ArticleCardData } from "./article-card";
 export type { ArticleFilter } from "./article-grid";
+export { HighlightedCategories, ALL_CATEGORIES } from "./highlighted-categories";
+export { CategoryCard } from "./category-card";
+export type { CategoryCardData } from "./category-card";
