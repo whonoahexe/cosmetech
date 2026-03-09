@@ -4,7 +4,12 @@ import { ArrowUpRight, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 
-const SOCIAL_LINKS = ["linkedin", "facebook", "instagram", "twitter"];
+const SOCIAL_LINKS = [
+  { label: "linkedin", href: "https://linkedin.com" },
+  { label: "facebook", href: "https://facebook.com" },
+  { label: "instagram", href: "https://instagram.com" },
+  { label: "twitter", href: "https://twitter.com" },
+];
 
 export function AboutPageContent() {
   return (
@@ -41,8 +46,16 @@ export function AboutPageContent() {
             </p>
           </div>
 
-          <div className="type-monospaced text-primary text-[30px]! leading-6 tracking-[-1.4px] md:text-[30px]!">
-            [ advertise ] / [ contact ]
+          <div className="type-monospaced flex flex-wrap items-center gap-3 text-primary text-[30px]! leading-6 tracking-[-1.4px] md:text-[30px]!">
+            [
+            <Link href="/contact#advertise" className="hover:underline">
+              advertise
+            </Link>
+            ] / [
+            <Link href="/contact" className="hover:underline">
+              contact
+            </Link>
+            ]
           </div>
 
           <Separator />
@@ -94,10 +107,10 @@ export function AboutPageContent() {
 
         <div className="type-monospaced flex flex-wrap items-center gap-4 text-primary text-[30px]! leading-6 tracking-[-1.4px] md:text-[30px]! py-16">
           {SOCIAL_LINKS.map((social, index) => (
-            <span key={social}>
+            <span key={social.label}>
               [{" "}
-              <Link href="#" className="hover:underline">
-                {social}
+              <Link href={social.href} target="_blank" rel="noreferrer" className="hover:underline">
+                {social.label}
               </Link>{" "}
               ]{index < SOCIAL_LINKS.length - 1 ? " /" : ""}
             </span>
