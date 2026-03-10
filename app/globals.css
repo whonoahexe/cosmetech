@@ -301,6 +301,14 @@ body {
   }
 }
 
+::-webkit-scrollbar {
+  display: none;
+}
+
+[data-scroll-locked][data-scroll-locked] {
+  overflow: scroll !important;
+}
+
 /* Typography */
 
 .type-heading-1,
