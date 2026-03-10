@@ -10,12 +10,15 @@ export interface EventCardData {
   title: string;
   location: string;
   date: string;
+  category?: string;
+  excerpt?: string;
   image?: string | null;
   isVirtual?: boolean;
   isSponsored?: boolean;
 }
 
 interface EventCardProps extends EventCardData {
+  variant?: "stacked" | "list";
   tilt?: number;
   onHoverStart?: () => void;
   onHoverEnd?: () => void;
@@ -26,14 +29,41 @@ export function EventCard({
   title,
   location,
   date,
+  category,
+  excerpt,
   image,
   isVirtual,
   isSponsored,
+  variant = "stacked",
   tilt = 0,
   onHoverStart,
   onHoverEnd,
   className,
 }: EventCardProps) {
+  if (variant === "list") {
+    return (
+      <article className={cn("flex items-center gap-5", className)}>
+        <div className="h-60 w-109 shrink-0 overflow-hidden rounded-3xl bg-[#D9D9D9]">
+          {image && <img src={image} alt={title} className="h-full w-full object-cover" />}
+        </div>
+
+        <div className="flex min-h-60 flex-1 flex-col justify-between py-4">
+          <div className="flex items-center gap-2.5">
+            <Badge variant="secondary">{category ?? location}</Badge>
+            {isSponsored && <Badge variant="default">Sponsored</Badge>}
+            <span className="type-paragraph text-foreground">&bull;</span>
+            <span className="type-paragraph-mini text-muted-foreground whitespace-nowrap">{date}</span>
+          </div>
+
+          <div className="space-y-4">
+            <h3 className="type-heading-3 text-foreground">{title}</h3>
+            <p className="type-paragraph-medium text-muted-foreground">{excerpt}</p>
+          </div>
+        </div>
+      </article>
+    );
+  }
+
   return (
     <motion.div
       className={cn("cursor-pointer", className)}
