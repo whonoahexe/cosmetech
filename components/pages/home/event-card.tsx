@@ -52,7 +52,9 @@ export function EventCard({
             <Badge variant="secondary">{category ?? location}</Badge>
             {isSponsored && <Badge variant="default">Sponsored</Badge>}
             <span className="type-paragraph text-foreground">&bull;</span>
-            <span className="type-paragraph-mini text-muted-foreground whitespace-nowrap">{date}</span>
+            <span className="type-paragraph-mini text-muted-foreground whitespace-nowrap">
+              {date}
+            </span>
           </div>
 
           <div className="space-y-4">

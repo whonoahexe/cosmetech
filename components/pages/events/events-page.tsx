@@ -90,18 +90,20 @@ function EventsSection({ title, events }: { title: string; events: EventCardData
     <section className="space-y-4">
       <div className="flex items-end gap-6 py-4">
         <h2 className="type-heading-1 text-foreground">{title}</h2>
-        <Button variant="outline" className="h-9 w-16 rounded-full" aria-label={`${title} controls`}>
+        <Button
+          variant="outline"
+          className="h-9 w-16 rounded-full"
+          aria-label={`${title} controls`}
+        >
           <ArrowDown className="size-4" />
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 gap-x-5 gap-y-8 py-4 xl:grid-cols-2">
+      <div className="grid grid-cols-8 gap-x-5 gap-y-8 py-4">
         {events.map((event) => (
-          <EventCard
-            key={`${title}-${event.title}-${event.date}`}
-            {...event}
-            variant="list"
-          />
+          <div key={`${title}-${event.title}-${event.date}`} className="col-span-8 xl:col-span-4">
+            <EventCard {...event} variant="list" />
+          </div>
         ))}
       </div>
     </section>
@@ -110,9 +112,9 @@ function EventsSection({ title, events }: { title: string; events: EventCardData
 
 export function EventsPageContent() {
   return (
-    <div className="mt-8 mb-12 flex flex-col gap-4">
-      <section className="flex flex-col gap-6 py-8 lg:flex-row lg:items-start lg:justify-between">
-        <div className="flex max-w-230 flex-col gap-4">
+    <div className="mt-4 mb-12 flex flex-col gap-4">
+      <section className="grid grid-cols-8 gap-5 py-8">
+        <div className="col-span-8 flex max-w-230 flex-col gap-4 xl:col-span-5">
           <h1 className="type-heading-1 text-foreground">EVENTS</h1>
 
           <div className="flex flex-wrap items-center gap-3 py-4">
@@ -144,7 +146,7 @@ export function EventsPageContent() {
           </div>
         </div>
 
-        <p className="type-paragraph-large-medium max-w-166 text-foreground lg:pt-2">
+        <p className="type-paragraph-large-medium col-span-8 max-w-166 text-foreground xl:col-span-3 xl:pt-2">
           Conferences, workshops, and industry gatherings from across the global cosmetics and
           personal care sector. Explore upcoming events, past highlights, and opportunities to
           connect with researchers, manufacturers, and innovators shaping the future of beauty.
