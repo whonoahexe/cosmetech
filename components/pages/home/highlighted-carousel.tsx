@@ -10,6 +10,7 @@ import Autoplay from "embla-carousel-autoplay";
 import { cn } from "@/lib/utils";
 import { useEffect, useRef, useState } from "react";
 import { Badge } from "@/components/ui/badge";
+import Link from "next/link";
 
 // Placeholder slides — replace with real ArticleCard data from Sanity
 const SLIDES = [
@@ -69,22 +70,24 @@ export function HighlightedCarousel() {
         {SLIDES.map((slide) => (
           <CarouselItem key={slide.id} className="pl-0">
             <div className="relative w-full min-h-95 rounded-[24px] overflow-hidden bg-[#d9d9d9] h-150">
-              {/* Background image */}
-              {slide.image && (
-                <img
-                  src={slide.image}
-                  alt={slide.title}
-                  className="absolute inset-0 w-full h-full object-cover"
-                />
-              )}
+              {/* Background image area entirely linked */}
+              <Link href="/article" className="absolute inset-0 z-0">
+                {slide.image && (
+                  <img
+                    src={slide.image}
+                    alt={slide.title}
+                    className="w-full h-full object-cover transition-opacity hover:opacity-90"
+                  />
+                )}
+              </Link>
 
               {/* Bottom gradient for text legibility over images */}
-              {/* <div className="absolute inset-0 bg-linear-to-t from-black/30 via-transparent to-transparent" /> */}
+              {/* <div className="absolute inset-0 bg-linear-to-t from-black/30 via-transparent to-transparent pointer-events-none" /> */}
 
               {/* Article details */}
-              <div className="absolute bottom-0 left-0 right-0 flex flex-col items-center gap-3 pb-16 text-center">
+              <div className="absolute bottom-0 left-0 right-0 flex flex-col items-center gap-3 pb-16 text-center pointer-events-none">
                 {/* Metadata row */}
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-3 pointer-events-auto">
                   <Badge>{slide.category}</Badge>
                   <span className="text-foreground type-paragraph-medium">•</span>
                   <span className="text-muted-foreground type-paragraph-mini">
@@ -93,10 +96,12 @@ export function HighlightedCarousel() {
                 </div>
 
                 {/* Title */}
-                <h2 className="text-foreground type-heading-2">{slide.title}</h2>
+                <Link href="/article" className="pointer-events-auto hover:underline">
+                  <h2 className="text-foreground type-heading-2">{slide.title}</h2>
+                </Link>
 
                 {/* Excerpt */}
-                <p className="text-muted-foreground type-paragraph-medium max-w-130">
+                <p className="text-muted-foreground type-paragraph-medium max-w-130 pointer-events-auto">
                   {slide.excerpt}
                 </p>
               </div>

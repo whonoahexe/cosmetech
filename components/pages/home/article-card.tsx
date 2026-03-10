@@ -1,6 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 export interface ArticleCardData {
   image?: string | null;
@@ -39,12 +40,14 @@ export function ArticleCard({
   if (isNewsHorizontal) {
     return (
       <article className={cn("grid grid-cols-1 gap-5 lg:grid-cols-8", className)}>
-        <div className="h-111 overflow-hidden rounded-3xl bg-[#D9D9D9] lg:col-span-4">
+        <Link href="/article" className="block h-111 overflow-hidden rounded-3xl bg-[#D9D9D9] lg:col-span-4 transition-opacity hover:opacity-90">
           {image && <img src={image} alt={title} className="h-full w-full object-cover" />}
-        </div>
+        </Link>
 
         <div className="flex flex-col gap-4 px-2 lg:col-span-4">
-          <h3 className="type-heading-3 text-foreground">{title}</h3>
+          <Link href="/article" className="w-fit hover:underline">
+            <h3 className="type-heading-3 text-foreground">{title}</h3>
+          </Link>
 
           <div className="flex items-center gap-2">
             <Badge variant="secondary">{category}</Badge>
@@ -74,14 +77,15 @@ export function ArticleCard({
       )}
     >
       {!isList && (
-        <div
+        <Link
+          href="/article"
           className={cn(
-            "w-full overflow-hidden rounded-3xl bg-[#D9D9D9]",
+            "block w-full overflow-hidden rounded-3xl bg-[#D9D9D9] transition-opacity hover:opacity-90",
             isFeatured ? "aspect-1123/600" : "aspect-square"
           )}
         >
           {image && <img src={image} alt={title} className="h-full w-full object-cover" />}
-        </div>
+        </Link>
       )}
 
       <div
@@ -94,7 +98,9 @@ export function ArticleCard({
       >
         {isFeatured ? (
           <>
-            <h2 className="type-heading-2 text-foreground">{title}</h2>
+            <Link href="/article" className="hover:underline">
+              <h2 className="type-heading-2 text-foreground">{title}</h2>
+            </Link>
             <p className="type-paragraph-medium max-w-130 text-muted-foreground">{excerpt}</p>
             <div className="flex items-center justify-center gap-2">
               <Badge variant="default">{category}</Badge>
@@ -120,9 +126,13 @@ export function ArticleCard({
             )}
 
             {isLargeGrid ? (
-              <h2 className="type-heading-1 text-foreground">{title}</h2>
+              <Link href="/article" className="w-fit hover:underline">
+                <h2 className="type-heading-1 text-foreground">{title}</h2>
+              </Link>
             ) : (
-              <h3 className="type-heading-3 text-foreground">{title}</h3>
+              <Link href="/article" className="w-fit hover:underline">
+                <h3 className="type-heading-3 text-foreground">{title}</h3>
+              </Link>
             )}
 
             <p
