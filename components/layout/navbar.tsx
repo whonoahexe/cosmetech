@@ -6,7 +6,6 @@ import { Search, X, Menu } from "lucide-react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -78,6 +77,7 @@ const SearchBar = ({
 export const Navbar = () => {
   const [searchOpen, setSearchOpen] = useState(false);
   const [desktopMenuOpen, setDesktopMenuOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [desktopSearch, setDesktopSearch] = useState("");
   const [mobileSearch, setMobileSearch] = useState("");
 
@@ -188,31 +188,77 @@ export const Navbar = () => {
             {searchOpen ? <X className="size-5" /> : <Search className="size-5" />}
           </Button>
 
-          <Sheet>
-            <SheetTrigger asChild>
+          <DropdownMenu open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+            <DropdownMenuTrigger asChild>
               <Button
                 variant="outline"
                 size="icon"
                 className="size-10 rounded-full border-border"
-                aria-label="Open menu"
+                aria-label={mobileMenuOpen ? "Close menu" : "Open menu"}
               >
-                <Menu className="size-5" />
+                {mobileMenuOpen ? <X className="size-5" /> : <Menu className="size-5" />}
               </Button>
-            </SheetTrigger>
-            <SheetContent side="right" className="w-72" title="Mobile navigation menu">
-              <nav className="flex flex-col gap-4 pt-8 px-2">
-                {PRIMARY_NAV_LINKS.map((link) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    className="text-base font-medium hover:text-primary transition-colors"
-                  >
-                    {link.label}
-                  </Link>
-                ))}
-              </nav>
-            </SheetContent>
-          </Sheet>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              align="end"
+              side="bottom"
+              sideOffset={12}
+              className="w-[calc(100vw-3rem)] max-w-120 rounded-2xl border border-border bg-primary p-0 text-primary-foreground shadow-2xl ring-0"
+            >
+              <div className="rounded-t-2xl border-b border-border px-3 py-2">
+                <div className="grid grid-cols-[1fr_auto_1fr] items-center">
+                  <div aria-hidden="true" />
+                  <span className="font-display text-2xl leading-none tracking-tight text-primary-foreground">
+                    Cosmetech
+                  </span>
+                  <div className="justify-self-end">
+                    <Button
+                      variant="ghost"
+                      size="icon-sm"
+                      className="rounded-md border border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10"
+                      aria-label="Close menu"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      <X className="size-4" />
+                    </Button>
+                  </div>
+                </div>
+              </div>
+
+              <div className="space-y-8 px-6 py-8">
+                <nav className="flex flex-col items-center gap-1 text-center">
+                  {PRIMARY_NAV_LINKS.map((link) => (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      className="font-display text-[2.5rem] leading-none tracking-tight text-primary-foreground transition-opacity duration-200 hover:opacity-75"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
+                </nav>
+
+                <div className="text-center">
+                  <p className="mb-3 text-[10px] font-semibold uppercase tracking-[0.2em] text-primary-foreground/65">
+                    Explore
+                  </p>
+                  <div className="flex flex-col items-center gap-1">
+                    {SECONDARY_NAV_LINKS.map((link) => (
+                      <Link
+                        key={link.href}
+                        href={link.href}
+                        className="text-xs text-primary-foreground/90 transition-opacity duration-200 hover:opacity-70"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        {link.label}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </div>
 
