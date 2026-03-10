@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 export interface CategoryCardData {
   name: string;
@@ -11,12 +12,11 @@ interface CategoryCardProps extends CategoryCardData {
   className?: string;
 }
 
-export function CategoryCard({ name, description, image, className }: CategoryCardProps) {
-  return (
+export function CategoryCard({ name, description, image, slug, className }: CategoryCardProps) {
+  const CardContent = (
     <div
       className={cn("relative w-full h-full rounded-3xl overflow-hidden bg-[#D9D9D9]", className)}
     >
-      {/* Background image */}
       {image && (
         <img src={image} alt={name} className="absolute inset-0 w-full h-full object-cover" />
       )}
@@ -28,4 +28,14 @@ export function CategoryCard({ name, description, image, className }: CategoryCa
       </div>
     </div>
   );
+
+  if (slug) {
+    return (
+      <Link href={`/categories?category=${slug}`} className="block h-full w-full">
+        {CardContent}
+      </Link>
+    );
+  }
+
+  return CardContent;
 }

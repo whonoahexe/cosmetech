@@ -1,7 +1,11 @@
+"use client";
+
 import { ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ArticleCard, type ArticleCardData } from "./article-card";
 import { cn } from "@/lib/utils";
+import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
 export type ArticleFilter = "latest" | "popular" | "sponsored" | "all";
 
@@ -58,20 +62,27 @@ const PLACEHOLDER_ARTICLES: ArticleCardData[] = [
 ];
 
 interface ArticleGridProps {
-  filter?: ArticleFilter;
   articles?: ArticleCardData[];
   className?: string;
 }
 
-export function ArticleGrid({
-  filter = "latest",
+export function ArticleGridContent({
   articles = PLACEHOLDER_ARTICLES,
   className,
 }: ArticleGridProps) {
+  const searchParams = useSearchParams();
+  const filterParam = searchParams.get("sort")?.toLowerCase();
+
+  const filter: ArticleFilter = ["latest", "popular", "sponsored", "all"].includes(
+    filterParam as string
+  )
+    ? (filterParam as ArticleFilter)
+    : "latest";
+
   const [leftTop, leftBottom, center, rightTop, rightBottom] = articles;
 
   return (
-    <section className={cn("flex flex-col", className)}>
+    <section id="article-grid" className={cn("flex flex-col", className)}>
       {/* Section header */}
       <div className="flex items-end gap-6 py-4">
         <h2 className="type-heading-1 text-foreground">{FILTER_LABELS[filter]}</h2>
@@ -99,5 +110,22 @@ export function ArticleGrid({
         </div>
       </div>
     </section>
+  );
+}
+
+export function ArticleGrid(props: ArticleGridProps) {
+  return (
+    <Suspense
+      fallback={
+        <section id="article-grid" className={cn("flex flex-col", props.className)}>
+          {/* Placeholder header while loading */}
+          <div className="flex items-end gap-6 py-4">
+            <h2 className="type-heading-1 text-foreground">Loading...</h2>
+          </div>
+        </section>
+      }
+    >
+      <ArticleGridContent {...props} />
+    </Suspense>
   );
 }
