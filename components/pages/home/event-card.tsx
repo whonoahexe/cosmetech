@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { motion } from "motion/react";
 import { ArrowUpRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
@@ -15,6 +16,7 @@ export interface EventCardData {
   image?: string | null;
   isVirtual?: boolean;
   isSponsored?: boolean;
+  href?: string;
 }
 
 interface EventCardProps extends EventCardData {
@@ -34,6 +36,7 @@ export function EventCard({
   image,
   isVirtual,
   isSponsored,
+  href,
   variant = "stacked",
   tilt = 0,
   onHoverStart,
@@ -41,8 +44,8 @@ export function EventCard({
   className,
 }: EventCardProps) {
   if (variant === "list") {
-    return (
-      <article className={cn("flex items-center gap-5", className)}>
+    const inner = (
+      <article className={cn("flex items-center gap-5 group", className)}>
         <div className="h-60 w-109 shrink-0 overflow-hidden rounded-3xl bg-[#D9D9D9]">
           {image && <img src={image} alt={title} className="h-full w-full object-cover" />}
         </div>
@@ -58,12 +61,19 @@ export function EventCard({
           </div>
 
           <div className="space-y-4">
-            <h3 className="type-heading-3 text-foreground">{title}</h3>
+            <h3 className="type-heading-3 text-foreground group-hover:underline transition-all">
+              {title}
+            </h3>
             <p className="type-paragraph-medium text-muted-foreground">{excerpt}</p>
           </div>
         </div>
       </article>
     );
+
+    if (href) {
+      return <Link href={href}>{inner}</Link>;
+    }
+    return inner;
   }
 
   return (
@@ -99,9 +109,17 @@ export function EventCard({
           </div>
 
           {/* CTA */}
-          <Button variant="outline" className="rounded-full w-16" aria-label={`View ${title}`}>
-            <ArrowUpRight className="size-4" />
-          </Button>
+          {href ? (
+            <Button variant="outline" className="rounded-full w-16" aria-label={`View ${title}`} asChild>
+              <Link href={href}>
+                <ArrowUpRight className="size-4" />
+              </Link>
+            </Button>
+          ) : (
+            <Button variant="outline" className="rounded-full w-16" aria-label={`View ${title}`}>
+              <ArrowUpRight className="size-4" />
+            </Button>
+          )}
         </div>
       </div>
     </motion.div>

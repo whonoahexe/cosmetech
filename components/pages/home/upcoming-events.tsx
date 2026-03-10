@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -21,28 +22,33 @@ const PLACEHOLDER_EVENTS: EventCardData[] = [
     title: "Cosmetech Formulation Summit 2026",
     location: "Mumbai",
     date: "19 March 2026",
+    href: "/events/cosmetech-formulation-summit-2026",
   },
   {
     title: "Fragrance & Sensory Forum",
     location: "Dubai",
     date: "12 April 2026",
+    href: "/events/fragrance-sensory-forum",
   },
   {
     title: "Sustainable Packaging",
     location: "Singapore",
     date: "6 May 2026",
+    href: "/events/sustainable-packaging",
   },
   {
     title: "BeautyTech & AI Innovation Expo",
     location: "Bengaluru",
     date: "22 June 2026",
     isSponsored: true,
+    href: "/events/beautytech-ai-innovation-expo",
   },
   {
     title: "Regulatory & Compliance Workshop: Asia-Pacific",
     location: "Virtual",
     date: "19 March 2026",
     isVirtual: true,
+    href: "/events/regulatory-compliance-workshop-asia-pacific",
   },
 ];
 
@@ -64,8 +70,11 @@ export function UpcomingEvents({ events = PLACEHOLDER_EVENTS, className }: Upcom
           size="icon"
           className="rounded-full shrink-0 w-16"
           aria-label="Browse all events"
+          asChild
         >
-          <ArrowUpRight className="size-4" />
+          <Link href="/events">
+            <ArrowUpRight className="size-4" />
+          </Link>
         </Button>
       </div>
 
@@ -93,9 +102,11 @@ export function UpcomingEvents({ events = PLACEHOLDER_EVENTS, className }: Upcom
         </div>
 
         {/* Explore All Events CTA */}
-        <Button size="lg" className="rounded-full px-8 h-12">
-          Explore All Events
-          <ArrowUpRight className="size-4" />
+        <Button size="lg" className="rounded-full px-8 h-12" asChild>
+          <Link href="/events">
+            Explore All Events
+            <ArrowUpRight className="size-4" />
+          </Link>
         </Button>
       </div>
     </section>

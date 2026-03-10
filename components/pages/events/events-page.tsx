@@ -12,6 +12,7 @@ const ONGOING_EVENTS: EventCardData[] = [
     date: "18/02/2026",
     excerpt:
       "An intensive session exploring refill systems, mono-material packaging, and evolving sustainability standards.",
+    href: "/events/sustainable-packaging-for-beauty-workshop",
   },
   {
     title: "Global Ingredients & Formulation Summit",
@@ -21,6 +22,7 @@ const ONGOING_EVENTS: EventCardData[] = [
     date: "21/02/2026",
     excerpt:
       "A two-day gathering focused on ingredient innovation, formulation science, and stability testing across emerging and established markets.",
+    href: "/events/global-ingredients-formulation-summit",
   },
   {
     title: "Cosmetech R&D Leadership Forum",
@@ -29,6 +31,7 @@ const ONGOING_EVENTS: EventCardData[] = [
     date: "14/03/2026",
     excerpt:
       "A strategic forum bringing together innovation leaders working across formulation, testing, and commercialization.",
+    href: "/events/cosmetech-rd-leadership-forum",
   },
 ];
 
@@ -40,6 +43,7 @@ const PAST_EVENTS: EventCardData[] = [
     date: "18/02/2026",
     excerpt:
       "An intensive session exploring refill systems, mono-material packaging, and evolving sustainability standards.",
+    href: "/events/fragrance-futures-scent-sensory-forum",
   },
   {
     title: "AI & BeautyTech Webinar Series",
@@ -49,6 +53,7 @@ const PAST_EVENTS: EventCardData[] = [
     date: "21/02/2026",
     excerpt:
       "A two-day gathering focused on ingredient innovation, formulation science, and stability testing across emerging and established markets.",
+    href: "/events/ai-beautytech-webinar-series",
   },
   {
     title: "Sustainable Packaging for Beauty Workshop",
@@ -57,6 +62,7 @@ const PAST_EVENTS: EventCardData[] = [
     date: "18/02/2026",
     excerpt:
       "An intensive session exploring refill systems, mono-material packaging, and evolving sustainability standards.",
+    href: "/events/sustainable-packaging-for-beauty-workshop-delhi",
   },
   {
     title: "Global Ingredients & Formulation Summit",
@@ -65,6 +71,7 @@ const PAST_EVENTS: EventCardData[] = [
     date: "21/02/2026",
     excerpt:
       "A two-day gathering focused on ingredient innovation, formulation science, and stability testing across emerging and established markets.",
+    href: "/events/global-ingredients-formulation-summit-bengaluru",
   },
   {
     title: "Regulatory Compliance in Cosmetics: APAC Edition",
@@ -74,6 +81,7 @@ const PAST_EVENTS: EventCardData[] = [
     date: "18/02/2026",
     excerpt:
       "An intensive session exploring refill systems, mono-material packaging, and evolving sustainability standards.",
+    href: "/events/regulatory-compliance-in-cosmetics-apac-edition",
   },
   {
     title: "Cosmetech Industry Expo & Networking Meet",
@@ -82,6 +90,7 @@ const PAST_EVENTS: EventCardData[] = [
     date: "21/02/2026",
     excerpt:
       "A two-day gathering focused on ingredient innovation, formulation science, and stability testing across emerging and established markets.",
+    href: "/events/cosmetech-industry-expo-networking-meet",
   },
 ];
 
