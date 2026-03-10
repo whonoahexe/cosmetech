@@ -29,7 +29,7 @@ const LEGAL_LINKS = [
   { label: "Terms & Conditions", href: "/terms" },
 ];
 
-export function Footer() {
+export const Footer = () => {
   return (
     <footer className="w-full bg-primary text-primary-foreground px-6 md:px-14 py-28 mt-12">
       {/* 8-col grid */}
@@ -142,4 +142,4 @@ export function Footer() {
       </div>
     </footer>
   );
-}
+};

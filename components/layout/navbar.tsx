@@ -7,11 +7,77 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import { InputGroup } from "@/components/ui/input-group";
 
-const Navbar = () => {
+const PRIMARY_NAV_LINKS = [
+  { href: "/", label: "Home" },
+  { href: "/news", label: "News" },
+  { href: "/events", label: "Events" },
+  { href: "/about", label: "About" },
+  { href: "/contact", label: "Contact" },
+];
+
+const SECONDARY_NAV_LINKS = [
+  { href: "/categories", label: "Categories" },
+  { href: "/contact#advertise", label: "Advertise with us" },
+  { href: "/faq", label: "Frequently Asked Questions" },
+];
+
+type SearchBarProps = {
+  value: string;
+  onChange: (value: string) => void;
+  iconClassName: string;
+  placeholderClassName: string;
+  inputClassName: string;
+  autoFocus?: boolean;
+};
+
+const SearchBar = ({
+  value,
+  onChange,
+  iconClassName,
+  placeholderClassName,
+  inputClassName,
+  autoFocus,
+}: SearchBarProps) => (
+  <>
+    <Search
+      className={cn(
+        "absolute top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none",
+        iconClassName
+      )}
+    />
+    {!value && (
+      <div
+        className={cn(
+          "pointer-events-none absolute top-1/2 -translate-y-1/2 text-sm peer-focus:opacity-0",
+          placeholderClassName
+        )}
+      >
+        Discover <span className="font-semibold">anything</span>
+      </div>
+    )}
+    <Input
+      type="search"
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      aria-label="Search"
+      placeholder=""
+      className={cn("peer", inputClassName)}
+      autoFocus={autoFocus}
+    />
+  </>
+);
+
+export const Navbar = () => {
   const [searchOpen, setSearchOpen] = useState(false);
+  const [desktopMenuOpen, setDesktopMenuOpen] = useState(false);
   const [desktopSearch, setDesktopSearch] = useState("");
   const [mobileSearch, setMobileSearch] = useState("");
 
@@ -32,72 +98,82 @@ const Navbar = () => {
         {/* Desktop search */}
         <div className="hidden flex-1 max-w-sm mx-8 md:flex items-center">
           <InputGroup className="relative w-60 shadow-2xl">
-            <Search className="absolute left-4 top-1/2 -translate-y-1/2 size-5 text-muted-foreground pointer-events-none" />
-            {!desktopSearch && (
-              <div className="pointer-events-none absolute left-12 top-1/2 -translate-y-1/2 text-sm text-foreground peer-focus:opacity-0">
-                Discover <span className="font-semibold">anything</span>
-              </div>
-            )}
-            <Input
-              type="search"
+            <SearchBar
               value={desktopSearch}
-              onChange={(e) => setDesktopSearch(e.target.value)}
-              aria-label="Search"
-              placeholder=""
-              className="peer pl-12 rounded-full border-border bg-input py-7"
+              onChange={setDesktopSearch}
+              iconClassName="left-4 size-5"
+              placeholderClassName="left-12 text-foreground"
+              inputClassName="pl-12 rounded-full border-border bg-input py-7"
             />
           </InputGroup>
         </div>
 
         {/* Desktop hamburger */}
         <div className="hidden md:flex items-center gap-3">
-          <Sheet>
-            <SheetTrigger asChild>
+          <DropdownMenu open={desktopMenuOpen} onOpenChange={setDesktopMenuOpen}>
+            <DropdownMenuTrigger asChild>
               <Button
                 variant="outline"
                 size="icon"
                 className="size-14 rounded-full border-border cursor-pointer"
-                aria-label="Open menu"
+                aria-label={desktopMenuOpen ? "Close menu" : "Open menu"}
               >
-                <Menu className="size-5 text-foreground" />
+                {desktopMenuOpen ? (
+                  <X className="size-5 text-foreground" />
+                ) : (
+                  <Menu className="size-5 text-foreground" />
+                )}
               </Button>
-            </SheetTrigger>
-            <SheetContent side="right" className="w-72" title="Desktop navigation menu">
-              <nav className="flex flex-col gap-4 pt-8 px-2">
-                <p>This is a temporary navbar</p>
-                <Link
-                  href="/"
-                  className="text-base font-medium hover:text-primary transition-colors"
-                >
-                  Home
-                </Link>
-                <Link
-                  href="/news"
-                  className="text-base font-medium hover:text-primary transition-colors"
-                >
-                  News
-                </Link>
-                <Link
-                  href="/events"
-                  className="text-base font-medium hover:text-primary transition-colors"
-                >
-                  Events
-                </Link>
-                <Link
-                  href="/about"
-                  className="text-base font-medium hover:text-primary transition-colors"
-                >
-                  About
-                </Link>
-                <Link
-                  href="/contact"
-                  className="text-base font-medium hover:text-primary transition-colors"
-                >
-                  Contact
-                </Link>
-              </nav>
-            </SheetContent>
-          </Sheet>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              align="end"
+              side="bottom"
+              sideOffset={14}
+              className="w-120 rounded-2xl border border-border bg-primary p-0 text-primary-foreground shadow-2xl ring-0 mt-4"
+            >
+              <div className="rounded-3xl border-b border-border px-4 py-2">
+                <div className="grid grid-cols-[1fr_auto_1fr] items-center">
+                  <div aria-hidden="true" />
+                  <span className="font-display text-3xl leading-none tracking-tight text-primary-foreground">
+                    Cosmetech
+                  </span>
+                </div>
+              </div>
+
+              <div className="space-y-12 px-10 py-12">
+                <nav className="flex flex-col items-center gap-1 text-center">
+                  {PRIMARY_NAV_LINKS.map((link) => (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      className="font-display text-5xl leading-none tracking-tight text-primary-foreground transition-opacity duration-200 hover:opacity-75"
+                      onClick={() => setDesktopMenuOpen(false)}
+                    >
+                      {link.label}
+                    </Link>
+                  ))}
+                </nav>
+
+                <div className="text-center">
+                  <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.2em] text-primary-foreground/65">
+                    Explore
+                  </p>
+                  <div className="flex flex-col items-center gap-1">
+                    {SECONDARY_NAV_LINKS.map((link) => (
+                      <Link
+                        key={link.href}
+                        href={link.href}
+                        className="text-sm text-primary-foreground/90 transition-opacity duration-200 hover:opacity-70"
+                        onClick={() => setDesktopMenuOpen(false)}
+                      >
+                        {link.label}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
 
         {/* Mobile controls */}
@@ -125,36 +201,15 @@ const Navbar = () => {
             </SheetTrigger>
             <SheetContent side="right" className="w-72" title="Mobile navigation menu">
               <nav className="flex flex-col gap-4 pt-8 px-2">
-                <Link
-                  href="/"
-                  className="text-base font-medium hover:text-primary transition-colors"
-                >
-                  Home
-                </Link>
-                <Link
-                  href="/news"
-                  className="text-base font-medium hover:text-primary transition-colors"
-                >
-                  News
-                </Link>
-                <Link
-                  href="/events"
-                  className="text-base font-medium hover:text-primary transition-colors"
-                >
-                  Events
-                </Link>
-                <Link
-                  href="/about"
-                  className="text-base font-medium hover:text-primary transition-colors"
-                >
-                  About
-                </Link>
-                <Link
-                  href="/contact"
-                  className="text-base font-medium hover:text-primary transition-colors"
-                >
-                  Contact
-                </Link>
+                {PRIMARY_NAV_LINKS.map((link) => (
+                  <Link
+                    key={link.href}
+                    href={link.href}
+                    className="text-base font-medium hover:text-primary transition-colors"
+                  >
+                    {link.label}
+                  </Link>
+                ))}
               </nav>
             </SheetContent>
           </Sheet>
@@ -170,19 +225,12 @@ const Navbar = () => {
       >
         <div className="px-6 py-3">
           <div className="relative shadow-2xl rounded-full">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground pointer-events-none" />
-            {!mobileSearch && (
-              <div className="pointer-events-none absolute left-9 top-1/2 -translate-y-1/2 text-sm text-muted-foreground peer-focus:opacity-0">
-                Discover <span className="font-semibold">anything</span>
-              </div>
-            )}
-            <Input
-              type="search"
+            <SearchBar
               value={mobileSearch}
-              onChange={(e) => setMobileSearch(e.target.value)}
-              aria-label="Search"
-              placeholder=""
-              className="peer pl-9 rounded-full border-border bg-transparent"
+              onChange={setMobileSearch}
+              iconClassName="left-3 size-4"
+              placeholderClassName="left-9 text-muted-foreground"
+              inputClassName="pl-9 rounded-full border-border bg-transparent"
               autoFocus={searchOpen}
             />
           </div>
@@ -191,5 +239,3 @@ const Navbar = () => {
     </header>
   );
 };
-
-export default Navbar;
