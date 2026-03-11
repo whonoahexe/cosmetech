@@ -20,7 +20,7 @@ const SOCIAL_LINKS = [
 
 const COMPANY_LINKS = [
   { label: "Events", href: "/events" },
-  { label: "Advertise With Us", href: "/advertise" },
+  { label: "Advertise With Us", href: "/contact#advertise" },
   { label: "Contact", href: "/contact" },
 ];
 
@@ -42,7 +42,7 @@ export const Footer = () => {
               alt="Cosmetech Logo"
               width={640}
               height={96}
-              className="object-contain"
+              className="object-contain brightness-0 invert"
             />
           </Link>
           <p className="type-paragraph-large-medium">
