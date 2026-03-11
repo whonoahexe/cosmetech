@@ -16,6 +16,7 @@ import Link from "next/link";
 const SLIDES = [
   {
     id: "1",
+    slug: "testing-dynamic-slug",
     image: null as string | null,
     category: "Fragrance",
     readTime: 6,
@@ -78,7 +79,7 @@ export function HighlightedCarousel() {
           <CarouselItem key={slide.id} className="pl-0">
             <div className="relative w-full min-h-95 rounded-[24px] overflow-hidden bg-[#d9d9d9] h-150">
               {/* Background image area entirely linked */}
-              <Link href="/article" className="absolute inset-0 z-0">
+              <Link href={slide.slug ? `/article/${slide.slug}` : "/article/testing-dynamic-slug"} className="absolute inset-0 z-0">
                 {slide.image && (
                   <img
                     src={slide.image}
@@ -102,7 +103,7 @@ export function HighlightedCarousel() {
                 </div>
 
                 {/* Title */}
-                <Link href="/article" className="pointer-events-auto hover:underline">
+                <Link href={slide.slug ? `/article/${slide.slug}` : "/article/testing-dynamic-slug"} className="pointer-events-auto hover:underline">
                   <h2 className="text-foreground type-heading-2">{slide.title}</h2>
                 </Link>
 

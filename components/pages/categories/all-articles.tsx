@@ -2,7 +2,7 @@ import { ArrowDown } from "lucide-react";
 import { ArticleCard, type ArticleCardData } from "@/components/pages/home/article-card";
 import { Button } from "@/components/ui/button";
 
-const CATEGORY_ARTICLES: ArticleCardData[] = [
+export const CATEGORY_ARTICLES: ArticleCardData[] = [
   {
     image: null,
     category: "Packaging",
@@ -69,7 +69,11 @@ const CATEGORY_ARTICLES: ArticleCardData[] = [
   },
 ];
 
-export function AllArticlesSection() {
+type AllArticlesSectionProps = {
+  articles: ArticleCardData[];
+};
+
+export function AllArticlesSection({ articles }: AllArticlesSectionProps) {
   return (
     <section className="flex flex-col mb-12">
       <div className="flex items-end gap-6 py-4">
@@ -80,7 +84,7 @@ export function AllArticlesSection() {
       </div>
 
       <div className="grid grid-cols-1 gap-5 py-4 md:grid-cols-4">
-        {CATEGORY_ARTICLES.map((article) => (
+        {articles.map((article) => (
           <div key={article.title} className="md:col-span-1">
             <ArticleCard {...article} colSpan={2} />
           </div>

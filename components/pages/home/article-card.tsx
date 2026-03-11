@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 
 export interface ArticleCardData {
+  slug?: string;
   image?: string | null;
   category: string;
   isSponsored?: boolean;
@@ -20,6 +21,7 @@ interface ArticleCardProps extends ArticleCardData {
 }
 
 function ArticleCardNewsHorizontal({
+  slug,
   image,
   category,
   isSponsored,
@@ -31,14 +33,14 @@ function ArticleCardNewsHorizontal({
   return (
     <article className={cn("grid grid-cols-1 gap-5 lg:grid-cols-8", className)}>
       <Link
-        href="/article"
+        href={slug ? `/article/${slug}` : "/article/testing-dynamic-slug"}
         className="block h-111 overflow-hidden rounded-3xl bg-[#D9D9D9] lg:col-span-4 transition-opacity hover:opacity-90"
       >
         {image && <img src={image} alt={title} className="h-full w-full object-cover" />}
       </Link>
 
       <div className="flex flex-col gap-4 px-2 lg:col-span-4">
-        <Link href="/article" className="w-fit hover:underline">
+        <Link href={slug ? `/article/${slug}` : "/article/testing-dynamic-slug"} className="w-fit hover:underline">
           <h3 className="type-heading-3 text-foreground">{title}</h3>
         </Link>
 
@@ -60,6 +62,7 @@ function ArticleCardNewsHorizontal({
 }
 
 function ArticleCardFeatured({
+  slug,
   image,
   category,
   isSponsored,
@@ -71,14 +74,14 @@ function ArticleCardFeatured({
   return (
     <article className={cn("flex flex-col gap-6", className)}>
       <Link
-        href="/article"
+        href={slug ? `/article/${slug}` : "/article/testing-dynamic-slug"}
         className="block w-full overflow-hidden rounded-3xl bg-[#D9D9D9] transition-opacity hover:opacity-90 aspect-1123/600"
       >
         {image && <img src={image} alt={title} className="h-full w-full object-cover" />}
       </Link>
 
       <div className="flex flex-col items-center gap-3 text-center">
-        <Link href="/article" className="hover:underline">
+        <Link href={slug ? `/article/${slug}` : "/article/testing-dynamic-slug"} className="hover:underline">
           <h2 className="type-heading-2 text-foreground">{title}</h2>
         </Link>
         <p className="type-paragraph-medium max-w-130 text-muted-foreground">{excerpt}</p>
@@ -96,6 +99,7 @@ function ArticleCardFeatured({
 }
 
 function ArticleCardGrid({
+  slug,
   image,
   category,
   isSponsored,
@@ -110,7 +114,7 @@ function ArticleCardGrid({
   return (
     <article className={cn("flex flex-col gap-4", className)}>
       <Link
-        href="/article"
+        href={slug ? `/article/${slug}` : "/article/testing-dynamic-slug"}
         className="block w-full overflow-hidden rounded-3xl bg-[#D9D9D9] transition-opacity hover:opacity-90 aspect-square"
       >
         {image && <img src={image} alt={title} className="h-full w-full object-cover" />}
@@ -128,11 +132,11 @@ function ArticleCardGrid({
         </div>
 
         {isLargeGrid ? (
-          <Link href="/article" className="w-fit hover:underline">
+          <Link href={slug ? `/article/${slug}` : "/article/testing-dynamic-slug"} className="w-fit hover:underline">
             <h2 className="type-heading-1 text-foreground">{title}</h2>
           </Link>
         ) : (
-          <Link href="/article" className="w-fit hover:underline">
+          <Link href={slug ? `/article/${slug}` : "/article/testing-dynamic-slug"} className="w-fit hover:underline">
             <h3 className="type-heading-3 text-foreground">{title}</h3>
           </Link>
         )}
@@ -151,6 +155,7 @@ function ArticleCardGrid({
 }
 
 function ArticleCardList({
+  slug,
   category,
   isSponsored,
   readTime,
@@ -162,7 +167,7 @@ function ArticleCardList({
   return (
     <article className={cn("flex flex-col gap-4 px-2", className)}>
       <div className="flex flex-col gap-4">
-        <Link href="/article" className="w-fit hover:underline">
+        <Link href={slug ? `/article/${slug}` : "/article/testing-dynamic-slug"} className="w-fit hover:underline">
           <h3 className="type-heading-3 text-foreground">{title}</h3>
         </Link>
         <p className="type-paragraph-medium text-muted-foreground">{excerpt}</p>

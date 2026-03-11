@@ -1,3 +1,4 @@
-export { CategoryHeroFilters } from "./hero-filters";
-export { FeaturedSplitSection } from "./featured-split";
-export { AllArticlesSection } from "./all-articles";
+export * from "./hero-filters";
+export * from "./featured-split";
+export * from "./all-articles";
+export * from "./filter-pill";

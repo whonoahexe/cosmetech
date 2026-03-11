@@ -14,10 +14,10 @@ export const FEATURED_NEWS = {
 export function NewsHeroSection() {
   return (
     <section className="py-4">
-      <div className="group relative h-150 w-full overflow-hidden rounded-3xl bg-[#D9D9D9]">
-        <Link href="/article" className="absolute inset-0 z-0" aria-label={`Read ${FEATURED_NEWS.title}`} />
+       <div className="group relative h-150 w-full overflow-hidden rounded-3xl bg-[#D9D9D9]">
+        <Link href="/article/testing-dynamic-slug" className="absolute inset-0 z-0" aria-label={`Read ${FEATURED_NEWS.title}`} />
         <div className="pointer-events-none absolute left-8 top-8 z-10 flex max-w-130 flex-col gap-4 md:left-18 md:top-18">
-          <Link href="/article" className="pointer-events-auto hover:underline">
+          <Link href="/article/testing-dynamic-slug" className="pointer-events-auto hover:underline">
             <h2 className="type-heading-1 text-foreground">{FEATURED_NEWS.title}</h2>
           </Link>
 

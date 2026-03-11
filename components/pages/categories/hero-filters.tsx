@@ -1,56 +1,10 @@
 "use client";
 
-import { ChevronDown } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { ButtonGroup } from "@/components/ui/button-group";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { ALL_CATEGORIES } from "@/components/pages/home/highlighted-categories";
+import { FilterPill } from "./filter-pill";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
-
-type FilterPillProps = {
-  label: string;
-  value: string;
-  options: string[];
-  onOptionSelect?: (option: string) => void;
-};
-
-function FilterPill({ label, value, options, onOptionSelect }: FilterPillProps) {
-  return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button
-          variant="outline"
-          size="lg"
-          className="h-auto min-h-12 px-6 text-left"
-          aria-label={`${label}: ${value}`}
-        >
-          <span className="flex flex-col items-start leading-none">
-            <span className="type-paragraph-small text-muted-foreground">{label}</span>
-            <span className="type-paragraph-small-medium text-foreground">{value}</span>
-          </span>
-          <ChevronDown className="size-4 text-foreground" />
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="start">
-        {options.map((option) => (
-          <DropdownMenuItem
-            key={option}
-            className="type-paragraph-small"
-            onClick={() => onOptionSelect?.(option)}
-          >
-            {option}
-          </DropdownMenuItem>
-        ))}
-      </DropdownMenuContent>
-    </DropdownMenu>
-  );
-}
 
 const SEARCH_TOPIC_OPTIONS = [
   "Any topic",

@@ -1,6 +1,6 @@
 import { ArticleCard, type ArticleCardData } from "@/components/pages/home/article-card";
 
-const FEATURED_ARTICLE: ArticleCardData = {
+export const FEATURED_ARTICLE: ArticleCardData = {
   image: null,
   category: "Fragrance",
   readTime: 6,
@@ -9,7 +9,7 @@ const FEATURED_ARTICLE: ArticleCardData = {
     "People do not search anymore. They ask. AI, forums, group chats. Information retrieval just turned conversational.",
 };
 
-const SIDE_ARTICLES: ArticleCardData[] = [
+export const SIDE_ARTICLES: ArticleCardData[] = [
   {
     image: null,
     category: "Packaging",
@@ -45,21 +45,29 @@ const SIDE_ARTICLES: ArticleCardData[] = [
   },
 ];
 
-export function FeaturedSplitSection() {
+type FeaturedSplitSectionProps = {
+  featuredArticle: ArticleCardData;
+  sideArticles: ArticleCardData[];
+};
+
+export function FeaturedSplitSection({
+  featuredArticle,
+  sideArticles,
+}: FeaturedSplitSectionProps) {
   return (
     <section className="py-4">
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-8">
         <div className="lg:col-span-5">
-          <ArticleCard {...FEATURED_ARTICLE} variant="featured" colSpan={4} />
+          <ArticleCard {...featuredArticle} variant="featured" colSpan={4} />
         </div>
 
         <div className="flex flex-col gap-6 lg:col-span-3">
-          {SIDE_ARTICLES.map((article, index) => (
+          {sideArticles.map((article, index) => (
             <ArticleCard
               key={article.title}
               {...article}
               variant="list"
-              showSeparator={index < SIDE_ARTICLES.length - 1}
+              showSeparator={index < sideArticles.length - 1}
             />
           ))}
         </div>
