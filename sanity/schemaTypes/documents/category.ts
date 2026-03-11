@@ -31,15 +31,11 @@ export const categoryType = defineType({
       to: [{ type: "article" }],
     }),
     defineField({
-      name: "allowedTopics",
-      title: "Allowed topics",
+      name: "highlightedArticles",
+      title: "Highlighted articles",
       type: "array",
-      of: [defineArrayMember({ type: "reference", to: [{ type: "topic" }] })],
-    }),
-    defineField({
-      name: "seo",
-      title: "SEO",
-      type: "seo",
+      of: [defineArrayMember({ type: "reference", to: [{ type: "article" }] })],
+      validation: (rule) => rule.max(4),
     }),
   ],
 });

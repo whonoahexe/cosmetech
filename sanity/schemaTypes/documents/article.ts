@@ -37,39 +37,29 @@ export const articleType = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
-      name: "readTime",
-      title: "Read time",
-      type: "number",
-      validation: (rule) => rule.min(1),
-    }),
-    defineField({
-      name: "contentKind",
-      title: "Content kind",
-      type: "string",
-      options: {
-        list: ["feature", "news", "pressRelease"],
-      },
-      initialValue: "feature",
-      validation: (rule) => rule.required(),
-    }),
-    defineField({
-      name: "category",
-      title: "Category",
-      type: "reference",
-      to: [{ type: "category" }],
-      validation: (rule) => rule.required(),
-    }),
-    defineField({
-      name: "topics",
-      title: "Topics",
+      name: "contentKinds",
+      title: "Content types",
       type: "array",
-      of: [defineArrayMember({ type: "reference", to: [{ type: "topic" }] })],
+      of: [
+        defineArrayMember({
+          type: "string",
+          options: {
+            list: [
+              { title: "Article", value: "article" },
+              { title: "News", value: "news" },
+              { title: "Press Release", value: "pressRelease" },
+            ],
+          },
+        }),
+      ],
+      validation: (rule) => rule.required().min(1),
     }),
     defineField({
-      name: "tags",
-      title: "Tags",
+      name: "categories",
+      title: "Categories",
       type: "array",
-      of: [defineArrayMember({ type: "reference", to: [{ type: "tag" }] })],
+      of: [defineArrayMember({ type: "reference", to: [{ type: "category" }] })],
+      validation: (rule) => rule.required().min(1).max(8),
     }),
     defineField({
       name: "isSponsored",
@@ -84,13 +74,6 @@ export const articleType = defineType({
       hidden: ({ parent }) => !parent?.isSponsored,
     }),
     defineField({
-      name: "popularityScore",
-      title: "Popularity score",
-      type: "number",
-      description:
-        "Optional editorial score for sorting popular content before analytics are wired.",
-    }),
-    defineField({
       name: "body",
       title: "Body",
       type: "array",
@@ -101,6 +84,7 @@ export const articleType = defineType({
       title: "Related articles",
       type: "array",
       of: [defineArrayMember({ type: "reference", to: [{ type: "article" }] })],
+      validation: (rule) => rule.max(2),
     }),
     defineField({
       name: "seo",

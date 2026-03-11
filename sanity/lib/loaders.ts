@@ -2,198 +2,166 @@ import { client } from "./client";
 import {
   aboutPageQuery,
   articleBySlugQuery,
+  categoriesQuery,
   categoryBySlugQuery,
   contactPageQuery,
-  contentCardProjection,
+  eventBySlugQuery,
   eventsPageQuery,
+  faqPageQuery,
   homePageQuery,
   newsPageQuery,
+  ongoingEventsQuery,
+  pastEventsQuery,
+  popularHomeContentQuery,
+  pressReleasesQuery,
+  privacyPolicyPageQuery,
   siteSettingsQuery,
-  topicBySlugQuery,
-  topicsByCategoryIdQuery,
+  termsPageQuery,
+  latestHomeContentQuery,
 } from "./queries";
 import type {
   AboutPageData,
+  AdvertisementCard,
+  AdvertisementSlot,
   ArticlePageData,
   CategoryPageData,
   ContentCard,
-  ContentTypeName,
   ContactPageData,
-  EventWindow,
+  EventCard,
+  EventPageData,
   EventsPageData,
   EventsPageDocument,
-  FeedMode,
-  FeedSectionConfig,
+  FaqPageData,
   HomePageData,
   HomePageDocument,
+  LegalPageData,
   NewsPageData,
   NewsPageDocument,
-  ResolvedFeedSection,
   SiteSettings,
-  TargetPage,
-  Topic,
 } from "./types";
 
-type FeedResolutionOptions = {
-  page?: TargetPage;
-  mode?: FeedMode;
-  eventWindow?: EventWindow;
-  forceContentTypes?: ContentTypeName[];
-  categoryIds?: string[];
-  topicIds?: string[];
+type RawArticleCard = Extract<ContentCard, { _type: "article" }> & { plainText?: string };
+type RawContentCard = RawArticleCard | Extract<ContentCard, { _type: "event" }> | AdvertisementCard;
+type RawArticlePageData = ArticlePageData & {
+  plainText?: string;
+  relatedArticles?: RawArticleCard[];
+};
+type RawHomePageDocument = Omit<HomePageDocument, "carouselItems" | "sponsoredItems"> & {
+  carouselItems?: RawContentCard[];
+  sponsoredItems?: RawContentCard[];
+};
+type RawNewsPageDocument = Omit<NewsPageDocument, "featuredBanner" | "highlightedStories"> & {
+  featuredBanner?: RawContentCard | null;
+  highlightedStories?: RawContentCard[];
 };
 
-const defaultContentTypes: ContentTypeName[] = ["article", "event", "advertisement"];
+const estimateReadTime = (plainText?: string) => {
+  const wordCount = plainText?.trim().split(/\s+/).filter(Boolean).length ?? 0;
 
-const buildFeedQuery = (mode: FeedMode, options: FeedResolutionOptions) => {
-  const filters = ["_type in $contentTypes"];
-
-  if (mode === "sponsored") {
-    filters.push(
-      '(_type == "advertisement" || (_type in ["article", "event"] && isSponsored == true))'
-    );
+  if (wordCount === 0) {
+    return undefined;
   }
 
-  if (options.page) {
-    filters.push(
-      '(_type != "advertisement" || !defined(targetPages) || count(targetPages) == 0 || count(targetPages[@ == $page]) > 0)'
-    );
+  return Math.max(1, Math.ceil(wordCount / 225));
+};
+
+const enrichArticleCard = (article: RawArticleCard) => {
+  const { plainText, ...rest } = article;
+
+  return {
+    ...rest,
+    readTime: estimateReadTime(plainText),
+  };
+};
+
+const enrichContentCard = (card: RawContentCard): ContentCard => {
+  if (card._type === "article") {
+    return enrichArticleCard(card);
   }
 
-  if (options.categoryIds?.length) {
-    filters.push(
-      '((_type == "article" && category._ref in $categoryIds) || (_type == "advertisement" && count(targetCategories[]._ref[@ in $categoryIds]) > 0))'
-    );
+  return card;
+};
+
+const enrichContentCards = (cards: RawContentCard[] | null | undefined) =>
+  (cards || []).map(enrichContentCard);
+
+const applyAdvertisementSlots = (
+  items: ContentCard[],
+  slots: AdvertisementSlot[] | null | undefined,
+  maxItems = 5
+) => {
+  const next: Array<ContentCard | undefined> = Array.from(
+    { length: maxItems },
+    (_, index) => items[index]
+  );
+
+  for (const slot of slots || []) {
+    if (!slot.advertisement) {
+      continue;
+    }
+
+    const slotIndex = slot.slot - 1;
+
+    if (slotIndex < 0 || slotIndex >= maxItems) {
+      continue;
+    }
+
+    next[slotIndex] = slot.advertisement;
   }
 
-  if (options.topicIds?.length) {
-    filters.push(
-      '((_type == "article" && count(topics[]._ref[@ in $topicIds]) > 0) || (_type == "event" && count(topics[]._ref[@ in $topicIds]) > 0) || (_type == "advertisement" && count(targetTopics[]._ref[@ in $topicIds]) > 0))'
-    );
-  }
-
-  if (options.eventWindow === "ongoing") {
-    filters.push(
-      '(_type != "event" || (dateTime(startDate) <= now() && (!defined(endDate) || dateTime(endDate) >= now())))'
-    );
-  }
-
-  if (options.eventWindow === "past") {
-    filters.push(
-      '(_type != "event" || ((defined(endDate) && dateTime(endDate) < now()) || (!defined(endDate) && dateTime(startDate) < now())))'
-    );
-  }
-
-  if (options.eventWindow === "upcoming") {
-    filters.push('(_type != "event" || dateTime(startDate) > now())');
-  }
-
-  const orderBy =
-    mode === "popular"
-      ? "order(coalesce(popularityScore, 0) desc, coalesce(publishDate, startDate, activeFrom, _createdAt) desc)"
-      : "order(coalesce(publishDate, startDate, activeFrom, _createdAt) desc)";
-
-  return `*[${filters.join(" && ")}] | ${orderBy}[0...$limit] ${contentCardProjection}`;
+  return next.filter((item): item is ContentCard => Boolean(item));
 };
 
 export const getSiteSettings = async () => client.fetch<SiteSettings | null>(siteSettingsQuery);
 
-export const resolveFeedSection = async (
-  section: FeedSectionConfig | null | undefined,
-  options: FeedResolutionOptions = {}
-): Promise<ResolvedFeedSection | null> => {
-  if (!section) {
-    return null;
-  }
-
-  const resolvedMode = options.mode || section.mode || "latest";
-  const limit = section.limit || 6;
-
-  if (resolvedMode === "manual" && section.manualItems?.length) {
-    return {
-      ...section,
-      resolvedMode,
-      items: section.manualItems.slice(0, limit),
-    };
-  }
-
-  const contentTypes = options.forceContentTypes || section.contentTypes || defaultContentTypes;
-  const categoryIds =
-    options.categoryIds || section.categories?.map((category) => category._id) || [];
-  const topicIds = options.topicIds || section.topics?.map((topic) => topic._id) || [];
-
-  const query = buildFeedQuery(resolvedMode, {
-    ...options,
-    categoryIds,
-    topicIds,
-  });
-
-  const items = await client.fetch<ContentCard[]>(query, {
-    contentTypes,
-    limit,
-    page: options.page,
-    categoryIds,
-    topicIds,
-  });
-
-  return {
-    ...section,
-    resolvedMode,
-    items,
-  };
-};
-
-export const getHomePageData = async (options?: { latestMode?: FeedMode }) => {
-  const homePage = await client.fetch<HomePageDocument | null>(homePageQuery);
+export const getHomePageData = async () => {
+  const homePage = await client.fetch<RawHomePageDocument | null>(homePageQuery);
 
   if (!homePage) {
     return null;
   }
 
-  const latestSection = await resolveFeedSection(homePage.latestSection, {
-    page: "homepage",
-    mode: options?.latestMode,
-  });
-  const upcomingEventsSection = await resolveFeedSection(homePage.upcomingEventsSection, {
-    page: "homepage",
-    forceContentTypes: ["event", "advertisement"],
-    eventWindow: "upcoming",
-  });
+  const [latestItemsRaw, popularItemsRaw] = await Promise.all([
+    client.fetch<RawContentCard[]>(latestHomeContentQuery),
+    client.fetch<RawContentCard[]>(popularHomeContentQuery),
+  ]);
+
+  const latestItems = applyAdvertisementSlots(
+    enrichContentCards(latestItemsRaw),
+    homePage.latestAdSlots,
+    5
+  );
+  const popularItems = applyAdvertisementSlots(
+    enrichContentCards(popularItemsRaw),
+    homePage.popularAdSlots,
+    5
+  );
 
   const data: HomePageData = {
     ...homePage,
-    latestSection,
-    upcomingEventsSection,
+    carouselItems: enrichContentCards(homePage.carouselItems),
+    sponsoredItems: enrichContentCards(homePage.sponsoredItems),
+    latestItems,
+    popularItems,
   };
 
   return data;
 };
 
 export const getNewsPageData = async () => {
-  const newsPage = await client.fetch<NewsPageDocument | null>(newsPageQuery);
+  const newsPage = await client.fetch<RawNewsPageDocument | null>(newsPageQuery);
 
   if (!newsPage) {
     return null;
   }
 
-  const featuredStories = await resolveFeedSection(newsPage.featuredStories, {
-    page: "news",
-    forceContentTypes: ["article", "advertisement"],
-  });
-  const latestNews = await resolveFeedSection(newsPage.latestNews, {
-    page: "news",
-    forceContentTypes: ["article", "advertisement"],
-  });
-  const pressReleaseSection = await resolveFeedSection(newsPage.pressReleaseSection, {
-    page: "news",
-    forceContentTypes: ["article", "advertisement"],
-  });
+  const pressReleases = await client.fetch<RawArticleCard[]>(pressReleasesQuery);
 
   const data: NewsPageData = {
     ...newsPage,
-    featuredStories,
-    latestNews,
-    pressReleaseSection,
+    featuredBanner: newsPage.featuredBanner ? enrichContentCard(newsPage.featuredBanner) : null,
+    highlightedStories: enrichContentCards(newsPage.highlightedStories),
+    pressReleases: pressReleases.map(enrichArticleCard),
   };
 
   return data;
@@ -206,21 +174,15 @@ export const getEventsPageData = async () => {
     return null;
   }
 
-  const ongoingSection = await resolveFeedSection(eventsPage.ongoingSection, {
-    page: "events",
-    forceContentTypes: ["event", "advertisement"],
-    eventWindow: "ongoing",
-  });
-  const pastSection = await resolveFeedSection(eventsPage.pastSection, {
-    page: "events",
-    forceContentTypes: ["event", "advertisement"],
-    eventWindow: "past",
-  });
+  const [ongoingEvents, pastEvents] = await Promise.all([
+    client.fetch<EventCard[]>(ongoingEventsQuery),
+    client.fetch<EventCard[]>(pastEventsQuery),
+  ]);
 
   const data: EventsPageData = {
     ...eventsPage,
-    ongoingSection,
-    pastSection,
+    ongoingEvents,
+    pastEvents,
   };
 
   return data;
@@ -231,51 +193,47 @@ export const getAboutPageData = async () => client.fetch<AboutPageData | null>(a
 export const getContactPageData = async () =>
   client.fetch<ContactPageData | null>(contactPageQuery);
 
-export const getArticlePageData = async (slug: string) =>
-  client.fetch<ArticlePageData | null>(articleBySlugQuery, { slug });
+export const getFaqPageData = async () => client.fetch<FaqPageData | null>(faqPageQuery);
 
-export const getCategoryPageData = async (
-  slug: string,
-  options?: { topicSlug?: string; mode?: FeedMode }
-) => {
-  const category = await client.fetch<Omit<CategoryPageData, "availableTopics" | "items"> | null>(
-    categoryBySlugQuery,
-    { slug }
-  );
+export const getPrivacyPolicyPageData = async () =>
+  client.fetch<LegalPageData | null>(privacyPolicyPageQuery);
+
+export const getTermsPageData = async () => client.fetch<LegalPageData | null>(termsPageQuery);
+
+export const getCategories = async () => client.fetch<CategoryPageData[]>(categoriesQuery);
+
+export const getArticlePageData = async (slug: string) =>
+  client.fetch<RawArticlePageData | null>(articleBySlugQuery, { slug }).then((article) => {
+    if (!article) {
+      return null;
+    }
+
+    const { plainText, relatedArticles, ...rest } = article;
+
+    return {
+      ...rest,
+      readTime: estimateReadTime(plainText),
+      relatedArticles: (relatedArticles || []).map(enrichArticleCard),
+    };
+  });
+
+export const getEventPageData = async (slug: string) =>
+  client.fetch<EventPageData | null>(eventBySlugQuery, { slug });
+
+export const getCategoryPageData = async (slug: string) => {
+  const category = await client.fetch<CategoryPageData | null>(categoryBySlugQuery, { slug });
 
   if (!category) {
     return null;
   }
 
-  const availableTopics = await client.fetch<Topic[]>(topicsByCategoryIdQuery, {
-    categoryId: category._id,
-  });
-
-  const topic = options?.topicSlug
-    ? await client.fetch<Topic | null>(topicBySlugQuery, { slug: options.topicSlug })
-    : null;
-
-  const items = await resolveFeedSection(
-    {
-      mode: options?.mode || "latest",
-      limit: 12,
-      contentTypes: ["article", "advertisement"],
-      categories: [{ _id: category._id, title: category.title, slug: category.slug }],
-      topics: topic ? [topic] : [],
-    },
-    {
-      page: "category",
-      mode: options?.mode,
-      categoryIds: [category._id],
-      topicIds: topic ? [topic._id] : [],
-    }
-  );
-
-  const data: CategoryPageData = {
+  return {
     ...category,
-    availableTopics,
-    items: items?.items || [],
+    heroArticle: category.heroArticle
+      ? enrichArticleCard(category.heroArticle as RawArticleCard)
+      : undefined,
+    highlightedArticles: ((category.highlightedArticles as RawArticleCard[] | undefined) || []).map(
+      enrichArticleCard
+    ),
   };
-
-  return data;
 };

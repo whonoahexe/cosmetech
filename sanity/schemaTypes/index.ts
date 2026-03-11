@@ -3,17 +3,19 @@ import { advertisementType } from "./documents/advertisement";
 import { articleType } from "./documents/article";
 import { categoryType } from "./documents/category";
 import { contactPageType } from "./documents/contactPage";
+import { faqPageType } from "./documents/faqPage";
 import { eventsPageType } from "./documents/eventsPage";
 import { eventType } from "./documents/event";
 import { homePageType } from "./documents/homePage";
 import { newsPageType } from "./documents/newsPage";
+import { privacyPolicyPageType } from "./documents/privacyPolicyPage";
 import { siteSettingsType } from "./documents/siteSettings";
-import { tagType } from "./documents/tag";
-import { topicType } from "./documents/topic";
+import { termsPageType } from "./documents/termsPage";
+import { agendaItemType } from "./objects/agendaItem";
+import { advertisementSlotType } from "./objects/advertisementSlot";
 import { contactMethodType } from "./objects/contactMethod";
-import { ctaLinkType } from "./objects/ctaLink";
-import { feedSectionType } from "./objects/feedSection";
-import { heroSlideType } from "./objects/heroSlide";
+import { faqItemType } from "./objects/faqItem";
+import { faqSectionType } from "./objects/faqSection";
 import { seoType } from "./objects/seo";
 import { socialLinkType } from "./objects/socialLink";
 import { sponsoredMetaType } from "./objects/sponsoredMeta";
@@ -25,16 +27,18 @@ export const schemaTypes = [
   eventsPageType,
   aboutPageType,
   contactPageType,
+  faqPageType,
+  privacyPolicyPageType,
+  termsPageType,
   articleType,
   eventType,
   advertisementType,
   categoryType,
-  topicType,
-  tagType,
+  agendaItemType,
+  advertisementSlotType,
   contactMethodType,
-  ctaLinkType,
-  feedSectionType,
-  heroSlideType,
+  faqItemType,
+  faqSectionType,
   seoType,
   socialLinkType,
   sponsoredMetaType,

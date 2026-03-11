@@ -1,0 +1,82 @@
+[
+  {
+    "_id": "category.ingredients-formulation",
+    "_type": "category",
+    "title": "Ingredients & Formulation",
+    "slug": {
+      "_type": "slug",
+      "current": "ingredients-formulation"
+    },
+    "description": "Raw materials, actives, and the science behind what goes into every product."
+  },
+  {
+    "_id": "category.fragrance",
+    "_type": "category",
+    "title": "Fragrance",
+    "slug": {
+      "_type": "slug",
+      "current": "fragrance"
+    },
+    "description": "The art and chemistry of scent, from raw materials to the finished bottle."
+  },
+  {
+    "_id": "category.packaging",
+    "_type": "category",
+    "title": "Packaging",
+    "slug": {
+      "_type": "slug",
+      "current": "packaging"
+    },
+    "description": "Design, materials, and sustainability shaping the future of cosmetic packaging."
+  },
+  {
+    "_id": "category.r-and-d",
+    "_type": "category",
+    "title": "R&D",
+    "slug": {
+      "_type": "slug",
+      "current": "r-and-d"
+    },
+    "description": "Research, clinical testing, and innovations powering the next generation of formulas."
+  },
+  {
+    "_id": "category.regulations",
+    "_type": "category",
+    "title": "Regulations",
+    "slug": {
+      "_type": "slug",
+      "current": "regulations"
+    },
+    "description": "Compliance, safety standards, and global frameworks every brand must navigate."
+  },
+  {
+    "_id": "category.springboard",
+    "_type": "category",
+    "title": "Springboard",
+    "slug": {
+      "_type": "slug",
+      "current": "springboard"
+    },
+    "description": "Startups, new launches, and emerging ideas shaping the industry."
+  },
+  {
+    "_id": "category.marketing",
+    "_type": "category",
+    "title": "Marketing",
+    "slug": {
+      "_type": "slug",
+      "current": "marketing"
+    },
+    "description": "Brand strategy, consumer trends, and the business of beauty."
+  },
+  {
+    "_id": "category.ai-technology",
+    "_type": "category",
+    "title": "AI & Technology",
+    "slug": {
+      "_type": "slug",
+      "current": "ai-technology"
+    },
+    "description": "How machine learning, automation, and digital tools are reshaping the cosmetics space."
+  }
+]

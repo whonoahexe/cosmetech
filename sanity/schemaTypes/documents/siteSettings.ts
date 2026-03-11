@@ -18,18 +18,6 @@ export const siteSettingsType = defineType({
       rows: 3,
     }),
     defineField({
-      name: "navigationLinks",
-      title: "Navigation links",
-      type: "array",
-      of: [defineArrayMember({ type: "ctaLink" })],
-    }),
-    defineField({
-      name: "footerLinks",
-      title: "Footer links",
-      type: "array",
-      of: [defineArrayMember({ type: "ctaLink" })],
-    }),
-    defineField({
       name: "socialLinks",
       title: "Social links",
       type: "array",

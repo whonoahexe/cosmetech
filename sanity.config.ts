@@ -5,7 +5,12 @@ import { defineConfig } from "sanity";
 import { structureTool } from "sanity/structure";
 import { dataset, projectId } from "./sanity/lib/env";
 import { schemaTypes } from "./sanity/schemaTypes";
-import { singletonActions, singletonTypes, structure } from "./sanity/structure";
+import {
+  fixedDocumentTypes,
+  singletonActions,
+  singletonTypes,
+  structure,
+} from "./sanity/structure";
 
 export default defineConfig({
   name: "default",
@@ -19,7 +24,7 @@ export default defineConfig({
   },
   document: {
     actions: (previousActions, context) => {
-      if (singletonTypes.has(context.schemaType)) {
+      if (singletonTypes.has(context.schemaType) || fixedDocumentTypes.has(context.schemaType)) {
         return previousActions.filter(
           (action) => action.action && singletonActions.has(action.action)
         );
@@ -27,12 +32,10 @@ export default defineConfig({
 
       return previousActions;
     },
-    newDocumentOptions: (previousOptions, context) => {
-      if (context.creationContext.type === "global") {
-        return previousOptions.filter((option) => !singletonTypes.has(option.templateId));
-      }
-
-      return previousOptions;
-    },
+    newDocumentOptions: (previousOptions) =>
+      previousOptions.filter(
+        (option) =>
+          !singletonTypes.has(option.templateId) && !fixedDocumentTypes.has(option.templateId)
+      ),
   },
 });

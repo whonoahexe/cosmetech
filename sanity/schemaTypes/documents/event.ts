@@ -52,16 +52,22 @@ export const eventType = defineType({
       type: "url",
     }),
     defineField({
-      name: "topics",
-      title: "Topics",
+      name: "eventTags",
+      title: "Event tags",
       type: "array",
-      of: [defineArrayMember({ type: "reference", to: [{ type: "topic" }] })],
-    }),
-    defineField({
-      name: "tags",
-      title: "Tags",
-      type: "array",
-      of: [defineArrayMember({ type: "reference", to: [{ type: "tag" }] })],
+      of: [
+        defineArrayMember({
+          type: "string",
+          options: {
+            list: [
+              { title: "Conference", value: "conference" },
+              { title: "Workshop", value: "workshop" },
+              { title: "Webinar", value: "webinar" },
+              { title: "Expo", value: "expo" },
+            ],
+          },
+        }),
+      ],
     }),
     defineField({
       name: "isSponsored",
@@ -76,10 +82,28 @@ export const eventType = defineType({
       hidden: ({ parent }) => !parent?.isSponsored,
     }),
     defineField({
+      name: "organizer",
+      title: "Organizer",
+      type: "string",
+    }),
+    defineField({
       name: "body",
       title: "Body",
       type: "array",
       of: [defineArrayMember({ type: "block" }), defineArrayMember({ type: "image" })],
+    }),
+    defineField({
+      name: "agenda",
+      title: "Agenda",
+      type: "array",
+      of: [defineArrayMember({ type: "agendaItem" })],
+    }),
+    defineField({
+      name: "relatedEvents",
+      title: "Related events",
+      type: "array",
+      of: [defineArrayMember({ type: "reference", to: [{ type: "event" }] })],
+      validation: (rule) => rule.max(2),
     }),
     defineField({
       name: "seo",

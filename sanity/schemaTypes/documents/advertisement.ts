@@ -1,4 +1,4 @@
-import { defineArrayMember, defineField, defineType } from "sanity";
+import { defineField, defineType } from "sanity";
 
 export const advertisementType = defineType({
   name: "advertisement",
@@ -50,44 +50,18 @@ export const advertisementType = defineType({
       type: "datetime",
     }),
     defineField({
-      name: "targetPages",
-      title: "Target pages",
-      type: "array",
-      of: [
-        defineArrayMember({
-          type: "string",
-          options: {
-            list: ["homepage", "category", "article", "news", "events", "about", "contact"],
-          },
-        }),
-      ],
-    }),
-    defineField({
-      name: "targetCategories",
-      title: "Target categories",
-      type: "array",
-      of: [defineArrayMember({ type: "reference", to: [{ type: "category" }] })],
-    }),
-    defineField({
-      name: "targetTopics",
-      title: "Target topics",
-      type: "array",
-      of: [defineArrayMember({ type: "reference", to: [{ type: "topic" }] })],
-    }),
-    defineField({
-      name: "tags",
-      title: "Tags",
-      type: "array",
-      of: [defineArrayMember({ type: "reference", to: [{ type: "tag" }] })],
-    }),
-    defineField({
-      name: "renderVariant",
-      title: "Render variant",
+      name: "renderAs",
+      title: "Render as",
       type: "string",
       options: {
-        list: ["nativeCard", "banner"],
+        list: [
+          { title: "Article", value: "article" },
+          { title: "Event", value: "event" },
+          { title: "News", value: "news" },
+          { title: "Press Release", value: "pressRelease" },
+        ],
       },
-      initialValue: "nativeCard",
+      initialValue: "article",
     }),
     defineField({
       name: "sponsoredMeta",

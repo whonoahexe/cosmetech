@@ -19,12 +19,6 @@ export type Seo = {
   image?: SanityImage;
 } | null;
 
-export type CtaLink = {
-  label: string;
-  href: string;
-  openInNewTab?: boolean;
-};
-
 export type SocialLink = {
   platform: string;
   label?: string;
@@ -32,25 +26,13 @@ export type SocialLink = {
 };
 
 export type ContactMethod = {
-  label: string;
   value: string;
-  kind?: string;
-  href?: string;
+  kind: "email" | "phone";
 };
 
-export type Topic = {
-  _id: string;
-  title: string;
-  slug?: string;
-  description?: string;
-};
-
-export type Tag = {
-  _id: string;
-  title: string;
-  slug?: string;
-  appliesTo?: string[];
-};
+export type ArticleContentKind = "article" | "news" | "pressRelease";
+export type EventTag = "conference" | "workshop" | "webinar" | "expo";
+export type AdvertisementRenderAs = "article" | "event" | "news" | "pressRelease";
 
 export type CategorySummary = {
   _id: string;
@@ -74,13 +56,10 @@ export type ArticleCard = {
   image?: SanityImage;
   publishDate?: string;
   readTime?: number;
-  contentKind?: "feature" | "news" | "pressRelease";
-  popularityScore?: number;
+  contentKinds?: ArticleContentKind[];
   isSponsored?: boolean;
   sponsoredMeta?: SponsoredMeta;
-  category?: CategorySummary;
-  topics?: Topic[];
-  tags?: Tag[];
+  categories?: CategorySummary[];
 };
 
 export type EventCard = {
@@ -93,11 +72,11 @@ export type EventCard = {
   startDate?: string;
   endDate?: string;
   location?: string;
+  organizer?: string;
   registrationUrl?: string;
+  eventTags?: EventTag[];
   isSponsored?: boolean;
   sponsoredMeta?: SponsoredMeta;
-  topics?: Topic[];
-  tags?: Tag[];
 };
 
 export type AdvertisementCard = {
@@ -111,134 +90,105 @@ export type AdvertisementCard = {
   advertiser?: string;
   activeFrom?: string;
   activeTo?: string;
-  targetPages?: string[];
-  renderVariant?: "nativeCard" | "banner";
+  renderAs?: AdvertisementRenderAs;
   sponsoredMeta?: SponsoredMeta;
-  tags?: Tag[];
-  targetCategories?: CategorySummary[];
-  targetTopics?: Topic[];
 };
 
 export type ContentCard = ArticleCard | EventCard | AdvertisementCard;
 
-export type FeedMode = "latest" | "popular" | "sponsored" | "manual";
-export type ContentTypeName = "article" | "event" | "advertisement";
-export type TargetPage =
-  | "homepage"
-  | "category"
-  | "article"
-  | "news"
-  | "events"
-  | "about"
-  | "contact";
-export type EventWindow = "ongoing" | "past" | "upcoming";
-
-export type FeedSectionConfig = {
-  title?: string;
-  mode: FeedMode;
-  limit?: number;
-  contentTypes?: ContentTypeName[];
-  categories?: CategorySummary[];
-  topics?: Topic[];
-  manualItems?: ContentCard[];
+export type AgendaItem = {
+  time: string;
+  label: string;
 };
 
-export type ResolvedFeedSection = FeedSectionConfig & {
-  items: ContentCard[];
-  resolvedMode: FeedMode;
-};
-
-export type HeroSlide = {
-  overrideTitle?: string;
-  overrideExcerpt?: string;
-  overrideImage?: SanityImage;
-  cta?: CtaLink;
-  tags?: Tag[];
-  content?: ContentCard;
+export type AdvertisementSlot = {
+  slot: number;
+  advertisement: AdvertisementCard | null;
 };
 
 export type SiteSettings = {
   _id: string;
   title: string;
   description?: string;
-  navigationLinks?: CtaLink[];
-  footerLinks?: CtaLink[];
   socialLinks?: SocialLink[];
   defaultSeo?: Seo;
 };
 
 export type HomePageDocument = {
   _id: string;
-  heroCarousel?: HeroSlide[];
-  latestSection?: FeedSectionConfig;
+  carouselItems?: ContentCard[];
+  latestAdSlots?: AdvertisementSlot[];
+  popularAdSlots?: AdvertisementSlot[];
+  sponsoredItems?: ContentCard[];
   highlightedCategories?: CategorySummary[];
-  upcomingEventsSection?: FeedSectionConfig;
-  subnavCategories?: CategorySummary[];
+  highlightedEvents?: EventCard[];
   seo?: Seo;
 };
 
-export type HomePageData = Omit<HomePageDocument, "latestSection" | "upcomingEventsSection"> & {
-  latestSection: ResolvedFeedSection | null;
-  upcomingEventsSection: ResolvedFeedSection | null;
+export type HomePageData = Omit<HomePageDocument, "latestAdSlots" | "popularAdSlots"> & {
+  latestItems: ContentCard[];
+  popularItems: ContentCard[];
 };
 
 export type NewsPageDocument = {
   _id: string;
-  title?: string;
-  intro?: string;
-  featuredStories?: FeedSectionConfig;
-  latestNews?: FeedSectionConfig;
-  pressReleaseSection?: FeedSectionConfig;
+  pageDescription?: string;
+  featuredBanner?: ContentCard | null;
+  highlightedStories?: ContentCard[];
   seo?: Seo;
 };
 
-export type NewsPageData = Omit<
-  NewsPageDocument,
-  "featuredStories" | "latestNews" | "pressReleaseSection"
-> & {
-  featuredStories: ResolvedFeedSection | null;
-  latestNews: ResolvedFeedSection | null;
-  pressReleaseSection: ResolvedFeedSection | null;
+export type NewsPageData = NewsPageDocument & {
+  pressReleases: ArticleCard[];
 };
 
 export type EventsPageDocument = {
   _id: string;
-  title?: string;
-  intro?: string;
-  filterTags?: Tag[];
-  ongoingSection?: FeedSectionConfig;
-  pastSection?: FeedSectionConfig;
+  pageDescription?: string;
   seo?: Seo;
 };
 
-export type EventsPageData = Omit<EventsPageDocument, "ongoingSection" | "pastSection"> & {
-  ongoingSection: ResolvedFeedSection | null;
-  pastSection: ResolvedFeedSection | null;
+export type EventsPageData = EventsPageDocument & {
+  ongoingEvents: EventCard[];
+  pastEvents: EventCard[];
 };
 
 export type AboutPageData = {
   _id: string;
-  cosmetechTitle?: string;
   cosmetechBody?: unknown[];
-  quickLinks?: CtaLink[];
-  fourthWaveTitle?: string;
   fourthWaveBody?: unknown[];
-  fourthWaveLink?: CtaLink;
-  socialLinks?: SocialLink[];
   seo?: Seo;
 };
 
 export type ContactPageData = {
   _id: string;
-  generalTitle?: string;
-  generalIntro?: string;
-  generalContactMethods?: ContactMethod[];
-  editorialTitle?: string;
-  editorialIntro?: string;
-  editorialContactMethods?: ContactMethod[];
-  advertisingTitle?: string;
-  advertisingBody?: unknown[];
-  advertisingContactMethods?: ContactMethod[];
+  generalContactEmail?: string;
+  editorialContactEmail?: string;
+  advertisingContacts?: ContactMethod[];
+  seo?: Seo;
+};
+
+export type FaqItem = {
+  question: string;
+  answer?: unknown[];
+};
+
+export type FaqSection = {
+  title: string;
+  items: FaqItem[];
+};
+
+export type FaqPageData = {
+  _id: string;
+  pageTitle?: string;
+  sections?: FaqSection[];
+  seo?: Seo;
+};
+
+export type LegalPageData = {
+  _id: string;
+  pageTitle?: string;
+  body?: unknown[];
   seo?: Seo;
 };
 
@@ -247,15 +197,19 @@ export type CategoryPageData = {
   title: string;
   slug?: string;
   description?: string;
-  heroArticle?: ContentCard;
-  allowedTopics?: Topic[];
-  availableTopics: Topic[];
-  items: ContentCard[];
-  seo?: Seo;
+  heroArticle?: ArticleCard;
+  highlightedArticles?: ArticleCard[];
 };
 
 export type ArticlePageData = ArticleCard & {
   body?: unknown[];
-  relatedArticles?: ContentCard[];
+  relatedArticles?: ArticleCard[];
+  seo?: Seo;
+};
+
+export type EventPageData = EventCard & {
+  body?: unknown[];
+  agenda?: AgendaItem[];
+  relatedEvents?: EventCard[];
   seo?: Seo;
 };

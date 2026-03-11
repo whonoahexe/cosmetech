@@ -1,4 +1,4 @@
-import { defineField, defineType } from "sanity";
+import { defineArrayMember, defineField, defineType } from "sanity";
 
 export const newsPageType = defineType({
   name: "newsPage",
@@ -6,31 +6,28 @@ export const newsPageType = defineType({
   type: "document",
   fields: [
     defineField({
-      name: "title",
-      title: "Title",
-      type: "string",
-      initialValue: "News / Updates",
-    }),
-    defineField({
-      name: "intro",
-      title: "Intro",
+      name: "pageDescription",
+      title: "Page description",
       type: "text",
       rows: 4,
     }),
     defineField({
-      name: "featuredStories",
-      title: "Featured stories",
-      type: "feedSection",
+      name: "featuredBanner",
+      title: "Featured banner",
+      type: "reference",
+      to: [{ type: "article" }, { type: "advertisement" }],
     }),
     defineField({
-      name: "latestNews",
-      title: "Latest news",
-      type: "feedSection",
-    }),
-    defineField({
-      name: "pressReleaseSection",
-      title: "Press release section",
-      type: "feedSection",
+      name: "highlightedStories",
+      title: "Highlighted stories",
+      type: "array",
+      of: [
+        defineArrayMember({
+          type: "reference",
+          to: [{ type: "article" }, { type: "advertisement" }],
+        }),
+      ],
+      validation: (rule) => rule.max(2),
     }),
     defineField({
       name: "seo",

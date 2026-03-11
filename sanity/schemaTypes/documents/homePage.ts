@@ -6,33 +6,56 @@ export const homePageType = defineType({
   type: "document",
   fields: [
     defineField({
-      name: "heroCarousel",
-      title: "Hero carousel",
+      name: "carouselItems",
+      title: "Carousel items",
       type: "array",
-      of: [defineArrayMember({ type: "heroSlide" })],
-      validation: (rule) => rule.min(1),
+      of: [
+        defineArrayMember({
+          type: "reference",
+          to: [{ type: "article" }, { type: "event" }, { type: "advertisement" }],
+        }),
+      ],
+      validation: (rule) => rule.required().min(1).max(5),
     }),
     defineField({
-      name: "latestSection",
-      title: "Latest section",
-      type: "feedSection",
+      name: "latestAdSlots",
+      title: "Latest section advertisement swaps",
+      type: "array",
+      of: [defineArrayMember({ type: "advertisementSlot" })],
+      validation: (rule) => rule.max(5),
+    }),
+    defineField({
+      name: "popularAdSlots",
+      title: "Popular section advertisement swaps",
+      type: "array",
+      of: [defineArrayMember({ type: "advertisementSlot" })],
+      validation: (rule) => rule.max(5),
+    }),
+    defineField({
+      name: "sponsoredItems",
+      title: "Sponsored items",
+      type: "array",
+      of: [
+        defineArrayMember({
+          type: "reference",
+          to: [{ type: "article" }, { type: "event" }, { type: "advertisement" }],
+        }),
+      ],
+      validation: (rule) => rule.max(5),
     }),
     defineField({
       name: "highlightedCategories",
       title: "Highlighted categories",
       type: "array",
       of: [defineArrayMember({ type: "reference", to: [{ type: "category" }] })],
+      validation: (rule) => rule.max(4),
     }),
     defineField({
-      name: "upcomingEventsSection",
-      title: "Upcoming events section",
-      type: "feedSection",
-    }),
-    defineField({
-      name: "subnavCategories",
-      title: "Sub-navigation categories",
+      name: "highlightedEvents",
+      title: "Highlighted events",
       type: "array",
-      of: [defineArrayMember({ type: "reference", to: [{ type: "category" }] })],
+      of: [defineArrayMember({ type: "reference", to: [{ type: "event" }] })],
+      validation: (rule) => rule.max(5),
     }),
     defineField({
       name: "seo",

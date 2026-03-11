@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "sanity": "sanity",
+    "sanity:seed-categories": "sanity documents create sanity/seeds/fixed-categories.json --missing",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },
