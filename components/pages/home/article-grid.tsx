@@ -6,6 +6,7 @@ import { ArticleCard, type ArticleCardData } from "./article-card";
 import { cn } from "@/lib/utils";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export type ArticleFilter = "latest" | "popular" | "sponsored" | "all";
 
@@ -118,9 +119,21 @@ export function ArticleGrid(props: ArticleGridProps) {
     <Suspense
       fallback={
         <section id="article-grid" className={cn("flex flex-col", props.className)}>
-          {/* Placeholder header while loading */}
           <div className="flex items-end gap-6 py-4">
-            <h2 className="type-heading-1 text-foreground">Loading...</h2>
+            <Skeleton className="h-12 w-48 rounded-md" />
+          </div>
+          <div className="grid grid-cols-8 gap-5 py-4">
+            <div className="col-span-2 flex flex-col gap-5">
+              <Skeleton className="h-100 w-full rounded-[30px]" />
+              <Skeleton className="h-100 w-full rounded-[30px]" />
+            </div>
+            <div className="col-span-4">
+              <Skeleton className="h-205 w-full rounded-[30px]" />
+            </div>
+            <div className="col-span-2 flex flex-col gap-5">
+              <Skeleton className="h-100 w-full rounded-[30px]" />
+              <Skeleton className="h-100 w-full rounded-[30px]" />
+            </div>
           </div>
         </section>
       }

@@ -5,6 +5,7 @@ import { ALL_CATEGORIES } from "@/components/pages/home/highlighted-categories";
 import { FilterPill } from "./filter-pill";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const SEARCH_TOPIC_OPTIONS = [
   "Any topic",
@@ -59,8 +60,12 @@ export function CategoryHeroFilters() {
     <Suspense
       fallback={
         <section className="flex flex-col items-center gap-8 py-8 mt-4">
-          <div className="flex max-w-2xl flex-col items-center gap-4 text-center">
-            <h1 className="type-heading-1 text-foreground px-14">Loading...</h1>
+          <div className="flex w-full max-w-2xl flex-col items-center gap-4 text-center">
+            <Skeleton className="h-16 w-3/4 rounded-2xl" />
+            <Skeleton className="h-6 w-1/2 rounded-full mt-2" />
+          </div>
+          <div className="w-full flex justify-center">
+            <Skeleton className="h-12 w-150 rounded-full" />
           </div>
         </section>
       }

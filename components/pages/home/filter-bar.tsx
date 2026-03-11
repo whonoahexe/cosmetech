@@ -43,7 +43,30 @@ const CATEGORIES_WITH_ICONS = ALL_CATEGORIES.map((cat, i) => ({
 
 const SORT_OPTIONS = ["Latest", "Popular", "Sponsored"];
 
-export const FilterBar = () => {
+import { Skeleton } from "@/components/ui/skeleton";
+import { Suspense } from "react";
+
+export function FilterBarSkeleton() {
+  return (
+    <div className="flex w-full justify-between items-center py-4">
+      <div className="flex gap-3 justify-center items-center">
+        <Skeleton className="h-14 w-40 rounded-full" />
+        <p className="type-heading-4 text-muted-foreground">•</p>
+        <div className="flex gap-1">
+          <Skeleton className="h-14 w-32 rounded-full" />
+          <Skeleton className="h-14 w-32 rounded-full" />
+          <Skeleton className="h-14 w-32 rounded-full" />
+        </div>
+      </div>
+      <div className="flex gap-1">
+        <Skeleton className="h-14 w-32 rounded-full" />
+        <Skeleton className="h-14 w-14 rounded-full" />
+      </div>
+    </div>
+  );
+}
+
+function FilterBarContent() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -123,4 +146,12 @@ export const FilterBar = () => {
       </DropdownMenu>
     </div>
   );
-};
+}
+
+export function FilterBar() {
+  return (
+    <Suspense fallback={<FilterBarSkeleton />}>
+      <FilterBarContent />
+    </Suspense>
+  );
+}
