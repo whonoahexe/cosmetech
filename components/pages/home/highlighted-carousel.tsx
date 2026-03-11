@@ -53,9 +53,16 @@ export function HighlightedCarousel() {
     if (!api) return;
     setCount(api.scrollSnapList().length);
     setCurrent(api.selectedScrollSnap());
-    api.on("select", () => {
+    
+    const onSelect = () => {
       setCurrent(api.selectedScrollSnap());
-    });
+    };
+    
+    api.on("select", onSelect);
+    
+    return () => {
+      api.off("select", onSelect);
+    };
   }, [api]);
 
   return (
@@ -82,7 +89,6 @@ export function HighlightedCarousel() {
               </Link>
 
               {/* Bottom gradient for text legibility over images */}
-              {/* <div className="absolute inset-0 bg-linear-to-t from-black/30 via-transparent to-transparent pointer-events-none" /> */}
 
               {/* Article details */}
               <div className="absolute bottom-0 left-0 right-0 flex flex-col items-center gap-3 pb-16 text-center pointer-events-none">

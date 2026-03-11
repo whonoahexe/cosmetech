@@ -27,55 +27,62 @@ interface EventCardProps extends EventCardData {
   className?: string;
 }
 
-export function EventCard({
+function EventCardList({
   title,
   location,
   date,
   category,
   excerpt,
   image,
+  isSponsored,
+  href,
+  className,
+}: EventCardProps) {
+  const inner = (
+    <article className={cn("flex items-center gap-5 group", className)}>
+      <div className="h-60 w-109 shrink-0 overflow-hidden rounded-3xl bg-[#D9D9D9]">
+        {image && <img src={image} alt={title} className="h-full w-full object-cover" />}
+      </div>
+
+      <div className="flex min-h-60 flex-1 flex-col justify-between py-4">
+        <div className="flex items-center gap-2.5">
+          <Badge variant="secondary">{category ?? location}</Badge>
+          {isSponsored && <Badge variant="default">Sponsored</Badge>}
+          <span className="type-paragraph text-foreground">&bull;</span>
+          <span className="type-paragraph-mini text-muted-foreground whitespace-nowrap">
+            {date}
+          </span>
+        </div>
+
+        <div className="space-y-4">
+          <h3 className="type-heading-3 text-foreground group-hover:underline transition-all">
+            {title}
+          </h3>
+          <p className="type-paragraph-medium text-muted-foreground">{excerpt}</p>
+        </div>
+      </div>
+    </article>
+  );
+
+  if (href) {
+    return <Link href={href}>{inner}</Link>;
+  }
+  return inner;
+}
+
+function EventCardStacked({
+  title,
+  location,
+  date,
+  image,
   isVirtual,
   isSponsored,
   href,
-  variant = "stacked",
   tilt = 0,
   onHoverStart,
   onHoverEnd,
   className,
 }: EventCardProps) {
-  if (variant === "list") {
-    const inner = (
-      <article className={cn("flex items-center gap-5 group", className)}>
-        <div className="h-60 w-109 shrink-0 overflow-hidden rounded-3xl bg-[#D9D9D9]">
-          {image && <img src={image} alt={title} className="h-full w-full object-cover" />}
-        </div>
-
-        <div className="flex min-h-60 flex-1 flex-col justify-between py-4">
-          <div className="flex items-center gap-2.5">
-            <Badge variant="secondary">{category ?? location}</Badge>
-            {isSponsored && <Badge variant="default">Sponsored</Badge>}
-            <span className="type-paragraph text-foreground">&bull;</span>
-            <span className="type-paragraph-mini text-muted-foreground whitespace-nowrap">
-              {date}
-            </span>
-          </div>
-
-          <div className="space-y-4">
-            <h3 className="type-heading-3 text-foreground group-hover:underline transition-all">
-              {title}
-            </h3>
-            <p className="type-paragraph-medium text-muted-foreground">{excerpt}</p>
-          </div>
-        </div>
-      </article>
-    );
-
-    if (href) {
-      return <Link href={href}>{inner}</Link>;
-    }
-    return inner;
-  }
-
   return (
     <motion.div
       className={cn("cursor-pointer", className)}
@@ -110,7 +117,12 @@ export function EventCard({
 
           {/* CTA */}
           {href ? (
-            <Button variant="outline" className="rounded-full w-16" aria-label={`View ${title}`} asChild>
+            <Button
+              variant="outline"
+              className="rounded-full w-16"
+              aria-label={`View ${title}`}
+              asChild
+            >
               <Link href={href}>
                 <ArrowUpRight className="size-4" />
               </Link>
@@ -125,3 +137,14 @@ export function EventCard({
     </motion.div>
   );
 }
+
+export function EventCard(props: EventCardProps) {
+  const { variant = "stacked" } = props;
+
+  if (variant === "list") {
+    return <EventCardList {...props} />;
+  }
+
+  return <EventCardStacked {...props} />;
+}
+

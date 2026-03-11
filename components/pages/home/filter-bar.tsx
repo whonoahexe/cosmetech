@@ -25,6 +25,24 @@ import {
 } from "lucide-react";
 import { ALL_CATEGORIES } from "./highlighted-categories";
 
+const ICONS = [
+  FlaskConical,
+  Flower,
+  Box,
+  Microscope,
+  FileCheck,
+  ArrowUp,
+  Megaphone,
+  Sparkle,
+];
+
+const CATEGORIES_WITH_ICONS = ALL_CATEGORIES.map((cat, i) => ({
+  ...cat,
+  Icon: ICONS[i],
+}));
+
+const SORT_OPTIONS = ["Latest", "Popular", "Sponsored"];
+
 export const FilterBar = () => {
   const router = useRouter();
   const pathname = usePathname();
@@ -33,7 +51,7 @@ export const FilterBar = () => {
 
   // Default to Latest if not specified or invalid
   const sortOption = (
-    ["Latest", "Popular", "Sponsored"].includes(sortParam as string) ? sortParam : "Latest"
+    SORT_OPTIONS.includes(sortParam as string) ? sortParam : "Latest"
   ) as "Latest" | "Popular" | "Sponsored";
 
   const setSortOption = (value: string) => {
@@ -62,54 +80,14 @@ export const FilterBar = () => {
         </Button>
         <p className="type-heading-4">•</p>
         <ButtonGroup>
-          <Button variant="outline" size="lg" className="px-6" asChild>
-            <Link href={`/categories?category=${ALL_CATEGORIES[0].slug}`}>
-              <FlaskConical />
-              Ingredients & Formulation
-            </Link>
-          </Button>
-          <Button variant="outline" size="lg" className="px-6" asChild>
-            <Link href={`/categories?category=${ALL_CATEGORIES[1].slug}`}>
-              <Flower />
-              Fragrance
-            </Link>
-          </Button>
-          <Button variant="outline" size="lg" className="px-6" asChild>
-            <Link href={`/categories?category=${ALL_CATEGORIES[2].slug}`}>
-              <Box />
-              Packaging
-            </Link>
-          </Button>
-          <Button variant="outline" size="lg" className="px-6" asChild>
-            <Link href={`/categories?category=${ALL_CATEGORIES[3].slug}`}>
-              <Microscope />
-              R&D
-            </Link>
-          </Button>
-          <Button variant="outline" size="lg" className="px-6" asChild>
-            <Link href={`/categories?category=${ALL_CATEGORIES[4].slug}`}>
-              <FileCheck />
-              Regulations
-            </Link>
-          </Button>
-          <Button variant="outline" size="lg" className="px-6" asChild>
-            <Link href={`/categories?category=${ALL_CATEGORIES[5].slug}`}>
-              <ArrowUp />
-              Springboard
-            </Link>
-          </Button>
-          <Button variant="outline" size="lg" className="px-6" asChild>
-            <Link href={`/categories?category=${ALL_CATEGORIES[6].slug}`}>
-              <Megaphone />
-              Marketing
-            </Link>
-          </Button>
-          <Button variant="outline" size="lg" className="px-6" asChild>
-            <Link href={`/categories?category=${ALL_CATEGORIES[7].slug}`}>
-              <Sparkle />
-              Ai & Technology
-            </Link>
-          </Button>
+          {CATEGORIES_WITH_ICONS.map((cat) => (
+            <Button key={cat.slug} variant="outline" size="lg" className="px-6" asChild>
+              <Link href={`/categories?category=${cat.slug}`}>
+                <cat.Icon />
+                {cat.name}
+              </Link>
+            </Button>
+          ))}
         </ButtonGroup>
       </div>
 
@@ -135,11 +113,11 @@ export const FilterBar = () => {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="w-40">
           <DropdownMenuGroup>
-            <DropdownMenuItem onClick={() => setSortOption("Latest")}>Latest</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setSortOption("Popular")}>Popular</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => setSortOption("Sponsored")}>
-              Sponsored
-            </DropdownMenuItem>
+            {SORT_OPTIONS.map((option) => (
+              <DropdownMenuItem key={option} onClick={() => setSortOption(option)}>
+                {option}
+              </DropdownMenuItem>
+            ))}
           </DropdownMenuGroup>
         </DropdownMenuContent>
       </DropdownMenu>
