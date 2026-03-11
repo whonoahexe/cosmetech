@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Playfair_Display, Space_Mono } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import { Navbar, Footer } from "@/components/layout";
+import { RootShell } from "@/components/layout";
 
 const bodyFont = Inter({
   variable: "--font-body",
@@ -35,9 +35,7 @@ export default function RootLayout({
       <body
         className={`${bodyFont.variable} ${headingFont.variable} ${monoFont.variable} antialiased`}
       >
-        <Navbar />
-        <div className="px-6 md:px-14">{children}</div>
-        <Footer />
+        <RootShell>{children}</RootShell>
       </body>
     </html>
   );
