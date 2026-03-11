@@ -1,4 +1,4 @@
-import { ArrowDown } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 import { ArticleCard, type ArticleCardData } from "@/components/pages/home/article-card";
 import { Badge } from "@/components/ui/badge";
@@ -96,7 +96,7 @@ function PressReleasesSection() {
           className="h-9 w-16 rounded-full"
           aria-label="Press releases controls"
         >
-          <ArrowDown className="size-4" />
+          <ArrowRight className="size-4" />
         </Button>
       </div>
 
