@@ -1,10 +1,9 @@
-import { ArrowDown, Calendar, Clapperboard, Store, Wrench, Zap } from "lucide-react";
+import { ArrowDown } from "lucide-react";
 
 import { EventCard, type EventCardData } from "@/components/pages/home/event-card";
 import { Button } from "@/components/ui/button";
-import { ButtonGroup } from "@/components/ui/button-group";
 
-const ONGOING_EVENTS: EventCardData[] = [
+export const ONGOING_EVENTS: EventCardData[] = [
   {
     title: "Sustainable Packaging for Beauty Workshop",
     location: "Mumbai",
@@ -35,7 +34,7 @@ const ONGOING_EVENTS: EventCardData[] = [
   },
 ];
 
-const PAST_EVENTS: EventCardData[] = [
+export const PAST_EVENTS: EventCardData[] = [
   {
     title: "Fragrance Futures: Scent & Sensory Forum",
     location: "Mumbai",
@@ -94,7 +93,7 @@ const PAST_EVENTS: EventCardData[] = [
   },
 ];
 
-function EventsSection({ title, events }: { title: string; events: EventCardData[] }) {
+export function EventsSection({ title, events }: { title: string; events: EventCardData[] }) {
   return (
     <section className="space-y-4">
       <div className="flex items-end gap-6 py-4">
@@ -116,61 +115,5 @@ function EventsSection({ title, events }: { title: string; events: EventCardData
         ))}
       </div>
     </section>
-  );
-}
-
-export function EventsPageContent() {
-  return (
-    <div className="mt-4 mb-12 flex flex-col gap-4">
-      <section className="grid grid-cols-8 gap-5 py-8">
-        <div className="col-span-8 flex max-w-230 flex-col gap-4 xl:col-span-5">
-          <h1 className="type-heading-1 text-foreground">EVENTS</h1>
-
-          <div className="flex flex-wrap items-center gap-3 py-4">
-            <Button variant="outline" size="sm" className="h-10 rounded-full border-secondary px-6">
-              <Zap className="size-4" />
-              Upcoming
-            </Button>
-
-            <span className="type-heading-4 text-foreground">&bull;</span>
-
-            <ButtonGroup>
-              <Button variant="outline" size="sm" className="h-10 px-6">
-                <Calendar className="size-4" />
-                Conferences
-              </Button>
-              <Button variant="outline" size="sm" className="h-10 px-6">
-                <Wrench className="size-4" />
-                Workshops
-              </Button>
-              <Button variant="outline" size="sm" className="h-10 px-6">
-                <Clapperboard className="size-4" />
-                Webinars
-              </Button>
-              <Button variant="outline" size="sm" className="h-10 px-6">
-                <Store className="size-4" />
-                Expos
-              </Button>
-            </ButtonGroup>
-          </div>
-        </div>
-
-        <p className="type-paragraph-large-medium col-span-8 max-w-166 text-foreground xl:col-span-3 xl:pt-2">
-          Conferences, workshops, and industry gatherings from across the global cosmetics and
-          personal care sector. Explore upcoming events, past highlights, and opportunities to
-          connect with researchers, manufacturers, and innovators shaping the future of beauty.
-        </p>
-      </section>
-
-      <EventsSection title="Ongoing" events={ONGOING_EVENTS} />
-      <EventsSection title="Past Events" events={PAST_EVENTS} />
-
-      <div className="flex items-center justify-center py-4">
-        <Button variant="default" size="lg" className="h-12 rounded-full px-8">
-          Load More
-          <ArrowDown className="size-4" />
-        </Button>
-      </div>
-    </div>
   );
 }

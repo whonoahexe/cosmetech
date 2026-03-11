@@ -1,2 +1,9 @@
-export { EventsPageContent } from "./events-page";
-export { EventPageContent } from "./event-page";
+export * from "./events-header";
+export * from "./events-section";
+export * from "./event-hero";
+export * from "./event-title";
+export * from "./event-breadcrumb";
+export * from "./event-details";
+export * from "./event-about";
+export * from "./event-agenda";
+export * from "./event-related";
