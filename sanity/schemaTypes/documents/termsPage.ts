@@ -3,6 +3,10 @@ import { defineArrayMember, defineField, defineType } from "sanity";
 export const termsPageType = defineType({
   name: "termsPage",
   title: "Terms & Conditions Page",
+  preview: {
+    select: {},
+    prepare: () => ({ title: "Terms & Conditions Page" }),
+  },
   type: "document",
   fields: [
     defineField({

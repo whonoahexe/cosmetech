@@ -4,6 +4,10 @@ export const aboutPageType = defineType({
   name: "aboutPage",
   title: "About Page",
   type: "document",
+  preview: {
+    select: {},
+    prepare: () => ({ title: "About Page" }),
+  },
   fields: [
     defineField({
       name: "cosmetechBody",

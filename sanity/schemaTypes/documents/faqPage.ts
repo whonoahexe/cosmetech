@@ -3,6 +3,10 @@ import { defineArrayMember, defineField, defineType } from "sanity";
 export const faqPageType = defineType({
   name: "faqPage",
   title: "FAQ Page",
+  preview: {
+    select: {},
+    prepare: () => ({ title: "FAQ Page" }),
+  },
   type: "document",
   fields: [
     defineField({

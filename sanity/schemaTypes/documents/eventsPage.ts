@@ -4,6 +4,10 @@ export const eventsPageType = defineType({
   name: "eventsPage",
   title: "Events Page",
   type: "document",
+  preview: {
+    select: {},
+    prepare: () => ({ title: "Events Page" }),
+  },
   fields: [
     defineField({
       name: "pageDescription",

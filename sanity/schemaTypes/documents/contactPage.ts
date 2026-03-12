@@ -4,6 +4,10 @@ export const contactPageType = defineType({
   name: "contactPage",
   title: "Contact Page",
   type: "document",
+  preview: {
+    select: {},
+    prepare: () => ({ title: "Contact Page" }),
+  },
   fields: [
     defineField({
       name: "generalContactEmail",

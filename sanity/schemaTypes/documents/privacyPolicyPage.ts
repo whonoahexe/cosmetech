@@ -3,6 +3,10 @@ import { defineArrayMember, defineField, defineType } from "sanity";
 export const privacyPolicyPageType = defineType({
   name: "privacyPolicyPage",
   title: "Privacy Policy Page",
+  preview: {
+    select: {},
+    prepare: () => ({ title: "Privacy Policy Page" }),
+  },
   type: "document",
   fields: [
     defineField({

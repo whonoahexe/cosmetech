@@ -4,6 +4,13 @@ export const articleType = defineType({
   name: "article",
   title: "Article",
   type: "document",
+  preview: {
+    select: {
+      title: "title",
+      subtitle: "excerpt",
+      media: "coverImage",
+    },
+  },
   fields: [
     defineField({
       name: "title",

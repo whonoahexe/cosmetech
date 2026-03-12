@@ -3,6 +3,10 @@ import { defineArrayMember, defineField, defineType } from "sanity";
 export const siteSettingsType = defineType({
   name: "siteSettings",
   title: "Site Settings",
+  preview: {
+    select: {},
+    prepare: () => ({ title: "Site Settings" }),
+  },
   type: "document",
   fields: [
     defineField({

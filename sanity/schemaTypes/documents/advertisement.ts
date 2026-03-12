@@ -4,6 +4,13 @@ export const advertisementType = defineType({
   name: "advertisement",
   title: "Advertisement",
   type: "document",
+  preview: {
+    select: {
+      title: "title",
+      subtitle: "advertiser",
+      media: "image",
+    },
+  },
   fields: [
     defineField({
       name: "title",

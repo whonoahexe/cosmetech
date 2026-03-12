@@ -4,6 +4,13 @@ export const eventType = defineType({
   name: "event",
   title: "Event",
   type: "document",
+  preview: {
+    select: {
+      title: "title",
+      subtitle: "summary",
+      media: "image",
+    },
+  },
   fields: [
     defineField({
       name: "title",

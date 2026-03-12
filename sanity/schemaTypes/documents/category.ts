@@ -29,12 +29,29 @@ export const categoryType = defineType({
       title: "Hero article",
       type: "reference",
       to: [{ type: "article" }],
+      options: {
+        filter: ({ document }) => ({
+          filter: "references($catId)",
+          params: { catId: document._id },
+        }),
+      },
     }),
     defineField({
       name: "highlightedArticles",
       title: "Highlighted articles",
       type: "array",
-      of: [defineArrayMember({ type: "reference", to: [{ type: "article" }] })],
+      of: [
+        defineArrayMember({
+          type: "reference",
+          to: [{ type: "article" }],
+          options: {
+            filter: ({ document }) => ({
+              filter: "references($catId)",
+              params: { catId: document._id },
+            }),
+          },
+        }),
+      ],
       validation: (rule) => rule.max(4),
     }),
   ],

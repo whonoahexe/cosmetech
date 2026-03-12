@@ -4,6 +4,10 @@ export const homePageType = defineType({
   name: "homePage",
   title: "Homepage",
   type: "document",
+  preview: {
+    select: {},
+    prepare: () => ({ title: "Homepage" }),
+  },
   fields: [
     defineField({
       name: "carouselItems",

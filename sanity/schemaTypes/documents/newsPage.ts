@@ -4,6 +4,10 @@ export const newsPageType = defineType({
   name: "newsPage",
   title: "News Page",
   type: "document",
+  preview: {
+    select: {},
+    prepare: () => ({ title: "News Page" }),
+  },
   fields: [
     defineField({
       name: "pageDescription",
