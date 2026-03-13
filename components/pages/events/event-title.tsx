@@ -4,11 +4,12 @@ interface EventTitleProps {
   title: string;
   category: string;
   date: string;
+  excerpt?: string;
   isSponsored?: boolean;
   isVirtual?: boolean;
 }
 
-export function EventTitle({ title, category, date, isSponsored, isVirtual }: EventTitleProps) {
+export function EventTitle({ title, category, date, excerpt, isSponsored, isVirtual }: EventTitleProps) {
   return (
     <section className="flex flex-col items-center gap-3 py-8 text-center">
       <div className="flex items-center justify-center gap-2">
@@ -21,9 +22,11 @@ export function EventTitle({ title, category, date, isSponsored, isVirtual }: Ev
         </span>
       </div>
       <h1 className="type-heading-2 text-foreground max-w-3xl">{title}</h1>
-      <p className="type-paragraph-medium max-w-110 text-muted-foreground">
-        An intensive full-day workshop on sustainable packaging, refill systems, and mono-material innovation for the beauty industry.
-      </p>
+      {excerpt && (
+        <p className="type-paragraph-medium max-w-110 text-muted-foreground">
+          {excerpt}
+        </p>
+      )}
     </section>
   );
 }

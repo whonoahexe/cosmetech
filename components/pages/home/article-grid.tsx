@@ -17,58 +17,17 @@ const FILTER_LABELS: Record<ArticleFilter, string> = {
   all: "All Articles",
 };
 
-// Placeholder articles
-const PLACEHOLDER_ARTICLES: ArticleCardData[] = [
-  {
-    image: null,
-    category: "Packaging",
-    readTime: 6,
-    title: "The Aesthetic Is the Product",
-    excerpt:
-      "Why branding, UI, and vibes now carry more weight than features. We're all buying feelings with a side of software.",
-  },
-  {
-    image: null,
-    category: "Fragrance",
-    readTime: 6,
-    title: "The Death of the Casual Internet",
-    excerpt:
-      "Every post is optimized. Every opinion branded. Whatever happened to logging on and just being weird.",
-  },
-  {
-    image: null,
-    category: "Culture",
-    readTime: 6,
-    title: "The Internet Is Smaller Than It Thinks!",
-    excerpt:
-      "Been poking at traffic patterns and it\u2019s kind of hilarious how the \u201copen web\u201d is just five platforms in a trench coat. Algorithms looping the same creators, same takes, same aesthetics. Discovery feels like walking in circles inside a very pretty mall.",
-  },
-  {
-    image: null,
-    category: "Fragrance",
-    readTime: 6,
-    title: "Minimalism Was a Phase. We Want Texture Again",
-    excerpt:
-      "Clean design ruled for a decade. Now people want personality, clutter, and interfaces that feel human.",
-  },
-  {
-    image: null,
-    category: "Regulations",
-    isSponsored: true,
-    readTime: 6,
-    title: "Burnout but Make It Productive",
-    excerpt:
-      "Hustle culture evolved into quiet overwork. Same pressure, softer language. Still exhausting.",
-  },
-];
-
 interface ArticleGridProps {
-  articles?: ArticleCardData[];
+  latestArticles?: ArticleCardData[];
+  popularArticles?: ArticleCardData[];
+  sponsoredArticles?: ArticleCardData[];
   className?: string;
 }
 
 export function ArticleGridContent({
-  articles = PLACEHOLDER_ARTICLES,
+  latestArticles = [],
+  popularArticles = [],
+  sponsoredArticles = [],
   className,
 }: ArticleGridProps) {
   const searchParams = useSearchParams();
@@ -79,6 +38,20 @@ export function ArticleGridContent({
   )
     ? (filterParam as ArticleFilter)
     : "latest";
+
+  let articles: ArticleCardData[];
+  switch (filter) {
+    case "popular":
+      articles = popularArticles;
+      break;
+    case "sponsored":
+      articles = sponsoredArticles;
+      break;
+    case "latest":
+    default:
+      articles = latestArticles;
+      break;
+  }
 
   const [leftTop, leftBottom, center, rightTop, rightBottom] = articles;
 

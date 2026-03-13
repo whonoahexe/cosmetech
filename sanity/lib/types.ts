@@ -59,7 +59,8 @@ export type ArticleCard = {
   contentKinds?: ArticleContentKind[];
   isSponsored?: boolean;
   sponsoredMeta?: SponsoredMeta;
-  categories?: CategorySummary[];
+  categories?: (CategorySummary | null)[];
+  categoryRefs?: string[];
 };
 
 export type EventCard = {

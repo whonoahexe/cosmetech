@@ -23,7 +23,7 @@ import {
   Sparkle,
   Zap,
 } from "lucide-react";
-import { ALL_CATEGORIES } from "./highlighted-categories";
+import type { CategoryCardData } from "./category-card";
 
 const ICONS = [
   FlaskConical,
@@ -35,11 +35,6 @@ const ICONS = [
   Megaphone,
   Sparkle,
 ];
-
-const CATEGORIES_WITH_ICONS = ALL_CATEGORIES.map((cat, i) => ({
-  ...cat,
-  Icon: ICONS[i],
-}));
 
 const SORT_OPTIONS = ["Latest", "Popular", "Sponsored"];
 
@@ -66,7 +61,7 @@ export function FilterBarSkeleton() {
   );
 }
 
-function FilterBarContent() {
+function FilterBarContent({ categories = [] }: { categories?: CategoryCardData[] }) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -89,6 +84,12 @@ function FilterBarContent() {
       gridEl.scrollIntoView({ behavior: "smooth" });
     }
   };
+
+  const categoriesWithIcons = categories.map((cat, i) => ({
+    ...cat,
+    Icon: ICONS[i % ICONS.length],
+  }));
+
   return (
     <div className="flex w-full justify-between items-center py-4">
       <div className="flex gap-3 justify-center items-center">
@@ -103,7 +104,7 @@ function FilterBarContent() {
         </Button>
         <p className="type-heading-4">•</p>
         <ButtonGroup>
-          {CATEGORIES_WITH_ICONS.map((cat) => (
+          {categoriesWithIcons.map((cat) => (
             <Button key={cat.slug} variant="outline" size="lg" className="px-6" asChild>
               <Link href={`/categories?category=${cat.slug}`}>
                 <cat.Icon />
@@ -148,10 +149,10 @@ function FilterBarContent() {
   );
 }
 
-export function FilterBar() {
+export function FilterBar({ categories }: { categories?: CategoryCardData[] }) {
   return (
     <Suspense fallback={<FilterBarSkeleton />}>
-      <FilterBarContent />
+      <FilterBarContent categories={categories} />
     </Suspense>
   );
 }

@@ -2,6 +2,7 @@ import { client } from "./client";
 import {
   aboutPageQuery,
   articleBySlugQuery,
+  articlesByCategoryRefQuery,
   categoriesQuery,
   categoryBySlugQuery,
   contactPageQuery,
@@ -9,6 +10,7 @@ import {
   eventsPageQuery,
   faqPageQuery,
   homePageQuery,
+  latestArticlesQuery,
   newsPageQuery,
   ongoingEventsQuery,
   pastEventsQuery,
@@ -201,6 +203,16 @@ export const getPrivacyPolicyPageData = async () =>
 export const getTermsPageData = async () => client.fetch<LegalPageData | null>(termsPageQuery);
 
 export const getCategories = async () => client.fetch<CategoryPageData[]>(categoriesQuery);
+
+export const getArticlesByCategory = async (categoryId: string) => {
+  const articles = await client.fetch<RawArticleCard[]>(articlesByCategoryRefQuery, { categoryId });
+  return articles.map(enrichArticleCard);
+};
+
+export const getLatestArticles = async (excludeSlug = "") => {
+  const articles = await client.fetch<RawArticleCard[]>(latestArticlesQuery, { excludeSlug });
+  return articles.map(enrichArticleCard);
+};
 
 export const getArticlePageData = async (slug: string) =>
   client.fetch<RawArticlePageData | null>(articleBySlugQuery, { slug }).then((article) => {

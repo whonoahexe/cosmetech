@@ -3,68 +3,18 @@ import { Button } from "@/components/ui/button";
 import { CategoryCard, type CategoryCardData } from "./category-card";
 import { cn } from "@/lib/utils";
 
-export const ALL_CATEGORIES: CategoryCardData[] = [
-  {
-    slug: "ingredients-formulation",
-    name: "Ingredients & Formulation",
-    description: "Raw materials, actives, and the science behind what goes into every product.",
-  },
-  {
-    slug: "fragrance",
-    name: "Fragrance",
-    description: "The art and chemistry of scent, from raw materials to the finished bottle.",
-  },
-  {
-    slug: "packaging",
-    name: "Packaging",
-    description: "Design, materials, and sustainability shaping the future of cosmetic packaging.",
-  },
-  {
-    slug: "r-and-d",
-    name: "R&D",
-    description:
-      "Research, clinical testing, and innovations powering the next generation of formulas.",
-  },
-  {
-    slug: "regulations",
-    name: "Regulations",
-    description: "Compliance, safety standards, and global frameworks every brand must navigate.",
-  },
-  {
-    slug: "springboard",
-    name: "Springboard",
-    description: "Startups, new launches, and emerging ideas shaping the industry.",
-  },
-  {
-    slug: "marketing",
-    name: "Marketing",
-    description: "Brand strategy, consumer trends, and the business of beauty.",
-  },
-  {
-    slug: "ai-technology",
-    name: "AI & Technology",
-    description:
-      "How machine learning, automation, and digital tools are reshaping the cosmetics space.",
-  },
-];
-
-const DEFAULT_HIGHLIGHTED = [
-  ALL_CATEGORIES[0], // Ingredients & Formulation
-  ALL_CATEGORIES[2], // Packaging
-  ALL_CATEGORIES[5], // Springboard
-  ALL_CATEGORIES[6], // Marketing
-];
-
 interface HighlightedCategoriesProps {
   categories?: CategoryCardData[];
   className?: string;
 }
 
 export function HighlightedCategories({
-  categories = DEFAULT_HIGHLIGHTED,
+  categories = [],
   className,
 }: HighlightedCategoriesProps) {
   const [first, second, third, fourth] = categories.slice(0, 4);
+
+  if (!first) return null;
 
   return (
     <section className={cn("flex flex-col", className)}>

@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { EventCard, type EventCardData } from "./event-card";
 import { cn } from "@/lib/utils";
 
-// Tilt angles from Figma (index 0–4): positive = CW, negative = CCW
+// Tilt angles from Figma (index 0-4): positive = CW, negative = CCW
 const TILTS = [4, -8, -4, 6, 4];
 
 // Vertical offsets
@@ -16,49 +16,15 @@ const Y_OFFSETS = [50, 94, 0, 101, 50];
 // Default z-indices: center card floats on top at rest
 const DEFAULT_Z = [1, 2, 3, 2, 1];
 
-// Placeholder events
-const PLACEHOLDER_EVENTS: EventCardData[] = [
-  {
-    title: "Cosmetech Formulation Summit 2026",
-    location: "Mumbai",
-    date: "19 March 2026",
-    href: "/events/cosmetech-formulation-summit-2026",
-  },
-  {
-    title: "Fragrance & Sensory Forum",
-    location: "Dubai",
-    date: "12 April 2026",
-    href: "/events/fragrance-sensory-forum",
-  },
-  {
-    title: "Sustainable Packaging",
-    location: "Singapore",
-    date: "6 May 2026",
-    href: "/events/sustainable-packaging",
-  },
-  {
-    title: "BeautyTech & AI Innovation Expo",
-    location: "Bengaluru",
-    date: "22 June 2026",
-    isSponsored: true,
-    href: "/events/beautytech-ai-innovation-expo",
-  },
-  {
-    title: "Regulatory & Compliance Workshop: Asia-Pacific",
-    location: "Virtual",
-    date: "19 March 2026",
-    isVirtual: true,
-    href: "/events/regulatory-compliance-workshop-asia-pacific",
-  },
-];
-
 interface UpcomingEventsProps {
   events?: EventCardData[];
   className?: string;
 }
 
-export function UpcomingEvents({ events = PLACEHOLDER_EVENTS, className }: UpcomingEventsProps) {
+export function UpcomingEvents({ events = [], className }: UpcomingEventsProps) {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
+  if (events.length === 0) return null;
 
   return (
     <section className={cn("flex flex-col", className)}>

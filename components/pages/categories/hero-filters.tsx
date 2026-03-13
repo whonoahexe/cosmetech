@@ -1,7 +1,7 @@
 "use client";
 
 import { ButtonGroup } from "@/components/ui/button-group";
-import { ALL_CATEGORIES } from "@/components/pages/home/highlighted-categories";
+import type { CategoryCardData } from "@/components/pages/home/category-card";
 import { FilterPill } from "./filter-pill";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
@@ -19,13 +19,19 @@ const TIME_OPTIONS = ["Any Time", "Last 7 days", "Last 30 days", "This year"];
 
 import { useRouter } from "next/navigation";
 
-function CategoryHeroFiltersContent() {
+type CategoryHeroFiltersProps = {
+  categories?: CategoryCardData[];
+};
+
+function CategoryHeroFiltersContent({ categories = [] }: CategoryHeroFiltersProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const categoryParam = searchParams.get("category");
 
   const selectedCategory =
-    ALL_CATEGORIES.find((c) => c.slug === categoryParam) || ALL_CATEGORIES[0];
+    categories.find((c) => c.slug === categoryParam) || categories[0];
+
+  if (!selectedCategory) return null;
 
   return (
     <section className="flex flex-col items-center gap-8 py-8 mt-4">
@@ -41,9 +47,9 @@ function CategoryHeroFiltersContent() {
           <FilterPill
             label="In"
             value={selectedCategory.name}
-            options={ALL_CATEGORIES.map((category) => category.name)}
+            options={categories.map((category) => category.name)}
             onOptionSelect={(name) => {
-              const cat = ALL_CATEGORIES.find((c) => c.name === name);
+              const cat = categories.find((c) => c.name === name);
               if (cat) router.push(`/categories?category=${cat.slug}`);
             }}
           />
@@ -55,7 +61,7 @@ function CategoryHeroFiltersContent() {
   );
 }
 
-export function CategoryHeroFilters() {
+export function CategoryHeroFilters({ categories }: CategoryHeroFiltersProps) {
   return (
     <Suspense
       fallback={
@@ -70,7 +76,7 @@ export function CategoryHeroFilters() {
         </section>
       }
     >
-      <CategoryHeroFiltersContent />
+      <CategoryHeroFiltersContent categories={categories} />
     </Suspense>
   );
 }

@@ -3,7 +3,11 @@ import { Calendar, Clapperboard, Store, Wrench, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ButtonGroup } from "@/components/ui/button-group";
 
-export function EventsHeader() {
+type EventsHeaderProps = {
+  description?: string;
+};
+
+export function EventsHeader({ description }: EventsHeaderProps) {
   return (
     <section className="grid grid-cols-8 gap-5 py-8">
       <div className="col-span-8 flex max-w-230 flex-col gap-4 xl:col-span-5">
@@ -38,11 +42,11 @@ export function EventsHeader() {
         </div>
       </div>
 
-      <p className="type-paragraph-large-medium col-span-8 max-w-166 text-foreground xl:col-span-3 xl:pt-2">
-        Conferences, workshops, and industry gatherings from across the global cosmetics and
-        personal care sector. Explore upcoming events, past highlights, and opportunities to
-        connect with researchers, manufacturers, and innovators shaping the future of beauty.
-      </p>
+      {description && (
+        <p className="type-paragraph-large-medium col-span-8 max-w-166 text-foreground xl:col-span-3 xl:pt-2">
+          {description}
+        </p>
+      )}
     </section>
   );
 }
