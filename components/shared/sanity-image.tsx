@@ -1,6 +1,7 @@
 import Image from "next/image";
 import type { SanityImage as SanityImageType } from "@/sanity/lib/types";
 import { cn } from "@/lib/utils";
+import { getEnhancedImageSrc } from "@/lib/image-loader";
 
 type SanityImageProps = {
   image: SanityImageType;
@@ -31,10 +32,11 @@ export function SanityImage({
 
   const imgWidth = width ?? dimensions?.width;
   const imgHeight = height ?? dimensions?.height;
+  const enhancedSrc = getEnhancedImageSrc({ src: url, quality: 80 });
 
   return (
     <Image
-      src={url}
+      src={enhancedSrc}
       alt={alt}
       fill={fill}
       width={fill ? undefined : imgWidth}

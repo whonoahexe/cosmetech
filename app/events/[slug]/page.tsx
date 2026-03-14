@@ -67,7 +67,7 @@ export default async function EventPage({ params }: Props) {
 
       <section className="relative py-8 lg:px-32 xl:px-64">
         <div className="mx-auto w-full max-w-6xl">
-          <EventBreadcrumb category={category} />
+          <EventBreadcrumb category={category} uid={slug} />
 
           <div className="lg:pr-20 pt-16 space-y-16">
             <EventDetails

@@ -19,6 +19,7 @@ interface ArticleCardProps extends ArticleCardData {
   colSpan?: 2 | 4;
   variant?: "grid" | "featured" | "list" | "news-horizontal";
   showSeparator?: boolean;
+  showThumbnail?: boolean;
   className?: string;
 }
 
@@ -47,7 +48,12 @@ function ArticleCardNewsHorizontal({
         href={slug ? `/article/${slug}` : "#"}
         className="relative block h-111 overflow-hidden rounded-3xl bg-[#D9D9D9] lg:col-span-4 transition-opacity hover:opacity-90"
       >
-        <SanityImage image={image ?? null} alt={title} fill sizes="(max-width: 1024px) 100vw, 50vw" />
+        <SanityImage
+          image={image ?? null}
+          alt={title}
+          fill
+          sizes="(max-width: 1024px) 100vw, 50vw"
+        />
       </Link>
 
       <div className="flex flex-col gap-4 px-2 lg:col-span-4">
@@ -167,30 +173,61 @@ function ArticleCardGrid({
 
 function ArticleCardList({
   slug,
+  image,
   category,
   isSponsored,
   readTime,
   title,
   excerpt,
   showSeparator = false,
+  showThumbnail = false,
   className,
 }: ArticleCardProps) {
+  const href = slug ? `/article/${slug}` : "#";
+
   return (
     <article className={cn("flex flex-col gap-4 px-2", className)}>
       <div className="flex flex-col gap-4">
-        <Link href={slug ? `/article/${slug}` : "#"} className="w-fit hover:underline">
-          <h3 className="type-heading-3 text-foreground">{title}</h3>
-        </Link>
-        {excerpt && (
-          <p className="type-paragraph-medium text-muted-foreground">{excerpt}</p>
-        )}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Badge variant="secondary">{category}</Badge>
-            {isSponsored && <Badge variant="default">Sponsored</Badge>}
+        <div className="flex gap-4">
+          {showThumbnail && (
+            <Link
+              href={href}
+              className="relative hidden h-32 w-48 shrink-0 overflow-hidden rounded-2xl bg-[#D9D9D9] sm:block md:h-36 md:w-56"
+            >
+              <SanityImage
+                image={image ?? null}
+                alt={title}
+                fill
+                sizes="(max-width: 768px) 192px, 224px"
+              />
+            </Link>
+          )}
+
+          <div className="flex min-w-0 flex-col gap-4">
+            {showThumbnail && (
+              <div className="flex items-center gap-2">
+                <Badge variant="secondary">{category}</Badge>
+                {isSponsored && <Badge variant="default">Sponsored</Badge>}
+                {readTime && <span className="type-paragraph text-foreground">&bull;</span>}
+                <ReadTimeBadge readTime={readTime} />
+              </div>
+            )}
+
+            <Link href={href} className="w-fit hover:underline">
+              <h3 className="type-heading-3 text-foreground">{title}</h3>
+            </Link>
+            {excerpt && <p className="type-paragraph-medium text-muted-foreground">{excerpt}</p>}
           </div>
-          <ReadTimeBadge readTime={readTime} />
         </div>
+        {!showThumbnail && (
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Badge variant="secondary">{category}</Badge>
+              {isSponsored && <Badge variant="default">Sponsored</Badge>}
+            </div>
+            <ReadTimeBadge readTime={readTime} />
+          </div>
+        )}
         {showSeparator && <Separator className="mt-2" />}
       </div>
     </article>

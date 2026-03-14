@@ -13,6 +13,7 @@ import { Badge } from "@/components/ui/badge";
 import { SanityImage } from "@/components/shared/sanity-image";
 import type { ContentCard } from "@/sanity/lib/types";
 import Link from "next/link";
+import { CATEGORY_REF_TO_NAME } from "@/lib/constants";
 
 function getSlideHref(card: ContentCard): string {
   if (card._type === "article" && card.slug) return `/article/${card.slug}`;
@@ -22,7 +23,18 @@ function getSlideHref(card: ContentCard): string {
 }
 
 function getSlideCategory(card: ContentCard): string {
-  if (card._type === "article") return card.categories?.[0]?.title ?? "Article";
+  if (card._type === "article") {
+    const resolved = card.categories?.find((category) => category?.title)?.title;
+    if (resolved) return resolved;
+
+    for (const ref of card.categoryRefs ?? []) {
+      const slug = ref.replace(/^category\./, "");
+      const fallbackName = CATEGORY_REF_TO_NAME[slug];
+      if (fallbackName) return fallbackName;
+    }
+
+    return "General";
+  }
   if (card._type === "event") return card.eventTags?.[0] ?? "Event";
   return card.advertiser ?? "Sponsored";
 }

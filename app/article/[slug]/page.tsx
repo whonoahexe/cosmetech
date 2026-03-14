@@ -10,6 +10,7 @@ import {
 import { getArticlePageData, getLatestArticles } from "@/sanity/lib/loaders";
 import { buildMetadata } from "@/lib/metadata";
 import { toArticleCardData } from "@/lib/mappers";
+import { CATEGORY_REF_TO_NAME } from "@/lib/constants";
 import type { Metadata } from "next";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -27,12 +28,24 @@ export default async function ArticlePage({ params }: Props) {
   if (!data) notFound();
 
   const category = toArticleCardData(data).category;
+  const categorySlug =
+    data.categories?.find((item) => item?.slug)?.slug ??
+    data.categoryRefs?.find((ref) => ref.startsWith("category."))?.replace(/^category\./, "");
+  const breadcrumbCategory =
+    data.categories?.find((item) => item?.title)?.title ??
+    (categorySlug ? CATEGORY_REF_TO_NAME[categorySlug] : undefined) ??
+    category;
+  const breadcrumbLeaf = (() => {
+    const seed = data._id ?? data.slug ?? "article";
+    let h = 0;
+    for (let i = 0; i < seed.length; i++) h = (Math.imul(31, h) + seed.charCodeAt(i)) | 0;
+    return String(Math.abs(h) % 100000).padStart(5, "0");
+  })();
 
   // Use CMS-configured related articles if available, else fall back to latest
   const cmsRelated = (data.relatedArticles ?? []).slice(0, 2).map(toArticleCardData);
-  const promoArticles = cmsRelated.length > 0
-    ? cmsRelated
-    : (await getLatestArticles(slug)).map(toArticleCardData);
+  const promoArticles =
+    cmsRelated.length > 0 ? cmsRelated : (await getLatestArticles(slug)).map(toArticleCardData);
 
   return (
     <div className="flex flex-col mt-4 gap-4 mb-32">
@@ -46,7 +59,11 @@ export default async function ArticlePage({ params }: Props) {
 
       <section className="relative py-16 lg:px-32 xl:px-64">
         <div className="mx-auto w-full max-w-6xl">
-          <ArticleBreadcrumb category={category} />
+          <ArticleBreadcrumb
+            category={breadcrumbCategory}
+            categorySlug={categorySlug}
+            articleLabel={breadcrumbLeaf}
+          />
 
           <div className="lg:pr-20 pt-16">
             <ArticleContent body={data.body} />

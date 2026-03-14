@@ -1,3 +1,6 @@
+"use client";
+
+import { useMemo, useState } from "react";
 import { ArrowDown } from "lucide-react";
 import { ArticleCard, type ArticleCardData } from "@/components/pages/home/article-card";
 import { Button } from "@/components/ui/button";
@@ -6,8 +9,19 @@ type AllArticlesSectionProps = {
   articles: ArticleCardData[];
 };
 
+const PAGE_SIZE = 8; // Two rows at md:grid-cols-4
+
 export function AllArticlesSection({ articles }: AllArticlesSectionProps) {
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+
+  const visibleArticles = useMemo(() => articles.slice(0, visibleCount), [articles, visibleCount]);
+  const hasMore = visibleCount < articles.length;
+
   if (articles.length === 0) return null;
+
+  const onLoadMore = () => {
+    setVisibleCount((current) => Math.min(current + PAGE_SIZE, articles.length));
+  };
 
   return (
     <section className="flex flex-col mb-12">
@@ -19,19 +33,26 @@ export function AllArticlesSection({ articles }: AllArticlesSectionProps) {
       </div>
 
       <div className="grid grid-cols-1 gap-5 py-4 md:grid-cols-4">
-        {articles.map((article) => (
-          <div key={article.title} className="md:col-span-1">
+        {visibleArticles.map((article) => (
+          <div key={article.slug ?? article.title} className="md:col-span-1">
             <ArticleCard {...article} colSpan={2} />
           </div>
         ))}
       </div>
 
-      <div className="flex items-center justify-center pt-4">
-        <Button variant="default" size="lg" className="rounded-full px-8 h-12">
-          Load More
-          <ArrowDown className="size-4" />
-        </Button>
-      </div>
+      {hasMore && (
+        <div className="flex items-center justify-center pt-4">
+          <Button
+            variant="default"
+            size="lg"
+            className="rounded-full px-8 h-12"
+            onClick={onLoadMore}
+          >
+            Load More
+            <ArrowDown className="size-4" />
+          </Button>
+        </div>
+      )}
     </section>
   );
 }

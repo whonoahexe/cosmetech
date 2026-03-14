@@ -123,9 +123,15 @@ export const getHomePageData = async () => {
     return null;
   }
 
-  const [latestItemsRaw, popularItemsRaw] = await Promise.all([
+  const now = new Date().toISOString();
+  const needsEventsFallback = !homePage.highlightedEvents || homePage.highlightedEvents.length === 0;
+
+  const [latestItemsRaw, popularItemsRaw, fallbackEvents] = await Promise.all([
     client.fetch<RawContentCard[]>(latestHomeContentQuery),
     client.fetch<RawContentCard[]>(popularHomeContentQuery),
+    needsEventsFallback
+      ? client.fetch<EventCard[]>(ongoingEventsQuery, { now })
+      : Promise.resolve([] as EventCard[]),
   ]);
 
   const latestItems = applyAdvertisementSlots(
@@ -145,6 +151,9 @@ export const getHomePageData = async () => {
     sponsoredItems: enrichContentCards(homePage.sponsoredItems),
     latestItems,
     popularItems,
+    highlightedEvents: (homePage.highlightedEvents?.length ?? 0) > 0
+      ? homePage.highlightedEvents
+      : fallbackEvents.slice(0, 5),
   };
 
   return data;
@@ -172,17 +181,17 @@ export const getNewsPageData = async () => {
 export const getEventsPageData = async () => {
   const eventsPage = await client.fetch<EventsPageDocument | null>(eventsPageQuery);
 
-  if (!eventsPage) {
-    return null;
-  }
+  const now = new Date().toISOString();
 
   const [ongoingEvents, pastEvents] = await Promise.all([
-    client.fetch<EventCard[]>(ongoingEventsQuery),
-    client.fetch<EventCard[]>(pastEventsQuery),
+    client.fetch<EventCard[]>(ongoingEventsQuery, { now }),
+    client.fetch<EventCard[]>(pastEventsQuery, { now }),
   ]);
 
   const data: EventsPageData = {
-    ...eventsPage,
+    _id: eventsPage?._id ?? "events-page.fallback",
+    pageDescription: eventsPage?.pageDescription,
+    seo: eventsPage?.seo,
     ongoingEvents,
     pastEvents,
   };

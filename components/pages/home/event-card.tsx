@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { SanityImage } from "@/components/shared/sanity-image";
 import type { SanityImage as SanityImageType } from "@/sanity/lib/types";
 import { cn } from "@/lib/utils";
+import { darkGradient } from "@/lib/card-gradient";
 
 export interface EventCardData {
   title: string;
@@ -42,7 +43,7 @@ function EventCardList({
 }: EventCardProps) {
   const inner = (
     <article className={cn("flex items-center gap-5 group", className)}>
-      <div className="relative h-60 w-109 shrink-0 overflow-hidden rounded-3xl bg-[#D9D9D9]">
+      <div className="relative h-60 w-109 shrink-0 overflow-hidden rounded-3xl bg-muted">
         <SanityImage image={image ?? null} alt={title} fill sizes="220px" />
       </div>
 
@@ -98,7 +99,7 @@ function EventCardStacked({
     >
       <div className="w-75 h-95 rounded-[24px] border border-border bg-[#D9D9D9] flex flex-col items-center justify-between px-6 py-16 gap-6">
         {/* Thumbnail */}
-        <div className="relative w-24 h-24 rounded-xl bg-accent overflow-hidden shrink-0">
+        <div className="relative w-24 h-24 rounded-xl overflow-hidden shrink-0 bg-primary/30">
           <SanityImage image={image ?? null} alt={title} fill sizes="96px" />
         </div>
 
