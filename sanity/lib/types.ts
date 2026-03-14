@@ -53,6 +53,7 @@ export type ArticleCard = {
   title: string;
   slug?: string;
   excerpt?: string;
+  imageMode?: "generated" | "custom";
   image?: SanityImage;
   publishDate?: string;
   readTime?: number;

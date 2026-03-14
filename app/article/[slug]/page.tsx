@@ -10,6 +10,7 @@ import {
 import { getArticlePageData, getLatestArticles } from "@/sanity/lib/loaders";
 import { buildMetadata } from "@/lib/metadata";
 import { toArticleCardData } from "@/lib/mappers";
+import { buildGeneratedImageUrl } from "@/lib/ai/images";
 import { CATEGORY_REF_TO_NAME } from "@/lib/constants";
 import type { Metadata } from "next";
 
@@ -27,7 +28,7 @@ export default async function ArticlePage({ params }: Props) {
   const data = await getArticlePageData(slug);
   if (!data) notFound();
 
-  const category = toArticleCardData(data).category;
+  const { category, generatedImageUrl } = toArticleCardData(data);
   const categorySlug =
     data.categories?.find((item) => item?.slug)?.slug ??
     data.categoryRefs?.find((ref) => ref.startsWith("category."))?.replace(/^category\./, "");
@@ -49,7 +50,7 @@ export default async function ArticlePage({ params }: Props) {
 
   return (
     <div className="flex flex-col mt-4 gap-4 mb-32">
-      <ArticleHero image={data.image} title={data.title} />
+      <ArticleHero image={data.image} generatedImageUrl={generatedImageUrl} title={data.title} />
       <ArticleHeader
         title={data.title}
         excerpt={data.excerpt ?? ""}

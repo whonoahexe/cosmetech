@@ -18,18 +18,20 @@ const client = createClient({
   useCdn: false,
 });
 
-function toWords(text) {
-  return text
-    .replace(/\s+/g, " ")
-    .trim()
-    .split(" ")
-    .map((word) => word.trim())
-    .filter(Boolean);
+function normalizeSpacing(text) {
+  return text.replace(/\s+/g, " ").trim();
+}
+
+function extractSentences(text) {
+  return text.match(/[^.!?]+[.!?]+/g)?.map((s) => s.trim()) ?? [];
 }
 
 function fallbackExcerpt({ title, plainText }) {
-  const merged = [title, plainText].filter(Boolean).join(". ");
-  return toWords(merged).slice(0, 25).join(" ");
+  const text = normalizeSpacing(plainText || title || "");
+  const sentences = extractSentences(text);
+  if (sentences.length >= 1) return sentences.slice(0, 2).join(" ");
+  const words = text.split(" ").filter(Boolean);
+  return words.slice(0, 30).join(" ") + (words.length > 30 ? "…" : "");
 }
 
 async function generateWithGemini({ title, plainText }) {
@@ -39,12 +41,12 @@ async function generateWithGemini({ title, plainText }) {
     "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent";
 
   const prompt = [
-    "Write a concise article excerpt in plain English.",
-    "Use exactly two short sentences. The total must be 20-28 words.",
-    "Do not write more than 28 words under any circumstances.",
+    "Write a 1-2 sentence excerpt for this article in plain English.",
+    "Every sentence must be complete and end with a period.",
+    "Target around 25-35 words total. Never exceed 40 words.",
+    "Be concise and informative. Preserve factual claims from the source.",
     "Avoid hype, clickbait, emojis, and hashtags.",
-    "Preserve factual claims from the source text.",
-    "Return ONLY the excerpt text with no labels, quotes, or extra punctuation.",
+    "Return ONLY the excerpt text — no labels, quotes, or extra formatting.",
     title ? `Title: ${title}` : "",
     `Body: ${plainText.slice(0, 800)}`,
   ]
@@ -56,25 +58,22 @@ async function generateWithGemini({ title, plainText }) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       contents: [{ parts: [{ text: prompt }] }],
-      generationConfig: { temperature: 0.4, maxOutputTokens: 80 },
+      generationConfig: { temperature: 0.4, maxOutputTokens: 120 },
     }),
   });
 
-  if (!response.ok) {
-    return null;
-  }
+  if (!response.ok) return null;
 
   const payload = await response.json();
-  const text = payload?.candidates?.[0]?.content?.parts?.[0]?.text?.trim();
+  const raw = payload?.candidates?.[0]?.content?.parts?.[0]?.text?.trim();
+  if (!raw) return null;
 
-  if (!text) {
-    return null;
-  }
+  const sentences = extractSentences(raw);
+  if (sentences.length === 0) return null;
 
-  // Hard-cap at the second sentence boundary to guard against model overrun
-  const sentences = text.match(/[^.!?]+[.!?]+/g) ?? [];
-  const capped = sentences.slice(0, 2).join(" ").trim() || toWords(text).slice(0, 28).join(" ");
-  return capped;
+  const twoSentences = sentences.slice(0, 2).join(" ");
+  const wordCount = twoSentences.split(/\s+/).length;
+  return wordCount <= 40 ? twoSentences : sentences[0];
 }
 
 const articles = await client.fetch(`*[_type == "article"]{

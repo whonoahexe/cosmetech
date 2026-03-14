@@ -1,6 +1,6 @@
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { SanityImage } from "@/components/shared/sanity-image";
+import { ArticleCoverImage } from "@/components/shared/article-cover-image";
 import type { SanityImage as SanityImageType } from "@/sanity/lib/types";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
@@ -8,6 +8,7 @@ import Link from "next/link";
 export interface ArticleCardData {
   slug?: string;
   image?: SanityImageType;
+  generatedImageUrl?: string;
   category: string;
   isSponsored?: boolean;
   readTime?: number;
@@ -35,6 +36,7 @@ function ReadTimeBadge({ readTime }: { readTime?: number }) {
 function ArticleCardNewsHorizontal({
   slug,
   image,
+  generatedImageUrl,
   category,
   isSponsored,
   readTime,
@@ -48,8 +50,9 @@ function ArticleCardNewsHorizontal({
         href={slug ? `/article/${slug}` : "#"}
         className="relative block h-111 overflow-hidden rounded-3xl bg-[#D9D9D9] lg:col-span-4 transition-opacity hover:opacity-90"
       >
-        <SanityImage
-          image={image ?? null}
+        <ArticleCoverImage
+          image={image}
+          generatedImageUrl={generatedImageUrl}
           alt={title}
           fill
           sizes="(max-width: 1024px) 100vw, 50vw"
@@ -81,6 +84,7 @@ function ArticleCardNewsHorizontal({
 function ArticleCardFeatured({
   slug,
   image,
+  generatedImageUrl,
   category,
   isSponsored,
   readTime,
@@ -94,7 +98,7 @@ function ArticleCardFeatured({
         href={slug ? `/article/${slug}` : "#"}
         className="relative block w-full overflow-hidden rounded-3xl bg-[#D9D9D9] transition-opacity hover:opacity-90 aspect-1123/600"
       >
-        <SanityImage image={image ?? null} alt={title} fill sizes="100vw" />
+        <ArticleCoverImage image={image} generatedImageUrl={generatedImageUrl} alt={title} fill sizes="100vw" />
       </Link>
 
       <div className="flex flex-col items-center gap-3 text-center">
@@ -118,6 +122,7 @@ function ArticleCardFeatured({
 function ArticleCardGrid({
   slug,
   image,
+  generatedImageUrl,
   category,
   isSponsored,
   readTime,
@@ -134,7 +139,7 @@ function ArticleCardGrid({
         href={slug ? `/article/${slug}` : "#"}
         className="relative block w-full overflow-hidden rounded-3xl bg-[#D9D9D9] transition-opacity hover:opacity-90 aspect-square"
       >
-        <SanityImage image={image ?? null} alt={title} fill sizes={isLargeGrid ? "50vw" : "25vw"} />
+        <ArticleCoverImage image={image} generatedImageUrl={generatedImageUrl} alt={title} fill sizes={isLargeGrid ? "50vw" : "25vw"} />
       </Link>
 
       <div className="flex flex-col gap-4 px-2">
@@ -174,6 +179,7 @@ function ArticleCardGrid({
 function ArticleCardList({
   slug,
   image,
+  generatedImageUrl,
   category,
   isSponsored,
   readTime,
@@ -194,8 +200,9 @@ function ArticleCardList({
               href={href}
               className="relative hidden h-32 w-48 shrink-0 overflow-hidden rounded-2xl bg-[#D9D9D9] sm:block md:h-36 md:w-56"
             >
-              <SanityImage
-                image={image ?? null}
+              <ArticleCoverImage
+                image={image}
+                generatedImageUrl={generatedImageUrl}
                 alt={title}
                 fill
                 sizes="(max-width: 768px) 192px, 224px"

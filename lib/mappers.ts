@@ -1,4 +1,5 @@
 import type { ArticleCardData } from "@/components/pages/home/article-card";
+import { buildGeneratedImageUrl } from "@/lib/ai/images";
 import type { EventCardData } from "@/components/pages/home/event-card";
 import type { CategoryCardData } from "@/components/pages/home/category-card";
 import type {
@@ -40,10 +41,15 @@ function resolveCategory(card: ArticleCard): string {
 }
 
 export function toArticleCardData(card: ArticleCard): ArticleCardData {
+  const category = resolveCategory(card);
+  const useGenerated = card.imageMode !== "custom";
   return {
     slug: card.slug,
-    image: card.image,
-    category: resolveCategory(card),
+    image: useGenerated ? undefined : card.image,
+    generatedImageUrl: useGenerated
+      ? buildGeneratedImageUrl(card.title, category, card.excerpt)
+      : undefined,
+    category,
     isSponsored: card.isSponsored,
     readTime: card.readTime,
     title: card.title,

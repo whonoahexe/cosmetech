@@ -10,10 +10,11 @@ import Autoplay from "embla-carousel-autoplay";
 import { cn } from "@/lib/utils";
 import { useEffect, useRef, useState } from "react";
 import { Badge } from "@/components/ui/badge";
-import { SanityImage } from "@/components/shared/sanity-image";
+import { ArticleCoverImage } from "@/components/shared/article-cover-image";
 import type { ContentCard } from "@/sanity/lib/types";
 import Link from "next/link";
 import { CATEGORY_REF_TO_NAME } from "@/lib/constants";
+import { buildGeneratedImageUrl } from "@/lib/ai/images";
 
 function getSlideHref(card: ContentCard): string {
   if (card._type === "article" && card.slug) return `/article/${card.slug}`;
@@ -86,13 +87,19 @@ export function HighlightedCarousel({ slides }: HighlightedCarouselProps) {
           const category = getSlideCategory(slide);
           const readTime = getSlideReadTime(slide);
 
+          const generatedImageUrl =
+            slide._type === "article" && slide.imageMode !== "custom"
+              ? buildGeneratedImageUrl(slide.title, category, slide.excerpt)
+              : undefined;
+
           return (
             <CarouselItem key={slide._id} className="pl-0">
               <div className="relative w-full min-h-95 rounded-[24px] overflow-hidden bg-[#d9d9d9] h-150">
                 {/* Background image area entirely linked */}
                 <Link href={href} className="absolute inset-0 z-0">
-                  <SanityImage
-                    image={slide.image ?? null}
+                  <ArticleCoverImage
+                    image={slide.image}
+                    generatedImageUrl={generatedImageUrl}
                     alt={slide.title}
                     fill
                     sizes="100vw"
