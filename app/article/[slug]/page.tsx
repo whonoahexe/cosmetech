@@ -6,6 +6,7 @@ import {
   ArticleHeader,
   ArticleHero,
   ArticlePromo,
+  ArticleViewTracker,
 } from "@/components/pages/article";
 import { getArticlePageData, getLatestArticles } from "@/sanity/lib/loaders";
 import { buildMetadata } from "@/lib/metadata";
@@ -50,6 +51,7 @@ export default async function ArticlePage({ params }: Props) {
 
   return (
     <div className="flex flex-col mt-4 gap-4 mb-32">
+      <ArticleViewTracker slug={slug} />
       <ArticleHero image={data.image} generatedImageUrl={generatedImageUrl} title={data.title} />
       <ArticleHeader
         title={data.title}

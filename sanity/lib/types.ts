@@ -57,6 +57,7 @@ export type ArticleCard = {
   image?: SanityImage;
   publishDate?: string;
   readTime?: number;
+  viewCount?: number;
   contentKinds?: ArticleContentKind[];
   isSponsored?: boolean;
   sponsoredMeta?: SponsoredMeta;

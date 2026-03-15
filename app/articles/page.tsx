@@ -21,7 +21,8 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
 export default async function ArticlesPage({ searchParams }: Props) {
   const { sort } = await searchParams;
 
-  const rawArticles = await getAllArticles();
+  const sanitySort = sort === "Popular" ? "popular" : "latest";
+  const rawArticles = await getAllArticles(sanitySort);
 
   const filtered =
     sort === "Sponsored"

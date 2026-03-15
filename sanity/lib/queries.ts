@@ -246,7 +246,7 @@ export const eventBySlugQuery = `*[_type == "event" && slug.current == $slug][0]
 
 export const latestHomeContentQuery = `*[_type == "article"] | order(coalesce(publishDate, _createdAt) desc)[0...5] ${articleCardProjection}`;
 
-export const popularHomeContentQuery = `*[_type == "article"] | order(coalesce(publishDate, _createdAt) desc)[0...5] ${articleCardProjection}`;
+export const popularHomeContentQuery = `*[_type == "article"] | order(coalesce(viewCount, 0) desc, coalesce(publishDate, _createdAt) desc)[0...5] ${articleCardProjection}`;
 
 export const pressReleasesQuery = `*[_type == "article" && "pressRelease" in coalesce(contentKinds, [])] | order(coalesce(publishDate, _createdAt) desc) ${articleCardProjection}`;
 
@@ -258,6 +258,8 @@ export const pastEventsQuery = `*[_type == "event" && defined(startDate) && ((de
 export const articlesByCategoryRefQuery = `*[_type == "article" && $categoryId in categories[]._ref] | order(coalesce(publishDate, _createdAt) desc) ${articleCardProjection}`;
 
 export const allArticlesQuery = `*[_type == "article"] | order(coalesce(publishDate, _createdAt) desc) ${articleCardProjection}`;
+
+export const popularArticlesQuery = `*[_type == "article"] | order(coalesce(viewCount, 0) desc, coalesce(publishDate, _createdAt) desc) ${articleCardProjection}`;
 
 export const allNewsStoriesQuery = `*[_type == "article" && !("pressRelease" in coalesce(contentKinds, []))] | order(coalesce(publishDate, _createdAt) desc) ${articleCardProjection}`;
 

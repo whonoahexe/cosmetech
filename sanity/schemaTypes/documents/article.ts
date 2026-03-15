@@ -112,5 +112,13 @@ export const articleType = defineType({
       title: "SEO",
       type: "seo",
     }),
+    defineField({
+      name: "viewCount",
+      title: "View count",
+      type: "number",
+      initialValue: 0,
+      readOnly: true,
+      hidden: true,
+    }),
   ],
 });

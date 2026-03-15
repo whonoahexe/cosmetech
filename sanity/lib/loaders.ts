@@ -3,6 +3,7 @@ import {
   aboutPageQuery,
   allArticlesQuery,
   allNewsStoriesQuery,
+  popularArticlesQuery,
   articleBySlugQuery,
   articlesByCategoryRefQuery,
   categoriesQuery,
@@ -224,8 +225,9 @@ export const getArticlesByCategory = async (categoryId: string) => {
   return articles.map(enrichArticleCard);
 };
 
-export const getAllArticles = async () => {
-  const articles = await client.fetch<RawArticleCard[]>(allArticlesQuery);
+export const getAllArticles = async (sort: "latest" | "popular" = "latest") => {
+  const query = sort === "popular" ? popularArticlesQuery : allArticlesQuery;
+  const articles = await client.fetch<RawArticleCard[]>(query);
   return articles.map(enrichArticleCard);
 };
 
