@@ -265,3 +265,13 @@ export const allNewsStoriesQuery = `*[_type == "article" && !("pressRelease" in 
 
 // Query a few latest articles (for related articles fallback)
 export const latestArticlesQuery = `*[_type == "article" && slug.current != $excludeSlug] | order(coalesce(publishDate, _createdAt) desc)[0...2] ${articleCardProjection}`;
+
+// $qWild must be pre-computed in JS as q + "*" — concatenation is not supported inside score()
+export const searchQuery = `*[
+  _type in ["article", "event"] &&
+  [title, coalesce(excerpt, summary)] match $qWild
+] | score(
+  boost(title match $qWild, 4),
+  boost(excerpt match $qWild, 2),
+  boost(summary match $qWild, 2)
+) | order(_score desc) [0...15] ${contentCardProjection}`;

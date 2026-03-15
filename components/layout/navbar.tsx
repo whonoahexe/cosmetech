@@ -3,7 +3,9 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Search, X, Menu } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
+import { motion, AnimatePresence } from "motion/react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -13,6 +15,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import { InputGroup } from "@/components/ui/input-group";
+import type { SearchResultItem, SearchResultType } from "@/app/api/search/route";
 
 const PRIMARY_NAV_LINKS = [
   { href: "/", label: "Home" },
@@ -28,58 +31,154 @@ const SECONDARY_NAV_LINKS = [
   { href: "/faq", label: "Frequently Asked Questions" },
 ];
 
-type SearchBarProps = {
-  value: string;
-  onChange: (value: string) => void;
-  iconClassName: string;
-  placeholderClassName: string;
-  inputClassName: string;
-  autoFocus?: boolean;
-};
+const RESULT_GROUPS: { label: string; types: SearchResultType[] }[] = [
+  { label: "Articles", types: ["article"] },
+  { label: "News & Press Releases", types: ["news", "pressRelease"] },
+  { label: "Events", types: ["event"] },
+];
 
-const SearchBar = ({
-  value,
-  onChange,
-  iconClassName,
-  placeholderClassName,
-  inputClassName,
-  autoFocus,
-}: SearchBarProps) => (
-  <>
-    <Search
-      className={cn(
-        "absolute top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none",
-        iconClassName
+function ResultGroup({
+  label,
+  items,
+  onSelect,
+}: {
+  label: string;
+  items: SearchResultItem[];
+  onSelect: () => void;
+}) {
+  if (items.length === 0) return null;
+  return (
+    <div>
+      <p className="px-4 pt-3 pb-1.5 text-[10px] font-semibold uppercase tracking-[0.15em] text-muted-foreground/70">
+        {label}
+      </p>
+      {items.map((result) => (
+        <Link
+          key={result.id}
+          href={result.href}
+          onClick={onSelect}
+          className="flex items-center justify-between gap-4 px-4 py-2.5 hover:bg-muted/60 transition-colors group"
+        >
+          <span className="text-sm font-medium text-foreground truncate leading-snug group-hover:text-foreground">
+            {result.title}
+          </span>
+          <span className="text-xs text-muted-foreground shrink-0 capitalize">
+            {result.label}
+          </span>
+        </Link>
+      ))}
+    </div>
+  );
+}
+
+function SearchDropdown({
+  searching,
+  results,
+  onSelect,
+}: {
+  searching: boolean;
+  results: SearchResultItem[];
+  onSelect: () => void;
+}) {
+  const hasResults = results.length > 0;
+
+  return (
+    <div className="py-1 max-h-[420px] overflow-y-auto divide-y divide-border/50">
+      {searching && (
+        <p className="px-4 py-3 text-sm text-muted-foreground">Searching…</p>
       )}
-    />
-    {!value && (
-      <div
-        className={cn(
-          "pointer-events-none absolute top-1/2 -translate-y-1/2 text-sm peer-focus:opacity-0",
-          placeholderClassName
-        )}
-      >
-        Discover <span className="font-semibold">anything</span>
-      </div>
-    )}
-    <Input
-      type="search"
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      aria-label="Search"
-      placeholder=""
-      className={cn("peer", inputClassName)}
-      autoFocus={autoFocus}
-    />
-  </>
-);
+
+      {!searching && !hasResults && (
+        <p className="px-4 py-3 text-sm text-muted-foreground">No results found</p>
+      )}
+
+      {!searching && hasResults && RESULT_GROUPS.map((group) => (
+        <ResultGroup
+          key={group.label}
+          label={group.label}
+          items={results.filter((r) => group.types.includes(r.type))}
+          onSelect={onSelect}
+        />
+      ))}
+    </div>
+  );
+}
 
 export const Navbar = () => {
-  const [searchOpen, setSearchOpen] = useState(false);
+  const router = useRouter();
   const [desktopMenuOpen, setDesktopMenuOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [desktopSearch, setDesktopSearch] = useState("");
-  const [mobileSearch, setMobileSearch] = useState("");
+
+  // Desktop search
+  const [desktopQuery, setDesktopQuery] = useState("");
+  const [desktopFocused, setDesktopFocused] = useState(false);
+  const [desktopResults, setDesktopResults] = useState<SearchResultItem[]>([]);
+  const [desktopSearching, setDesktopSearching] = useState(false);
+  const desktopRef = useRef<HTMLDivElement>(null);
+
+  // Mobile search
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [mobileQuery, setMobileQuery] = useState("");
+  const [mobileResults, setMobileResults] = useState<SearchResultItem[]>([]);
+  const [mobileSearching, setMobileSearching] = useState(false);
+
+  // Debounced fetch — desktop
+  useEffect(() => {
+    if (!desktopQuery.trim()) { setDesktopResults([]); return; }
+    setDesktopSearching(true);
+    const timer = setTimeout(async () => {
+      try {
+        const res = await fetch(`/api/search?q=${encodeURIComponent(desktopQuery.trim())}`);
+        const data = await res.json();
+        setDesktopResults(data.results ?? []);
+      } finally { setDesktopSearching(false); }
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [desktopQuery]);
+
+  // Debounced fetch — mobile
+  useEffect(() => {
+    if (!mobileQuery.trim()) { setMobileResults([]); return; }
+    setMobileSearching(true);
+    const timer = setTimeout(async () => {
+      try {
+        const res = await fetch(`/api/search?q=${encodeURIComponent(mobileQuery.trim())}`);
+        const data = await res.json();
+        setMobileResults(data.results ?? []);
+      } finally { setMobileSearching(false); }
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [mobileQuery]);
+
+  // Click outside — close desktop dropdown
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (desktopRef.current && !desktopRef.current.contains(e.target as Node)) {
+        setDesktopFocused(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  const closeDesktop = () => {
+    setDesktopFocused(false);
+    setDesktopQuery("");
+    setDesktopResults([]);
+  };
+
+  const closeMobile = () => {
+    setMobileOpen(false);
+    setMobileQuery("");
+    setMobileResults([]);
+  };
+
+  const goToFirstResult = (results: SearchResultItem[]) => {
+    if (results[0]) router.push(results[0].href);
+  };
+
+  const showDesktopDropdown = desktopFocused && desktopQuery.trim().length > 0;
+  const showMobileResults = mobileOpen && mobileQuery.trim().length > 0;
 
   return (
     <header className="w-full">
@@ -95,17 +194,57 @@ export const Navbar = () => {
           />
         </Link>
 
-        {/* Desktop search */}
-        <div className="hidden flex-1 max-w-sm mx-8 md:flex items-center">
-          <InputGroup className="relative w-60 shadow-2xl">
-            <SearchBar
-              value={desktopSearch}
-              onChange={setDesktopSearch}
-              iconClassName="left-4 size-5"
-              placeholderClassName="left-12 text-foreground"
-              inputClassName="pl-12 rounded-full border-border bg-input py-7"
-            />
-          </InputGroup>
+        {/* Desktop search — centered in remaining space */}
+        <div
+          ref={desktopRef}
+          className="hidden flex-1 mx-8 md:flex items-center justify-center relative"
+        >
+          <motion.div
+            className="relative"
+            animate={{ width: desktopFocused ? 460 : 240 }}
+            transition={{ type: "spring", stiffness: 300, damping: 28 }}
+          >
+            <InputGroup className="relative shadow-2xl">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 size-5 text-muted-foreground pointer-events-none z-10" />
+              {!desktopQuery && (
+                <div className="pointer-events-none absolute left-12 top-1/2 -translate-y-1/2 text-sm text-foreground select-none">
+                  Discover <span className="font-semibold">anything</span>
+                </div>
+              )}
+              <Input
+                type="search"
+                value={desktopQuery}
+                onChange={(e) => setDesktopQuery(e.target.value)}
+                onFocus={() => setDesktopFocused(true)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") goToFirstResult(desktopResults);
+                  if (e.key === "Escape") closeDesktop();
+                }}
+                aria-label="Search"
+                placeholder=""
+                className="pl-12 rounded-full border-border bg-input py-7"
+              />
+            </InputGroup>
+
+            {/* Dropdown */}
+            <AnimatePresence>
+              {showDesktopDropdown && (
+                <motion.div
+                  initial={{ opacity: 0, y: -8, scale: 0.97 }}
+                  animate={{ opacity: 1, y: 0, scale: 1 }}
+                  exit={{ opacity: 0, y: -8, scale: 0.97 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                  className="absolute top-full left-0 right-0 mt-2 bg-card border border-border rounded-2xl shadow-xl overflow-hidden z-50"
+                >
+                  <SearchDropdown
+                    searching={desktopSearching}
+                    results={desktopResults}
+                    onSelect={closeDesktop}
+                  />
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.div>
         </div>
 
         {/* Desktop hamburger */}
@@ -183,9 +322,9 @@ export const Navbar = () => {
             size="icon"
             className="size-10 rounded-full"
             aria-label="Search"
-            onClick={() => setSearchOpen((v) => !v)}
+            onClick={() => setMobileOpen((v) => !v)}
           >
-            {searchOpen ? <X className="size-5" /> : <Search className="size-5" />}
+            {mobileOpen ? <X className="size-5" /> : <Search className="size-5" />}
           </Button>
 
           <DropdownMenu open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
@@ -263,25 +402,53 @@ export const Navbar = () => {
       </div>
 
       {/* Mobile expandable search */}
-      <div
-        className={cn(
-          "md:hidden overflow-hidden transition-all duration-200",
-          searchOpen ? "max-h-16 border-b border-border" : "max-h-0"
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ type: "spring", stiffness: 300, damping: 28 }}
+            className="md:hidden overflow-hidden border-b border-border"
+          >
+            <div className="px-6 py-3 flex flex-col gap-2">
+              <div className="relative shadow-sm rounded-full">
+                <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground pointer-events-none" />
+                <Input
+                  type="search"
+                  value={mobileQuery}
+                  onChange={(e) => setMobileQuery(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") { goToFirstResult(mobileResults); closeMobile(); }
+                    if (e.key === "Escape") closeMobile();
+                  }}
+                  placeholder="Discover anything"
+                  className="pl-9 rounded-full border-border bg-input"
+                  autoFocus
+                />
+              </div>
+
+              <AnimatePresence>
+                {showMobileResults && (
+                  <motion.div
+                    initial={{ opacity: 0, y: -4 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -4 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 30 }}
+                    className="bg-card border border-border rounded-2xl overflow-hidden shadow-lg"
+                  >
+                    <SearchDropdown
+                      searching={mobileSearching}
+                      results={mobileResults}
+                      onSelect={closeMobile}
+                    />
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          </motion.div>
         )}
-      >
-        <div className="px-6 py-3">
-          <div className="relative shadow-2xl rounded-full">
-            <SearchBar
-              value={mobileSearch}
-              onChange={setMobileSearch}
-              iconClassName="left-3 size-4"
-              placeholderClassName="left-9 text-muted-foreground"
-              inputClassName="pl-9 rounded-full border-border bg-transparent"
-              autoFocus={searchOpen}
-            />
-          </div>
-        </div>
-      </div>
+      </AnimatePresence>
     </header>
   );
 };

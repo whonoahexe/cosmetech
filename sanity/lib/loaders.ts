@@ -4,6 +4,7 @@ import {
   allArticlesQuery,
   allNewsStoriesQuery,
   popularArticlesQuery,
+  searchQuery,
   articleBySlugQuery,
   articlesByCategoryRefQuery,
   categoriesQuery,
@@ -223,6 +224,14 @@ export const getCategories = async () => client.fetch<CategoryPageData[]>(catego
 export const getArticlesByCategory = async (categoryId: string) => {
   const articles = await client.fetch<RawArticleCard[]>(articlesByCategoryRefQuery, { categoryId });
   return articles.map(enrichArticleCard);
+};
+
+export const searchContent = async (q: string) => {
+  if (!q.trim()) return [];
+  const results = await client.fetch<RawContentCard[]>(searchQuery, {
+    qWild: q.trim() + "*",
+  });
+  return enrichContentCards(results);
 };
 
 export const getAllArticles = async (sort: "latest" | "popular" = "latest") => {
