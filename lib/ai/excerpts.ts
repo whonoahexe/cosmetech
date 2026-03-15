@@ -9,11 +9,21 @@ function extractSentences(text: string): string[] {
 export function buildFallbackExcerpt(input: { title?: string; plainText?: string }): string {
   const text = normalizeSpacing(input.plainText || input.title || "");
   const sentences = extractSentences(text);
-  if (sentences.length >= 1) return sentences.slice(0, 2).join(" ");
+  if (sentences.length === 0) return "";
 
-  // No sentence boundary — truncate cleanly at a word boundary
-  const words = text.split(" ").filter(Boolean);
-  return words.slice(0, 30).join(" ") + (words.length > 30 ? "…" : "");
+  // Pick 1-2 complete sentences staying within 35 words total.
+  const result: string[] = [];
+  let wordCount = 0;
+  for (const sentence of sentences.slice(0, 2)) {
+    const words = sentence.split(/\s+/).filter(Boolean).length;
+    if (wordCount + words > 35) break;
+    result.push(sentence);
+    wordCount += words;
+  }
+
+  // Always include at least the first sentence (even if it alone exceeds 35 words)
+  // so the excerpt is never empty when content exists.
+  return result.length > 0 ? result.join(" ") : sentences[0];
 }
 
 export async function generateExcerptWithGemini(input: {
