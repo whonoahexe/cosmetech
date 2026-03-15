@@ -74,12 +74,14 @@ export const Footer = ({ socialLinks }: FooterProps) => {
           </ul>
 
           {/* FAQ */}
-          <Link
-            href="/faq"
-            className="type-paragraph-large-medium hover:opacity-70 transition-opacity uppercase"
-          >
-            FAQ
-          </Link>
+          <span>
+            <Link
+              href="/faq"
+              className="type-paragraph-large-medium uppercase hover:opacity-70 transition-opacity"
+            >
+              FAQ
+            </Link>
+          </span>
 
           {/* Socials */}
           <ul className="flex flex-col gap-1">
