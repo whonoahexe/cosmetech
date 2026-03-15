@@ -2,6 +2,7 @@ import { ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { CategoryCard, type CategoryCardData } from "./category-card";
 import { cn } from "@/lib/utils";
+import Link from "next/link";
 
 interface HighlightedCategoriesProps {
   categories?: CategoryCardData[];
@@ -26,8 +27,11 @@ export function HighlightedCategories({
           size="icon"
           className="rounded-full shrink-0 w-16"
           aria-label="Browse all categories"
+          asChild
         >
-          <ArrowUpRight className="size-4" />
+          <Link href="/categories">
+            <ArrowUpRight className="size-4" />
+          </Link>
         </Button>
       </div>
 

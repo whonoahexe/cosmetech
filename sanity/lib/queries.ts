@@ -248,14 +248,18 @@ export const latestHomeContentQuery = `*[_type == "article"] | order(coalesce(pu
 
 export const popularHomeContentQuery = `*[_type == "article"] | order(coalesce(publishDate, _createdAt) desc)[0...5] ${articleCardProjection}`;
 
-export const pressReleasesQuery = `*[_type == "article" && "pressRelease" in coalesce(contentKinds, [])] | order(coalesce(publishDate, _createdAt) desc)[0...4] ${articleCardProjection}`;
+export const pressReleasesQuery = `*[_type == "article" && "pressRelease" in coalesce(contentKinds, [])] | order(coalesce(publishDate, _createdAt) desc) ${articleCardProjection}`;
 
 export const ongoingEventsQuery = `*[_type == "event" && defined(startDate) && ((defined(endDate) && endDate >= $now) || (!defined(endDate) && startDate >= $now))] | order(startDate asc) ${eventCardProjection}`;
 
 export const pastEventsQuery = `*[_type == "event" && defined(startDate) && ((defined(endDate) && endDate < $now) || (!defined(endDate) && startDate < $now))] | order(coalesce(endDate, startDate) desc) ${eventCardProjection}`;
 
 // Query articles by category ref ID (works even when category docs are drafts/unpublished)
-export const articlesByCategoryRefQuery = `*[_type == "article" && $categoryId in categories[]._ref] | order(coalesce(publishDate, _createdAt) desc)[0...12] ${articleCardProjection}`;
+export const articlesByCategoryRefQuery = `*[_type == "article" && $categoryId in categories[]._ref] | order(coalesce(publishDate, _createdAt) desc) ${articleCardProjection}`;
+
+export const allArticlesQuery = `*[_type == "article"] | order(coalesce(publishDate, _createdAt) desc) ${articleCardProjection}`;
+
+export const allNewsStoriesQuery = `*[_type == "article" && !("pressRelease" in coalesce(contentKinds, []))] | order(coalesce(publishDate, _createdAt) desc) ${articleCardProjection}`;
 
 // Query a few latest articles (for related articles fallback)
 export const latestArticlesQuery = `*[_type == "article" && slug.current != $excludeSlug] | order(coalesce(publishDate, _createdAt) desc)[0...2] ${articleCardProjection}`;

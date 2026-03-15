@@ -7,6 +7,7 @@ import { cn } from "@/lib/utils";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
+import Link from "next/link";
 
 export type ArticleFilter = "latest" | "popular" | "sponsored" | "all";
 
@@ -64,8 +65,11 @@ export function ArticleGridContent({
           variant="outline"
           className="rounded-full shrink-0 w-16"
           aria-label="View all articles"
+          asChild
         >
-          <ArrowUpRight className="size-4" />
+          <Link href={`/articles?sort=${searchParams.get("sort") ?? "Latest"}`}>
+            <ArrowUpRight className="size-4" />
+          </Link>
         </Button>
       </div>
 

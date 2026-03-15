@@ -7,9 +7,33 @@ import { getCategoryPageData, getCategories, getArticlesByCategory } from "@/san
 import { toArticleCardData, toCategoryCardData } from "@/lib/mappers";
 import { FALLBACK_CATEGORIES } from "@/lib/constants";
 import { buildMetadata } from "@/lib/metadata";
+import type { ArticleCard } from "@/sanity/lib/types";
 import type { Metadata } from "next";
 
-type Props = { searchParams: Promise<{ category?: string }> };
+type Props = { searchParams: Promise<{ category?: string; time?: string }> };
+
+function getTimeCutoff(time: string | undefined): Date | null {
+  const now = new Date();
+  if (time === "Last 7 days") {
+    return new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+  }
+  if (time === "Last 30 days") {
+    return new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+  }
+  if (time === "This year") {
+    return new Date(now.getFullYear(), 0, 1);
+  }
+  return null;
+}
+
+function filterByTime(articles: ArticleCard[], time: string | undefined): ArticleCard[] {
+  const cutoff = getTimeCutoff(time);
+  if (!cutoff) return articles;
+  return articles.filter((a) => {
+    const date = a.publishDate ? new Date(a.publishDate) : null;
+    return date && date >= cutoff;
+  });
+}
 
 export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
   const { category: slug } = await searchParams;
@@ -19,7 +43,7 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
 }
 
 export default async function CategoriesPage({ searchParams }: Props) {
-  const { category: slug } = await searchParams;
+  const { category: slug, time } = await searchParams;
 
   const categories = await getCategories();
   const resolvedCategories = (categories ?? []).filter(Boolean).map(toCategoryCardData);
@@ -32,18 +56,26 @@ export default async function CategoriesPage({ searchParams }: Props) {
   // Try fetching CMS-configured category data first
   const categoryData = selectedSlug ? await getCategoryPageData(selectedSlug) : null;
 
-  let featuredArticle = categoryData?.heroArticle ? toArticleCardData(categoryData.heroArticle) : null;
-  let allArticles = (categoryData?.highlightedArticles ?? []).map(toArticleCardData);
+  let rawFeaturedArticle = categoryData?.heroArticle ?? null;
+  let rawAllArticles: ArticleCard[] = (categoryData?.highlightedArticles ?? []) as ArticleCard[];
 
   // Fall back to direct article query by category ref ID when CMS data is unavailable
-  if (!featuredArticle && selectedSlug) {
+  if (!rawFeaturedArticle && selectedSlug) {
     const categoryId = `category.${selectedSlug}`;
     const directArticles = await getArticlesByCategory(categoryId);
-    const mapped = directArticles.map(toArticleCardData);
-    featuredArticle = mapped[0] ?? null;
-    allArticles = mapped.slice(1);
+    rawFeaturedArticle = directArticles[0] ?? null;
+    rawAllArticles = directArticles.slice(1);
   }
 
+  // Apply time filter before mapping
+  const filteredRawAll = filterByTime(rawAllArticles, time);
+  const filteredFeatured =
+    rawFeaturedArticle && filterByTime([rawFeaturedArticle], time).length > 0
+      ? rawFeaturedArticle
+      : null;
+
+  const featuredArticle = filteredFeatured ? toArticleCardData(filteredFeatured) : null;
+  const allArticles = filteredRawAll.map(toArticleCardData);
   const sideArticles = allArticles.slice(0, 4);
 
   return (

@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
-import { SanityImage } from "@/components/shared/sanity-image";
+import { ArticleCoverImage } from "@/components/shared/article-cover-image";
 import type { ContentCard } from "@/sanity/lib/types";
+import { buildGeneratedImageUrl } from "@/lib/ai/images";
 
 type NewsHeroSectionProps = {
   featuredBanner: ContentCard | null;
@@ -31,13 +32,18 @@ export function NewsHeroSection({ featuredBanner }: NewsHeroSectionProps) {
   const href = getHref(featuredBanner);
   const category = getCategory(featuredBanner);
   const readTime = getReadTime(featuredBanner);
+  const generatedImageUrl =
+    featuredBanner._type === "article" && featuredBanner.imageMode !== "custom"
+      ? buildGeneratedImageUrl(featuredBanner.title, category, featuredBanner.excerpt)
+      : undefined;
 
   return (
     <section className="py-4">
       <div className="group relative h-150 w-full overflow-hidden rounded-3xl bg-[#D9D9D9]">
         <Link href={href} className="absolute inset-0 z-0" aria-label={`Read ${featuredBanner.title}`}>
-          <SanityImage
-            image={featuredBanner.image ?? null}
+          <ArticleCoverImage
+            image={featuredBanner.image}
+            generatedImageUrl={generatedImageUrl}
             alt={featuredBanner.title}
             fill
             sizes="100vw"

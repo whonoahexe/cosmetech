@@ -142,6 +142,7 @@ export type NewsPageDocument = {
 
 export type NewsPageData = NewsPageDocument & {
   pressReleases: ArticleCard[];
+  allNewsStories: ArticleCard[];
 };
 
 export type EventsPageDocument = {

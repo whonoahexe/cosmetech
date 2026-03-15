@@ -1,6 +1,8 @@
 import { client } from "./client";
 import {
   aboutPageQuery,
+  allArticlesQuery,
+  allNewsStoriesQuery,
   articleBySlugQuery,
   articlesByCategoryRefQuery,
   categoriesQuery,
@@ -166,13 +168,17 @@ export const getNewsPageData = async () => {
     return null;
   }
 
-  const pressReleases = await client.fetch<RawArticleCard[]>(pressReleasesQuery);
+  const [pressReleases, allNewsStories] = await Promise.all([
+    client.fetch<RawArticleCard[]>(pressReleasesQuery),
+    client.fetch<RawArticleCard[]>(allNewsStoriesQuery),
+  ]);
 
   const data: NewsPageData = {
     ...newsPage,
     featuredBanner: newsPage.featuredBanner ? enrichContentCard(newsPage.featuredBanner) : null,
     highlightedStories: enrichContentCards(newsPage.highlightedStories),
     pressReleases: pressReleases.map(enrichArticleCard),
+    allNewsStories: allNewsStories.map(enrichArticleCard),
   };
 
   return data;
@@ -215,6 +221,11 @@ export const getCategories = async () => client.fetch<CategoryPageData[]>(catego
 
 export const getArticlesByCategory = async (categoryId: string) => {
   const articles = await client.fetch<RawArticleCard[]>(articlesByCategoryRefQuery, { categoryId });
+  return articles.map(enrichArticleCard);
+};
+
+export const getAllArticles = async () => {
+  const articles = await client.fetch<RawArticleCard[]>(allArticlesQuery);
   return articles.map(enrichArticleCard);
 };
 

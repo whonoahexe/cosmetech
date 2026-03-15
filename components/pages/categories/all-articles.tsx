@@ -7,11 +7,12 @@ import { Button } from "@/components/ui/button";
 
 type AllArticlesSectionProps = {
   articles: ArticleCardData[];
+  heading?: string;
 };
 
 const PAGE_SIZE = 8; // Two rows at md:grid-cols-4
 
-export function AllArticlesSection({ articles }: AllArticlesSectionProps) {
+export function AllArticlesSection({ articles, heading = "All Articles" }: AllArticlesSectionProps) {
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
   const visibleArticles = useMemo(() => articles.slice(0, visibleCount), [articles, visibleCount]);
@@ -26,7 +27,7 @@ export function AllArticlesSection({ articles }: AllArticlesSectionProps) {
   return (
     <section className="flex flex-col mb-12">
       <div className="flex items-end gap-6 py-4">
-        <h2 className="type-heading-1 text-foreground">All Articles</h2>
+        <h2 className="type-heading-1 text-foreground">{heading}</h2>
         <Button variant="outline" className="h-9 rounded-full w-16" aria-label="Sort all articles">
           <ArrowDown className="size-4" />
         </Button>

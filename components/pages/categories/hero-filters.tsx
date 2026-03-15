@@ -27,11 +27,22 @@ function CategoryHeroFiltersContent({ categories = [] }: CategoryHeroFiltersProp
   const searchParams = useSearchParams();
   const router = useRouter();
   const categoryParam = searchParams.get("category");
+  const timeParam = searchParams.get("time") ?? "Any Time";
 
   const selectedCategory =
     categories.find((c) => c.slug === categoryParam) || categories[0];
 
   if (!selectedCategory) return null;
+
+  const updateParam = (key: string, value: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (value === "Any Time" && key === "time") {
+      params.delete("time");
+    } else {
+      params.set(key, value);
+    }
+    router.push(`/categories?${params.toString()}`);
+  };
 
   return (
     <section className="flex flex-col items-center gap-8 py-8 mt-4">
@@ -50,11 +61,20 @@ function CategoryHeroFiltersContent({ categories = [] }: CategoryHeroFiltersProp
             options={categories.map((category) => category.name)}
             onOptionSelect={(name) => {
               const cat = categories.find((c) => c.name === name);
-              if (cat) router.push(`/categories?category=${cat.slug}`);
+              if (cat) {
+                const params = new URLSearchParams(searchParams.toString());
+                params.set("category", cat.slug ?? "");
+                router.push(`/categories?${params.toString()}`);
+              }
             }}
           />
           <FilterPill label="In" value="Search Topics" options={SEARCH_TOPIC_OPTIONS} />
-          <FilterPill label="From" value="Any Time" options={TIME_OPTIONS} />
+          <FilterPill
+            label="From"
+            value={timeParam}
+            options={TIME_OPTIONS}
+            onOptionSelect={(value) => updateParam("time", value)}
+          />
         </ButtonGroup>
       </div>
     </section>
