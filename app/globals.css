@@ -309,6 +309,28 @@ body {
   overflow: scroll !important;
 }
 
+/* Responsive typography scaling */
+
+@media (max-width: 639px) {
+  :root {
+    --type-heading-1-font-size: 26px;
+    --type-heading-1-line-height: 30px;
+    --type-heading-2-font-size: 20px;
+    --type-heading-2-line-height: 24px;
+    --type-heading-3-font-size: 18px;
+    --type-heading-3-line-height: 22px;
+  }
+}
+
+@media (min-width: 640px) and (max-width: 1279px) {
+  :root {
+    --type-heading-1-font-size: 34px;
+    --type-heading-1-line-height: 38px;
+    --type-heading-2-font-size: 24px;
+    --type-heading-2-line-height: 28px;
+  }
+}
+
 /* Typography */
 
 .type-heading-1,

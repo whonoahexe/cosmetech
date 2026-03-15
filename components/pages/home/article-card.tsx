@@ -48,7 +48,7 @@ function ArticleCardNewsHorizontal({
     <article className={cn("grid grid-cols-1 gap-5 lg:grid-cols-8", className)}>
       <Link
         href={slug ? `/article/${slug}` : "#"}
-        className="relative block h-111 overflow-hidden rounded-3xl bg-[#D9D9D9] lg:col-span-4 transition-opacity hover:opacity-90"
+        className="relative block aspect-[4/3] xl:h-111 xl:aspect-auto overflow-hidden rounded-3xl bg-[#D9D9D9] lg:col-span-4 transition-opacity hover:opacity-90"
       >
         <ArticleCoverImage
           image={image}
@@ -137,7 +137,7 @@ function ArticleCardGrid({
     <article className={cn("flex flex-col gap-4", className)}>
       <Link
         href={slug ? `/article/${slug}` : "#"}
-        className="relative block w-full overflow-hidden rounded-3xl bg-[#D9D9D9] transition-opacity hover:opacity-90 aspect-square"
+        className="relative block w-full overflow-hidden rounded-3xl bg-[#D9D9D9] transition-opacity hover:opacity-90 aspect-[4/3] xl:aspect-square"
       >
         <ArticleCoverImage image={image} generatedImageUrl={generatedImageUrl} alt={title} fill sizes={isLargeGrid ? "50vw" : "25vw"} />
       </Link>
@@ -165,7 +165,9 @@ function ArticleCardGrid({
           <p
             className={cn(
               "text-muted-foreground",
-              isLargeGrid ? "type-paragraph-large-medium" : "type-paragraph-medium"
+              isLargeGrid
+                ? "type-paragraph-large-medium line-clamp-3 xl:line-clamp-none"
+                : "type-paragraph-medium line-clamp-2 xl:line-clamp-none"
             )}
           >
             {excerpt}

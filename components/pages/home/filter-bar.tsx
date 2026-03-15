@@ -43,19 +43,19 @@ import { Suspense } from "react";
 
 export function FilterBarSkeleton() {
   return (
-    <div className="flex w-full justify-between items-center py-4">
-      <div className="flex gap-3 justify-center items-center">
-        <Skeleton className="h-14 w-40 rounded-full" />
-        <p className="type-heading-4 text-muted-foreground">•</p>
-        <div className="flex gap-1">
-          <Skeleton className="h-14 w-32 rounded-full" />
-          <Skeleton className="h-14 w-32 rounded-full" />
-          <Skeleton className="h-14 w-32 rounded-full" />
+    <div className="flex w-full items-center justify-between py-4">
+      <div className="flex items-center gap-3">
+        <Skeleton className="h-11 w-36 rounded-full" />
+        <p className="hidden md:block type-heading-4 text-muted-foreground">•</p>
+        <div className="hidden md:flex gap-1">
+          <Skeleton className="h-11 w-28 rounded-full" />
+          <Skeleton className="h-11 w-28 rounded-full" />
+          <Skeleton className="h-11 w-28 rounded-full" />
         </div>
       </div>
       <div className="flex gap-1">
-        <Skeleton className="h-14 w-32 rounded-full" />
-        <Skeleton className="h-14 w-14 rounded-full" />
+        <Skeleton className="h-11 w-28 rounded-full" />
+        <Skeleton className="h-11 w-11 rounded-full" />
       </div>
     </div>
   );
@@ -91,33 +91,37 @@ function FilterBarContent({ categories = [] }: { categories?: CategoryCardData[]
   }));
 
   return (
-    <div className="flex w-full justify-between items-center py-4">
-      <div className="flex gap-3 justify-center items-center">
+    <div className="flex w-full items-center justify-between py-4 gap-3">
+      {/* Left: active-filter indicator + category pills (pills hidden on mobile) */}
+      <div className="flex items-center gap-3 min-w-0">
         <Button
           variant="outline"
           size="lg"
-          className="px-6 border-secondary border-b capitalize"
+          className="shrink-0 px-6 border-secondary border-b capitalize"
           onClick={handleScrollToGrid}
         >
           <Zap />
           {sortOption === "Latest" ? "The Latest" : sortOption}
         </Button>
-        <p className="type-heading-4">•</p>
-        <ButtonGroup>
-          {categoriesWithIcons.map((cat) => (
-            <Button key={cat.slug} variant="outline" size="lg" className="px-6" asChild>
-              <Link href={`/categories?category=${cat.slug}`}>
-                <cat.Icon />
-                {cat.name}
-              </Link>
-            </Button>
-          ))}
-        </ButtonGroup>
+        <p className="hidden md:block shrink-0 type-heading-4">•</p>
+        <div className="hidden md:block overflow-x-auto">
+          <ButtonGroup className="shrink-0">
+            {categoriesWithIcons.map((cat) => (
+              <Button key={cat.slug} variant="outline" size="lg" className="px-6" asChild>
+                <Link href={`/categories?category=${cat.slug}`}>
+                  <cat.Icon />
+                  {cat.name}
+                </Link>
+              </Button>
+            ))}
+          </ButtonGroup>
+        </div>
       </div>
 
+      {/* Right: sort picker — always visible */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <ButtonGroup className="hover:cursor-pointer group">
+          <ButtonGroup className="shrink-0 hover:cursor-pointer group">
             <Button
               variant="outline"
               size="lg"

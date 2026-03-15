@@ -35,9 +35,9 @@ export function EventsSection({
         </Button>
       </div>
 
-      <div className="grid grid-cols-8 gap-x-5 gap-y-8 py-4">
+      <div className="grid grid-cols-1 gap-y-8 py-4 xl:grid-cols-2 xl:gap-x-5">
         {visibleEvents.map((event) => (
-          <div key={`${title}-${event.title}-${event.date}`} className="col-span-8 xl:col-span-4">
+          <div key={`${title}-${event.title}-${event.date}`}>
             <EventCard {...event} variant="list" />
           </div>
         ))}

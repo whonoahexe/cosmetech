@@ -45,8 +45,9 @@ export function UpcomingEvents({ events = [], className }: UpcomingEventsProps) 
       </div>
 
       {/* Black backdrop */}
-      <div className="flex flex-col justify-center items-center gap-8 rounded-[24px] bg-popover my-4 h-200">
-        <div className="flex items-start justify-center">
+      <div className="flex flex-col items-center justify-center gap-8 rounded-[24px] bg-popover my-4 py-8 xl:py-0 xl:h-200">
+        {/* Fan layout — desktop only */}
+        <div className="hidden xl:flex items-start justify-center">
           {events.slice(0, 5).map((event, i) => (
             <div
               key={i}
@@ -63,6 +64,15 @@ export function UpcomingEvents({ events = [], className }: UpcomingEventsProps) 
                 onHoverStart={() => setHoveredIndex(i)}
                 onHoverEnd={() => setHoveredIndex(null)}
               />
+            </div>
+          ))}
+        </div>
+
+        {/* Grid layout — mobile/tablet */}
+        <div className="xl:hidden grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 w-full px-4">
+          {events.slice(0, 5).map((event, i) => (
+            <div key={i} className="flex justify-center">
+              <EventCard {...event} />
             </div>
           ))}
         </div>

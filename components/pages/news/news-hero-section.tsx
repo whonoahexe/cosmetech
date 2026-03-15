@@ -39,7 +39,7 @@ export function NewsHeroSection({ featuredBanner }: NewsHeroSectionProps) {
 
   return (
     <section className="py-4">
-      <div className="group relative h-150 w-full overflow-hidden rounded-3xl bg-[#D9D9D9]">
+      <div className="group relative h-[260px] sm:h-[380px] md:h-[460px] xl:h-150 w-full overflow-hidden rounded-3xl bg-[#D9D9D9]">
         <Link href={href} className="absolute inset-0 z-0" aria-label={`Read ${featuredBanner.title}`}>
           <ArticleCoverImage
             image={featuredBanner.image}

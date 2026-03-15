@@ -109,6 +109,21 @@ export const Navbar = () => {
   const [desktopMenuOpen, setDesktopMenuOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  // Responsive search widths — avoids overflow at md
+  const [searchWidth, setSearchWidth] = useState({ collapsed: 240, expanded: 460 });
+
+  useEffect(() => {
+    const sync = () => {
+      const w = window.innerWidth;
+      if (w < 1024) setSearchWidth({ collapsed: 180, expanded: 290 });
+      else if (w < 1280) setSearchWidth({ collapsed: 210, expanded: 370 });
+      else setSearchWidth({ collapsed: 240, expanded: 460 });
+    };
+    sync();
+    window.addEventListener("resize", sync);
+    return () => window.removeEventListener("resize", sync);
+  }, []);
+
   // Desktop search
   const [desktopQuery, setDesktopQuery] = useState("");
   const [desktopFocused, setDesktopFocused] = useState(false);
@@ -190,7 +205,7 @@ export const Navbar = () => {
             alt="Cosmetech Logo"
             width={310}
             height={48}
-            className="object-contain"
+            className="w-[130px] md:w-[180px] xl:w-[310px] h-auto object-contain"
           />
         </Link>
 
@@ -201,7 +216,7 @@ export const Navbar = () => {
         >
           <motion.div
             className="relative"
-            animate={{ width: desktopFocused ? 460 : 240 }}
+            animate={{ width: desktopFocused ? searchWidth.expanded : searchWidth.collapsed }}
             transition={{ type: "spring", stiffness: 300, damping: 28 }}
           >
             <InputGroup className="relative shadow-2xl">
