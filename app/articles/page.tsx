@@ -1,3 +1,4 @@
+import { PageTransition } from "@/components/page-transition";
 import { AllArticlesSection } from "@/components/pages/categories";
 import { getAllArticles } from "@/sanity/lib/loaders";
 import { toArticleCardData } from "@/lib/mappers";
@@ -33,8 +34,10 @@ export default async function ArticlesPage({ searchParams }: Props) {
   const heading = SORT_LABELS[sort ?? ""] ?? "The Latest";
 
   return (
-    <div className="mt-4 mb-12 flex flex-col gap-4">
-      <AllArticlesSection articles={articles} heading={heading} />
-    </div>
+    <PageTransition>
+      <div className="mt-4 mb-12 flex flex-col gap-4">
+        <AllArticlesSection articles={articles} heading={heading} />
+      </div>
+    </PageTransition>
   );
 }

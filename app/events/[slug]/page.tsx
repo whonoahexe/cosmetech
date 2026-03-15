@@ -1,3 +1,4 @@
+import { PageTransition } from "@/components/page-transition";
 import { notFound } from "next/navigation";
 import {
   EventAbout,
@@ -54,6 +55,7 @@ export default async function EventPage({ params }: Props) {
   const relatedEvents = (data.relatedEvents ?? []).map(toEventCardData);
 
   return (
+    <PageTransition>
     <div className="flex flex-col mt-4 gap-4 mb-32">
       <EventHero image={data.image} title={data.title} />
       <EventTitle
@@ -99,5 +101,6 @@ export default async function EventPage({ params }: Props) {
         </div>
       </section>
     </div>
+    </PageTransition>
   );
 }

@@ -1,3 +1,4 @@
+import { PageTransition } from "@/components/page-transition";
 import {
   NewsHeader,
   NewsHeroSection,
@@ -22,11 +23,13 @@ export default async function NewsPage() {
   const pressReleases = (data?.pressReleases ?? []).map(toArticleCardData);
 
   return (
-    <div className="mt-4 mb-12 flex flex-col gap-4">
-      <NewsHeader description={data?.pageDescription} />
-      <NewsHeroSection featuredBanner={featuredBanner} />
-      <NewsListSection stories={allNewsStories} />
-      <PressReleasesSection pressReleases={pressReleases} />
-    </div>
+    <PageTransition>
+      <div className="mt-4 mb-12 flex flex-col gap-4">
+        <NewsHeader description={data?.pageDescription} />
+        <NewsHeroSection featuredBanner={featuredBanner} />
+        <NewsListSection stories={allNewsStories} />
+        <PressReleasesSection pressReleases={pressReleases} />
+      </div>
+    </PageTransition>
   );
 }

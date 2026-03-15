@@ -1,3 +1,4 @@
+import { PageTransition } from "@/components/page-transition";
 import {
   AllArticlesSection,
   CategoryHeroFilters,
@@ -79,7 +80,8 @@ export default async function CategoriesPage({ searchParams }: Props) {
   const sideArticles = allArticles.slice(0, 4);
 
   return (
-    <div className="flex flex-col gap-4">
+    <PageTransition>
+      <div className="flex flex-col gap-4">
       <CategoryHeroFilters categories={allCategories} />
       {featuredArticle && (
         <FeaturedSplitSection
@@ -89,5 +91,6 @@ export default async function CategoriesPage({ searchParams }: Props) {
       )}
       {allArticles.length > 0 && <AllArticlesSection articles={allArticles} />}
     </div>
+    </PageTransition>
   );
 }

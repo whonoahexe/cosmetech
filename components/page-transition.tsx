@@ -1,13 +1,8 @@
 "use client";
 
 import { motion } from "motion/react";
-import { useEffect } from "react";
 
-export default function Template({ children }: { children: React.ReactNode }) {
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
+export function PageTransition({ children }: { children: React.ReactNode }) {
   return (
     <motion.div
       initial={{ opacity: 0, y: 10 }}

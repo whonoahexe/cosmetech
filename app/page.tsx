@@ -5,6 +5,7 @@ import {
   HighlightedCategories,
   UpcomingEvents,
 } from "@/components/pages/home";
+import { PageTransition } from "@/components/page-transition";
 import { getHomePageData, getCategories } from "@/sanity/lib/loaders";
 import { buildMetadata } from "@/lib/metadata";
 import { FALLBACK_CATEGORIES, PLACEHOLDER_EVENTS } from "@/lib/constants";
@@ -45,16 +46,18 @@ export default async function Home() {
     highlightedCategories.length > 0 ? highlightedCategories : allCategories.slice(0, 4);
 
   return (
-    <div className="flex flex-col gap-4">
-      <FilterBar categories={allCategories} />
-      <HighlightedCarousel slides={carouselSlides} />
-      <ArticleGrid
-        latestArticles={latestArticles}
-        popularArticles={popularArticles}
-        sponsoredArticles={sponsoredArticles}
-      />
-      <HighlightedCategories categories={displayCategories} />
-      <UpcomingEvents events={highlightedEvents} />
-    </div>
+    <PageTransition>
+      <div className="flex flex-col gap-4">
+        <FilterBar categories={allCategories} />
+        <HighlightedCarousel slides={carouselSlides} />
+        <ArticleGrid
+          latestArticles={latestArticles}
+          popularArticles={popularArticles}
+          sponsoredArticles={sponsoredArticles}
+        />
+        <HighlightedCategories categories={displayCategories} />
+        <UpcomingEvents events={highlightedEvents} />
+      </div>
+    </PageTransition>
   );
 }

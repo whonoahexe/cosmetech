@@ -1,3 +1,4 @@
+import { PageTransition } from "@/components/page-transition";
 import { notFound } from "next/navigation";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -50,6 +51,7 @@ export default async function ArticlePage({ params }: Props) {
     cmsRelated.length > 0 ? cmsRelated : (await getLatestArticles(slug)).map(toArticleCardData);
 
   return (
+    <PageTransition>
     <div className="flex flex-col mt-4 gap-4 mb-32">
       <ArticleViewTracker slug={slug} />
       <ArticleHero image={data.image} generatedImageUrl={generatedImageUrl} title={data.title} />
@@ -78,5 +80,6 @@ export default async function ArticlePage({ params }: Props) {
         </div>
       </section>
     </div>
+    </PageTransition>
   );
 }

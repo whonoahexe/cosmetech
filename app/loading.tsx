@@ -1,16 +1,9 @@
 "use client";
 
-import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { motion } from "motion/react";
 
 function ProgressBar() {
-  const ref = useRef<Element | null>(null);
-
-  useEffect(() => {
-    ref.current = document.body;
-  }, []);
-
   if (typeof document === "undefined") return null;
 
   return createPortal(
@@ -33,22 +26,15 @@ export default function Loading() {
     <>
       <ProgressBar />
 
-      {/* Page skeleton */}
-      <div className="py-6 space-y-6 animate-pulse">
-        {/* Hero / carousel placeholder */}
-        <div className="w-full aspect-[16/7] rounded-2xl bg-[var(--muted)]" />
-
-        {/* Card grid */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          {[...Array(3)].map((_, i) => (
-            <div key={i} className="flex flex-col gap-3">
-              <div className="aspect-[3/2] rounded-xl bg-[var(--muted)]" />
-              <div className="h-3 w-1/4 rounded-full bg-[var(--muted)]" />
-              <div className="h-5 w-full rounded-md bg-[var(--muted)]" />
-              <div className="h-3 w-3/4 rounded-full bg-[var(--muted)]" />
-            </div>
-          ))}
-        </div>
+      <div className="flex items-center justify-center min-h-[70vh] gap-1.5">
+        {[0, 1, 2].map((i) => (
+          <motion.span
+            key={i}
+            className="block w-1.5 h-1.5 rounded-full bg-[var(--primary)]"
+            animate={{ opacity: [0.3, 1, 0.3], y: [0, -5, 0] }}
+            transition={{ duration: 0.9, repeat: Infinity, delay: i * 0.15, ease: "easeInOut" }}
+          />
+        ))}
       </div>
     </>
   );
