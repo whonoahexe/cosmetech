@@ -5,14 +5,15 @@ import { ArrowDown } from "lucide-react";
 import { ArticleCard, type ArticleCardData } from "@/components/pages/home/article-card";
 import { Button } from "@/components/ui/button";
 
-const PAGE_SIZE = 4;
+const INITIAL_COUNT = 2;
+const LOAD_MORE_SIZE = 4;
 
 type NewsListSectionProps = {
   stories?: ArticleCardData[];
 };
 
 export function NewsListSection({ stories = [] }: NewsListSectionProps) {
-  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  const [visibleCount, setVisibleCount] = useState(INITIAL_COUNT);
 
   if (stories.length === 0) return null;
 
@@ -33,7 +34,7 @@ export function NewsListSection({ stories = [] }: NewsListSectionProps) {
             variant="default"
             size="lg"
             className="rounded-full px-8 h-12"
-            onClick={() => setVisibleCount((c) => Math.min(c + PAGE_SIZE, stories.length))}
+            onClick={() => setVisibleCount((c) => Math.min(c + LOAD_MORE_SIZE, stories.length))}
           >
             Load More
             <ArrowDown className="size-4" />

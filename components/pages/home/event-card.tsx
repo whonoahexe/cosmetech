@@ -86,6 +86,10 @@ function EventCardStacked({
   onHoverEnd,
   className,
 }: EventCardProps) {
+  const country = location.includes(",")
+    ? (location.split(",").at(-1)?.trim() ?? location)
+    : location;
+
   return (
     <motion.div
       className={cn("cursor-pointer", className)}
@@ -109,7 +113,7 @@ function EventCardStacked({
 
           {/* Metadata row */}
           <div className="flex items-center gap-3 flex-wrap justify-center">
-            <Badge variant="secondary">{location}</Badge>
+            <Badge variant="secondary">{country}</Badge>
             {isVirtual && <Badge variant="default">Virtual</Badge>}
             {isSponsored && <Badge>Sponsored</Badge>}
             <span className="type-paragraph-medium text-foreground">•</span>
