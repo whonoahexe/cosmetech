@@ -7,14 +7,6 @@ import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 
-const SEARCH_TOPIC_OPTIONS = [
-  "Any topic",
-  "Consumer trends",
-  "Ingredients",
-  "Packaging innovation",
-  "Compliance",
-];
-
 const TIME_OPTIONS = ["Any Time", "Last 7 days", "Last 30 days", "This year"];
 
 import { useRouter } from "next/navigation";
@@ -68,7 +60,6 @@ function CategoryHeroFiltersContent({ categories = [] }: CategoryHeroFiltersProp
               }
             }}
           />
-          <FilterPill label="In" value="Search Topics" options={SEARCH_TOPIC_OPTIONS} />
           <FilterPill
             label="From"
             value={timeParam}
