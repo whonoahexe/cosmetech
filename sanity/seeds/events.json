@@ -1,0 +1,406 @@
+[
+  {
+    "_id": "eventsPage.main",
+    "_type": "eventsPage",
+    "pageDescription": "Discover conferences, workshops, webinars, and expos shaping the cosmetics industry.",
+    "seo": {
+      "_type": "seo",
+      "title": "Events | Cosmetech",
+      "description": "Upcoming and past cosmetics industry events from Cosmetech."
+    }
+  },
+  {
+    "_id": "event.formulation-summit-2026",
+    "_type": "event",
+    "title": "Cosmetech Formulation Summit 2026",
+    "slug": { "_type": "slug", "current": "cosmetech-formulation-summit-2026" },
+    "summary": "An intensive summit connecting formulation scientists, R&D leaders, and ingredient innovators across beauty and personal care.",
+    "startDate": "2026-03-13T09:00:00.000Z",
+    "endDate": "2026-03-20T18:00:00.000Z",
+    "location": "Mumbai, India",
+    "registrationUrl": "https://cosmetech.example.com/events/formulation-summit-2026",
+    "eventTags": ["conference"],
+    "isSponsored": false,
+    "organizer": "Cosmetech Editorial",
+    "body": [
+      {
+        "_type": "block", "_key": "fs-b1", "style": "normal", "markDefs": [],
+        "children": [{ "_type": "span", "_key": "fs-s1", "text": "The Cosmetech Formulation Summit is the region's premier gathering for cosmetic scientists and R&D professionals. Over eight days, attendees will explore cutting-edge advances in ingredient science, stability testing, and sustainable formulation practices.", "marks": [] }]
+      },
+      {
+        "_type": "block", "_key": "fs-b2", "style": "h3", "markDefs": [],
+        "children": [{ "_type": "span", "_key": "fs-s2", "text": "Who Should Attend", "marks": [] }]
+      },
+      {
+        "_type": "block", "_key": "fs-b3", "style": "normal", "markDefs": [],
+        "children": [{ "_type": "span", "_key": "fs-s3", "text": "This summit is designed for senior formulation chemists, R&D directors, ingredient suppliers, and product developers looking to stay ahead of regulatory and consumer-driven changes in the beauty landscape.", "marks": [] }]
+      },
+      {
+        "_type": "block", "_key": "fs-b4", "style": "h3", "markDefs": [],
+        "children": [{ "_type": "span", "_key": "fs-s4", "text": "Key Themes", "marks": [] }]
+      },
+      {
+        "_type": "block", "_key": "fs-b5", "style": "normal", "markDefs": [],
+        "children": [{ "_type": "span", "_key": "fs-s5", "text": "Sessions will cover biobased actives, microbiome-friendly formulation, waterless beauty, and the integration of AI-assisted stability modelling. A dedicated track on APAC regulatory harmonisation will run throughout the week.", "marks": [] }]
+      }
+    ],
+    "agenda": [
+      { "_type": "agendaItem", "_key": "fs-a1", "time": "09:00", "label": "Registration and welcome coffee" },
+      { "_type": "agendaItem", "_key": "fs-a2", "time": "10:00", "label": "Opening keynote: The next decade of cosmetic science" },
+      { "_type": "agendaItem", "_key": "fs-a3", "time": "11:30", "label": "Panel: Biobased actives — sourcing, efficacy, and claims" },
+      { "_type": "agendaItem", "_key": "fs-a4", "time": "13:00", "label": "Networking lunch" },
+      { "_type": "agendaItem", "_key": "fs-a5", "time": "14:30", "label": "Workshop: Stability testing under tropical conditions" },
+      { "_type": "agendaItem", "_key": "fs-a6", "time": "16:30", "label": "Roundtable: AI in formulation — promise vs. practice" }
+    ],
+    "relatedEvents": [
+      { "_key": "fs-r1", "_type": "reference", "_ref": "event.fragrance-sensory-forum-2026" },
+      { "_key": "fs-r2", "_type": "reference", "_ref": "event.eurocosmetch-conference-2026" }
+    ]
+  },
+  {
+    "_id": "event.fragrance-sensory-forum-2026",
+    "_type": "event",
+    "title": "Fragrance and Sensory Forum",
+    "slug": { "_type": "slug", "current": "fragrance-sensory-forum-2026" },
+    "summary": "A two-day industry forum focused on fragrance creation, sensory science, and consumer testing in modern beauty products.",
+    "startDate": "2026-04-12T09:30:00.000Z",
+    "location": "Dubai, UAE",
+    "registrationUrl": "https://cosmetech.example.com/events/fragrance-sensory-forum-2026",
+    "eventTags": ["workshop"],
+    "isSponsored": false,
+    "organizer": "Fragrance Council",
+    "body": [
+      {
+        "_type": "block", "_key": "ff-b1", "style": "normal", "markDefs": [],
+        "children": [{ "_type": "span", "_key": "ff-s1", "text": "The Fragrance and Sensory Forum brings together perfumers, sensory scientists, and brand teams for two immersive days of workshops and case studies centred on the intersection of scent, emotion, and product experience.", "marks": [] }]
+      },
+      {
+        "_type": "block", "_key": "ff-b2", "style": "h3", "markDefs": [],
+        "children": [{ "_type": "span", "_key": "ff-s2", "text": "Workshop Format", "marks": [] }]
+      },
+      {
+        "_type": "block", "_key": "ff-b3", "style": "normal", "markDefs": [],
+        "children": [{ "_type": "span", "_key": "ff-s3", "text": "Each session is limited to 40 participants to ensure hands-on engagement. Attendees will work directly with raw materials, conduct blind sensory evaluations, and present findings to peer groups.", "marks": [] }]
+      },
+      {
+        "_type": "block", "_key": "ff-b4", "style": "h3", "markDefs": [],
+        "children": [{ "_type": "span", "_key": "ff-s4", "text": "Topics Covered", "marks": [] }]
+      },
+      {
+        "_type": "block", "_key": "ff-b5", "style": "normal", "markDefs": [],
+        "children": [{ "_type": "span", "_key": "ff-s5", "text": "Fragrance longevity and substantivity, consumer sensory panels, olfactory storytelling in brand identity, naturals vs. synthetics in Middle Eastern markets, and the regulatory landscape for fragrance allergen disclosure.", "marks": [] }]
+      }
+    ],
+    "agenda": [
+      { "_type": "agendaItem", "_key": "ff-a1", "time": "09:30", "label": "Welcome and forum overview" },
+      { "_type": "agendaItem", "_key": "ff-a2", "time": "10:00", "label": "Keynote: Scent as a sensory brand language" },
+      { "_type": "agendaItem", "_key": "ff-a3", "time": "11:15", "label": "Hands-on: Raw material evaluation and blind testing" },
+      { "_type": "agendaItem", "_key": "ff-a4", "time": "13:00", "label": "Lunch and supplier exhibition" },
+      { "_type": "agendaItem", "_key": "ff-a5", "time": "14:30", "label": "Session: Regulatory updates on fragrance allergen disclosure" },
+      { "_type": "agendaItem", "_key": "ff-a6", "time": "16:00", "label": "Closing panel: Where is fragrance science headed?" }
+    ],
+    "relatedEvents": [
+      { "_key": "ff-r1", "_type": "reference", "_ref": "event.formulation-summit-2026" },
+      { "_key": "ff-r2", "_type": "reference", "_ref": "event.active-ingredients-masterclass-2026" }
+    ]
+  },
+  {
+    "_id": "event.eurocosmetch-conference-2026",
+    "_type": "event",
+    "title": "EuroCosmetech Conference 2026",
+    "slug": { "_type": "slug", "current": "eurocosmetch-conference-2026" },
+    "summary": "Europe's flagship cosmetics industry conference, bringing together formulators, brand leaders, and suppliers to explore the frontiers of beauty science.",
+    "startDate": "2026-04-22T09:00:00.000Z",
+    "endDate": "2026-04-24T18:00:00.000Z",
+    "location": "Amsterdam, Netherlands",
+    "registrationUrl": "https://cosmetech.example.com/events/eurocosmetch-conference-2026",
+    "eventTags": ["conference"],
+    "isSponsored": false,
+    "organizer": "European Cosmetics Council",
+    "body": [
+      {
+        "_type": "block", "_key": "ec-b1", "style": "normal", "markDefs": [],
+        "children": [{ "_type": "span", "_key": "ec-s1", "text": "EuroCosmetech is the definitive annual gathering for Europe's cosmetics industry. Three full days of keynotes, panels, and curated networking sessions give attendees unparalleled access to thought leaders shaping the regulatory and innovation agenda across the continent.", "marks": [] }]
+      },
+      {
+        "_type": "block", "_key": "ec-b2", "style": "h3", "markDefs": [],
+        "children": [{ "_type": "span", "_key": "ec-s2", "text": "Conference Tracks", "marks": [] }]
+      },
+      {
+        "_type": "block", "_key": "ec-b3", "style": "normal", "markDefs": [],
+        "children": [{ "_type": "span", "_key": "ec-s3", "text": "This year's programme runs across four parallel tracks: Ingredient Science, Sustainability & Packaging, Regulatory Affairs, and Digital Innovation. Each track features a mix of invited talks and open-submission presentations.", "marks": [] }]
+      },
+      {
+        "_type": "block", "_key": "ec-b4", "style": "h3", "markDefs": [],
+        "children": [{ "_type": "span", "_key": "ec-s4", "text": "Exhibition Floor", "marks": [] }]
+      },
+      {
+        "_type": "block", "_key": "ec-b5", "style": "normal", "markDefs": [],
+        "children": [{ "_type": "span", "_key": "ec-s5", "text": "Over 120 suppliers will exhibit across 3,000 sqm of floor space. Pre-scheduled one-to-one meetings can be booked through the conference portal in advance of the event.", "marks": [] }]
+      }
+    ],
+    "agenda": [
+      { "_type": "agendaItem", "_key": "ec-a1", "time": "08:30", "label": "Registration and badge collection" },
+      { "_type": "agendaItem", "_key": "ec-a2", "time": "09:30", "label": "Opening address: The European Green Deal and cosmetics" },
+      { "_type": "agendaItem", "_key": "ec-a3", "time": "10:45", "label": "Track sessions begin (Ingredient Science / Sustainability / Regulatory / Digital)" },
+      { "_type": "agendaItem", "_key": "ec-a4", "time": "12:30", "label": "Lunch and exhibition floor open" },
+      { "_type": "agendaItem", "_key": "ec-a5", "time": "14:00", "label": "Afternoon keynote: Post-PFAS reformulation strategies" },
+      { "_type": "agendaItem", "_key": "ec-a6", "time": "15:30", "label": "Speed networking session" },
+      { "_type": "agendaItem", "_key": "ec-a7", "time": "17:00", "label": "Day 1 close and welcome drinks" }
+    ],
+    "relatedEvents": [
+      { "_key": "ec-r1", "_type": "reference", "_ref": "event.formulation-summit-2026" },
+      { "_key": "ec-r2", "_type": "reference", "_ref": "event.sustainable-beauty-expo-2026" }
+    ]
+  },
+  {
+    "_id": "event.active-ingredients-masterclass-2026",
+    "_type": "event",
+    "title": "Active Ingredients Masterclass 2026",
+    "slug": { "_type": "slug", "current": "active-ingredients-masterclass-2026" },
+    "summary": "A hands-on two-day masterclass for cosmetic chemists and R&D professionals focused on the latest developments in active ingredient science.",
+    "startDate": "2026-05-14T09:00:00.000Z",
+    "endDate": "2026-05-15T17:00:00.000Z",
+    "location": "London, United Kingdom",
+    "registrationUrl": "https://cosmetech.example.com/events/active-ingredients-masterclass-2026",
+    "eventTags": ["workshop"],
+    "isSponsored": false,
+    "organizer": "Cosmetic Chemists Society",
+    "body": [
+      {
+        "_type": "block", "_key": "ai-b1", "style": "normal", "markDefs": [],
+        "children": [{ "_type": "span", "_key": "ai-s1", "text": "This intensive two-day masterclass provides in-depth technical training on the science, formulation, and substantiation of active ingredients. Designed for practising cosmetic chemists, the programme balances theory with practical laboratory sessions.", "marks": [] }]
+      },
+      {
+        "_type": "block", "_key": "ai-b2", "style": "h3", "markDefs": [],
+        "children": [{ "_type": "span", "_key": "ai-s2", "text": "Programme Overview", "marks": [] }]
+      },
+      {
+        "_type": "block", "_key": "ai-b3", "style": "normal", "markDefs": [],
+        "children": [{ "_type": "span", "_key": "ai-s3", "text": "Day one covers peptide and growth-factor actives, ceramide complexes, and encapsulation technology for enhanced delivery. Day two focuses on antioxidant systems, SPF boosters, and building robust in-vitro and in-vivo claims packages.", "marks": [] }]
+      },
+      {
+        "_type": "block", "_key": "ai-b4", "style": "h3", "markDefs": [],
+        "children": [{ "_type": "span", "_key": "ai-s4", "text": "Certification", "marks": [] }]
+      },
+      {
+        "_type": "block", "_key": "ai-b5", "style": "normal", "markDefs": [],
+        "children": [{ "_type": "span", "_key": "ai-s5", "text": "Delegates who complete both days receive a certificate of attendance from the Cosmetic Chemists Society, eligible for CPD recognition under the Society of Cosmetic Scientists accreditation framework.", "marks": [] }]
+      }
+    ],
+    "agenda": [
+      { "_type": "agendaItem", "_key": "ai-a1", "time": "09:00", "label": "Welcome and programme introduction" },
+      { "_type": "agendaItem", "_key": "ai-a2", "time": "09:30", "label": "Peptide actives: mechanisms, stability, and formulation challenges" },
+      { "_type": "agendaItem", "_key": "ai-a3", "time": "11:00", "label": "Lab session: Encapsulation techniques for actives" },
+      { "_type": "agendaItem", "_key": "ai-a4", "time": "13:00", "label": "Lunch" },
+      { "_type": "agendaItem", "_key": "ai-a5", "time": "14:00", "label": "Ceramides and lipid-barrier restoration science" },
+      { "_type": "agendaItem", "_key": "ai-a6", "time": "16:00", "label": "Q&A and day 1 close" }
+    ],
+    "relatedEvents": [
+      { "_key": "ai-r1", "_type": "reference", "_ref": "event.fragrance-sensory-forum-2026" },
+      { "_key": "ai-r2", "_type": "reference", "_ref": "event.eurocosmetch-conference-2026" }
+    ]
+  },
+  {
+    "_id": "event.sustainable-beauty-expo-2026",
+    "_type": "event",
+    "title": "Sustainable Beauty Expo 2026",
+    "slug": { "_type": "slug", "current": "sustainable-beauty-expo-2026" },
+    "summary": "A four-day expo showcasing the next generation of sustainable ingredients, packaging, and supply chain solutions for the global beauty industry.",
+    "startDate": "2026-06-09T09:00:00.000Z",
+    "endDate": "2026-06-12T18:00:00.000Z",
+    "location": "Singapore",
+    "registrationUrl": "https://cosmetech.example.com/events/sustainable-beauty-expo-2026",
+    "eventTags": ["expo"],
+    "isSponsored": true,
+    "sponsoredMeta": {
+      "_type": "sponsoredMeta",
+      "label": "Sponsored",
+      "sponsorName": "GreenBeauty Co.",
+      "sponsorUrl": "https://example.com"
+    },
+    "organizer": "Green Beauty Initiative",
+    "body": [
+      {
+        "_type": "block", "_key": "sb-b1", "style": "normal", "markDefs": [],
+        "children": [{ "_type": "span", "_key": "sb-s1", "text": "The Sustainable Beauty Expo is Asia's largest dedicated platform for green beauty innovation. Across four days, visitors can explore exhibitor stands, attend curated conference sessions, and connect with the brands and suppliers redefining what sustainable beauty means in practice.", "marks": [] }]
+      },
+      {
+        "_type": "block", "_key": "sb-b2", "style": "h3", "markDefs": [],
+        "children": [{ "_type": "span", "_key": "sb-s2", "text": "What to Expect", "marks": [] }]
+      },
+      {
+        "_type": "block", "_key": "sb-b3", "style": "normal", "markDefs": [],
+        "children": [{ "_type": "span", "_key": "sb-s3", "text": "More than 200 exhibitors will present sustainable ingredient innovations, compostable and refillable packaging solutions, carbon-neutral manufacturing processes, and verified supply chain traceability tools.", "marks": [] }]
+      },
+      {
+        "_type": "block", "_key": "sb-b4", "style": "h3", "markDefs": [],
+        "children": [{ "_type": "span", "_key": "sb-s4", "text": "Conference Programme", "marks": [] }]
+      },
+      {
+        "_type": "block", "_key": "sb-b5", "style": "normal", "markDefs": [],
+        "children": [{ "_type": "span", "_key": "sb-s5", "text": "The co-located conference features 60 speakers across six themed summits including Biodiversity & Sourcing, Circular Packaging, Clean Chemistry, and Scope 3 Emissions in the beauty supply chain.", "marks": [] }]
+      }
+    ],
+    "agenda": [
+      { "_type": "agendaItem", "_key": "sb-a1", "time": "09:00", "label": "Expo doors open" },
+      { "_type": "agendaItem", "_key": "sb-a2", "time": "10:00", "label": "Opening keynote: Defining sustainability beyond claims" },
+      { "_type": "agendaItem", "_key": "sb-a3", "time": "11:30", "label": "Panel: Circular packaging — what's actually working?" },
+      { "_type": "agendaItem", "_key": "sb-a4", "time": "13:00", "label": "Lunch and exhibition floor" },
+      { "_type": "agendaItem", "_key": "sb-a5", "time": "14:30", "label": "Summit: Biodiversity and responsible sourcing" },
+      { "_type": "agendaItem", "_key": "sb-a6", "time": "16:30", "label": "Innovation awards ceremony" }
+    ],
+    "relatedEvents": [
+      { "_key": "sb-r1", "_type": "reference", "_ref": "event.eurocosmetch-conference-2026" },
+      { "_key": "sb-r2", "_type": "reference", "_ref": "event.digital-beauty-retail-forum-2026" }
+    ]
+  },
+  {
+    "_id": "event.digital-beauty-retail-forum-2026",
+    "_type": "event",
+    "title": "Digital Beauty and Retail Forum",
+    "slug": { "_type": "slug", "current": "digital-beauty-retail-forum-2026" },
+    "summary": "A virtual forum exploring how DTC brands, retailers, and technology partners are reshaping the beauty commerce experience.",
+    "startDate": "2026-07-17T10:00:00.000Z",
+    "location": "Virtual",
+    "registrationUrl": "https://cosmetech.example.com/events/digital-beauty-retail-forum-2026",
+    "eventTags": ["webinar"],
+    "isSponsored": false,
+    "organizer": "BeautyTech Alliance",
+    "body": [
+      {
+        "_type": "block", "_key": "db-b1", "style": "normal", "markDefs": [],
+        "children": [{ "_type": "span", "_key": "db-s1", "text": "The Digital Beauty and Retail Forum is a one-day virtual event exploring the fast-changing landscape of beauty commerce. Sessions will examine how brands are using data, personalisation, and digital channels to build loyalty and drive conversion in a crowded market.", "marks": [] }]
+      },
+      {
+        "_type": "block", "_key": "db-b2", "style": "h3", "markDefs": [],
+        "children": [{ "_type": "span", "_key": "db-s2", "text": "Session Highlights", "marks": [] }]
+      },
+      {
+        "_type": "block", "_key": "db-b3", "style": "normal", "markDefs": [],
+        "children": [{ "_type": "span", "_key": "db-s3", "text": "Key sessions include live commerce and social selling in Southeast Asia, first-party data strategies post-cookie, AI-powered product recommendation engines, and the evolving role of beauty retailers as content platforms.", "marks": [] }]
+      },
+      {
+        "_type": "block", "_key": "db-b4", "style": "h3", "markDefs": [],
+        "children": [{ "_type": "span", "_key": "db-s4", "text": "Format", "marks": [] }]
+      },
+      {
+        "_type": "block", "_key": "db-b5", "style": "normal", "markDefs": [],
+        "children": [{ "_type": "span", "_key": "db-s5", "text": "All sessions are streamed live and available on-demand for 30 days after the event. Registered attendees will also have access to the speaker slide deck library and a facilitated virtual networking lounge.", "marks": [] }]
+      }
+    ],
+    "agenda": [
+      { "_type": "agendaItem", "_key": "db-a1", "time": "10:00", "label": "Welcome and logistics overview" },
+      { "_type": "agendaItem", "_key": "db-a2", "time": "10:15", "label": "Keynote: The DTC beauty playbook in 2026" },
+      { "_type": "agendaItem", "_key": "db-a3", "time": "11:15", "label": "Panel: Live commerce — converting viewers to buyers" },
+      { "_type": "agendaItem", "_key": "db-a4", "time": "12:30", "label": "Break and virtual networking" },
+      { "_type": "agendaItem", "_key": "db-a5", "time": "13:15", "label": "Session: AI-powered personalisation at scale" },
+      { "_type": "agendaItem", "_key": "db-a6", "time": "14:30", "label": "Closing Q&A and wrap-up" }
+    ],
+    "relatedEvents": [
+      { "_key": "db-r1", "_type": "reference", "_ref": "event.sustainable-beauty-expo-2026" },
+      { "_key": "db-r2", "_type": "reference", "_ref": "event.beautytech-ai-innovation-expo-2026" }
+    ]
+  },
+  {
+    "_id": "event.beautytech-ai-innovation-expo-2026",
+    "_type": "event",
+    "title": "BeautyTech and AI Innovation Expo",
+    "slug": { "_type": "slug", "current": "beautytech-ai-innovation-expo-2026" },
+    "summary": "An expo where AI teams, product developers, and digital marketers explore practical innovation across the beauty value chain.",
+    "startDate": "2026-01-22T09:00:00.000Z",
+    "endDate": "2026-01-24T18:00:00.000Z",
+    "location": "Bengaluru, India",
+    "registrationUrl": "https://cosmetech.example.com/events/beautytech-ai-innovation-expo-2026",
+    "eventTags": ["expo"],
+    "isSponsored": true,
+    "sponsoredMeta": {
+      "_type": "sponsoredMeta",
+      "label": "Sponsored",
+      "sponsorName": "BeautyStack",
+      "sponsorUrl": "https://example.com"
+    },
+    "organizer": "Innovation Guild",
+    "body": [
+      {
+        "_type": "block", "_key": "bt-b1", "style": "normal", "markDefs": [],
+        "children": [{ "_type": "span", "_key": "bt-s1", "text": "The BeautyTech and AI Innovation Expo connects technologists with beauty professionals across a three-day programme of demonstrations, talks, and hands-on lab sessions. From generative AI in product development to machine learning for demand forecasting, the expo covers the full spectrum of technology applications in beauty.", "marks": [] }]
+      },
+      {
+        "_type": "block", "_key": "bt-b2", "style": "h3", "markDefs": [],
+        "children": [{ "_type": "span", "_key": "bt-s2", "text": "Innovation Showcases", "marks": [] }]
+      },
+      {
+        "_type": "block", "_key": "bt-b3", "style": "normal", "markDefs": [],
+        "children": [{ "_type": "span", "_key": "bt-s3", "text": "Live technology showcases will include AI skin analysis tools, virtual try-on platforms, automated formulation software, and predictive trend analytics dashboards — all demonstrated in working product environments.", "marks": [] }]
+      },
+      {
+        "_type": "block", "_key": "bt-b4", "style": "h3", "markDefs": [],
+        "children": [{ "_type": "span", "_key": "bt-s4", "text": "Startup Pitch Competition", "marks": [] }]
+      },
+      {
+        "_type": "block", "_key": "bt-b5", "style": "normal", "markDefs": [],
+        "children": [{ "_type": "span", "_key": "bt-s5", "text": "Twenty early-stage beautytech startups will pitch to a panel of investors and brand executives. The winning team receives a six-month accelerator placement and a Rs 25 lakh innovation grant.", "marks": [] }]
+      }
+    ],
+    "agenda": [
+      { "_type": "agendaItem", "_key": "bt-a1", "time": "09:00", "label": "Expo doors open and exhibitor showcase begins" },
+      { "_type": "agendaItem", "_key": "bt-a2", "time": "10:00", "label": "Opening keynote: AI as a creative collaborator in beauty" },
+      { "_type": "agendaItem", "_key": "bt-a3", "time": "11:30", "label": "Demo stage: Live AI skin diagnostics demonstration" },
+      { "_type": "agendaItem", "_key": "bt-a4", "time": "13:00", "label": "Lunch and expo floor" },
+      { "_type": "agendaItem", "_key": "bt-a5", "time": "14:30", "label": "Startup pitch competition — round 1" },
+      { "_type": "agendaItem", "_key": "bt-a6", "time": "16:30", "label": "Panel: Responsible AI in consumer-facing beauty products" }
+    ],
+    "relatedEvents": [
+      { "_key": "bt-r1", "_type": "reference", "_ref": "event.digital-beauty-retail-forum-2026" },
+      { "_key": "bt-r2", "_type": "reference", "_ref": "event.regulatory-compliance-webinar-apac-2026" }
+    ]
+  },
+  {
+    "_id": "event.regulatory-compliance-webinar-apac-2026",
+    "_type": "event",
+    "title": "Regulatory and Compliance Webinar: APAC",
+    "slug": { "_type": "slug", "current": "regulatory-compliance-webinar-apac-2026" },
+    "summary": "A practical webinar covering regulatory updates and compliance pathways for cosmetics teams operating in key APAC markets.",
+    "startDate": "2026-02-15T10:00:00.000Z",
+    "location": "Virtual",
+    "registrationUrl": "https://cosmetech.example.com/events/regulatory-compliance-webinar-apac-2026",
+    "eventTags": ["webinar"],
+    "isSponsored": false,
+    "organizer": "Cosmetech Research",
+    "body": [
+      {
+        "_type": "block", "_key": "rc-b1", "style": "normal", "markDefs": [],
+        "children": [{ "_type": "span", "_key": "rc-s1", "text": "This focused half-day webinar is designed for regulatory affairs professionals and compliance teams managing product registrations, safety dossiers, and labelling requirements across the APAC region. Sessions are presented by practising regulatory consultants with direct market experience.", "marks": [] }]
+      },
+      {
+        "_type": "block", "_key": "rc-b2", "style": "h3", "markDefs": [],
+        "children": [{ "_type": "span", "_key": "rc-s2", "text": "Markets Covered", "marks": [] }]
+      },
+      {
+        "_type": "block", "_key": "rc-b3", "style": "normal", "markDefs": [],
+        "children": [{ "_type": "span", "_key": "rc-s3", "text": "Sessions will focus on updated notification frameworks in China (NMPA), India (BIS), ASEAN harmonisation under the ASEAN Cosmetic Directive, and recent changes to Japan's Pharmaceutical and Medical Device Act as it applies to quasi-drug products.", "marks": [] }]
+      },
+      {
+        "_type": "block", "_key": "rc-b4", "style": "h3", "markDefs": [],
+        "children": [{ "_type": "span", "_key": "rc-s4", "text": "Who Should Join", "marks": [] }]
+      },
+      {
+        "_type": "block", "_key": "rc-b5", "style": "normal", "markDefs": [],
+        "children": [{ "_type": "span", "_key": "rc-s5", "text": "Regulatory affairs managers, legal counsel, quality assurance leads, and product managers responsible for market access in Asia. A live Q&A with the presenting consultants closes the session.", "marks": [] }]
+      }
+    ],
+    "agenda": [
+      { "_type": "agendaItem", "_key": "rc-a1", "time": "10:00", "label": "Welcome and housekeeping" },
+      { "_type": "agendaItem", "_key": "rc-a2", "time": "10:10", "label": "China NMPA update: New notification categories and ingredient restrictions" },
+      { "_type": "agendaItem", "_key": "rc-a3", "time": "10:50", "label": "India BIS: Mandatory certification requirements and timelines" },
+      { "_type": "agendaItem", "_key": "rc-a4", "time": "11:20", "label": "ASEAN harmonisation: Where we are and what's next" },
+      { "_type": "agendaItem", "_key": "rc-a5", "time": "11:50", "label": "Japan quasi-drug: Practical implications for skin-care brands" },
+      { "_type": "agendaItem", "_key": "rc-a6", "time": "12:20", "label": "Live Q&A and close" }
+    ],
+    "relatedEvents": [
+      { "_key": "rc-r1", "_type": "reference", "_ref": "event.beautytech-ai-innovation-expo-2026" },
+      { "_key": "rc-r2", "_type": "reference", "_ref": "event.fragrance-sensory-forum-2026" }
+    ]
+  }
+]

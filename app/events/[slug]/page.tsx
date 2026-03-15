@@ -1,3 +1,4 @@
+import { notFound } from "next/navigation";
 import {
   EventAbout,
   EventAgenda,
@@ -7,99 +8,93 @@ import {
   EventRelated,
   EventTitle,
 } from "@/components/pages/events";
-import { type EventCardData } from "@/components/pages/home/event-card";
 import { Separator } from "@/components/ui/separator";
+import { getEventPageData } from "@/sanity/lib/loaders";
+import { buildMetadata } from "@/lib/metadata";
+import { toEventCardData } from "@/lib/mappers";
+import type { Metadata } from "next";
 
-// ─── Placeholder data ────────────────────────────────────────────────────────
+type Props = { params: Promise<{ slug: string }> };
 
-const EVENT = {
-  title: "Sustainable Packaging for Beauty Workshop",
-  category: "Conferences",
-  location: "Mumbai, India",
-  date: "18 February 2026",
-  time: "9:00 AM – 5:00 PM IST",
-  organizer: "Cosmetech Media Group",
-  isSponsored: false,
-  isVirtual: false,
-  registrationUrl: "#",
-  description: `
-    An intensive, full-day workshop bringing together R&D leads, supply chain
-    directors, and sustainability officers from across the beauty and personal
-    care industry. Sessions cover the regulatory landscape for single-use
-    plastics, next-generation refill architecture, mono-material laminate
-    innovations from global suppliers, and life-cycle assessment methodology
-    for cosmetic packaging lines.
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params;
+  const data = await getEventPageData(slug);
+  if (!data) return {};
+  return buildMetadata(data.seo, { title: data.title });
+}
 
-    Attendees leave with a working framework for auditing their current
-    packaging portfolio and a curated list of verified supplier contacts
-    actively operating in the South and Southeast Asian market.
-  `,
-  agenda: [
-    { time: "09:00", label: "Registration & Networking Breakfast" },
-    { time: "10:00", label: "Opening Keynote: The Regulatory Horizon" },
-    { time: "11:30", label: "Panel — Refill Systems at Commercial Scale" },
-    { time: "13:00", label: "Lunch Break" },
-    { time: "14:00", label: "Workshop: Mono-Material Design Principles" },
-    { time: "15:30", label: "Supplier Showcase & Networking" },
-    { time: "17:00", label: "Closing Remarks" },
-  ],
-};
+function formatEventDate(iso?: string): string {
+  if (!iso) return "";
+  return new Date(iso).toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+}
 
-const RELATED_EVENTS: EventCardData[] = [
-  {
-    title: "Global Ingredients & Formulation Summit",
-    location: "Dubai",
-    category: "Workshops",
-    date: "21/02/2026",
-    excerpt:
-      "A two-day gathering focused on ingredient innovation, formulation science, and stability testing.",
-    href: "/events/global-ingredients-formulation-summit",
-  },
-  {
-    title: "Cosmetech R&D Leadership Forum",
-    location: "Singapore",
-    category: "Conferences",
-    date: "14/03/2026",
-    excerpt:
-      "A strategic forum bringing together innovation leaders working across formulation, testing, and commercialization.",
-    href: "/events/cosmetech-rd-leadership-forum",
-  },
-];
+function formatEventTime(startIso?: string, endIso?: string): string {
+  if (!startIso) return "";
+  const start = new Date(startIso);
+  const fmt = (d: Date) =>
+    d.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit", hour12: true }).toUpperCase();
+  if (endIso) {
+    return `${fmt(start)} – ${fmt(new Date(endIso))}`;
+  }
+  return fmt(start);
+}
 
-export default function EventPage() {
+export default async function EventPage({ params }: Props) {
+  const { slug } = await params;
+  const data = await getEventPageData(slug);
+  if (!data) notFound();
+
+  const category = data.eventTags?.[0] ?? "Event";
+  const dateStr = formatEventDate(data.startDate);
+  const timeStr = formatEventTime(data.startDate, data.endDate);
+  const relatedEvents = (data.relatedEvents ?? []).map(toEventCardData);
+
   return (
     <div className="flex flex-col mt-4 gap-4 mb-32">
-      <EventHero />
+      <EventHero image={data.image} title={data.title} />
       <EventTitle
-        title={EVENT.title}
-        category={EVENT.category}
-        date={EVENT.date}
-        isSponsored={EVENT.isSponsored}
-        isVirtual={EVENT.isVirtual}
+        title={data.title}
+        category={category}
+        date={dateStr}
+        excerpt={data.excerpt}
+        isSponsored={data.isSponsored}
+        isVirtual={data.location?.toLowerCase() === "virtual"}
       />
 
       <section className="relative py-8 lg:px-32 xl:px-64">
         <div className="mx-auto w-full max-w-6xl">
-          <EventBreadcrumb category={EVENT.category} />
+          <EventBreadcrumb category={category} uid={slug} />
 
           <div className="lg:pr-20 pt-16 space-y-16">
             <EventDetails
-              date={EVENT.date}
-              time={EVENT.time}
-              location={EVENT.location}
-              organizer={EVENT.organizer}
-              isVirtual={EVENT.isVirtual}
-              registrationUrl={EVENT.registrationUrl}
+              date={dateStr}
+              time={timeStr}
+              location={data.location ?? ""}
+              organizer={data.organizer ?? ""}
+              isVirtual={data.location?.toLowerCase() === "virtual"}
+              registrationUrl={data.registrationUrl ?? "#"}
             />
 
             <Separator />
-            <EventAbout description={EVENT.description} />
+            <EventAbout body={data.body} />
 
-            <Separator />
-            <EventAgenda agenda={EVENT.agenda} />
+            {data.agenda && data.agenda.length > 0 && (
+              <>
+                <Separator />
+                <EventAgenda agenda={data.agenda} />
+              </>
+            )}
 
-            <Separator />
-            <EventRelated events={RELATED_EVENTS} />
+            {relatedEvents.length > 0 && (
+              <>
+                <Separator />
+                <EventRelated events={relatedEvents} />
+              </>
+            )}
           </div>
         </div>
       </section>

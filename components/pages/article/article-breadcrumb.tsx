@@ -13,9 +13,17 @@ import { Button } from "@/components/ui/button";
 
 type ArticleBreadcrumbProps = {
   category: string;
+  categorySlug?: string;
+  articleLabel: string;
 };
 
-export function ArticleBreadcrumb({ category }: ArticleBreadcrumbProps) {
+export function ArticleBreadcrumb({
+  category,
+  categorySlug,
+  articleLabel,
+}: ArticleBreadcrumbProps) {
+  const categoryHref = categorySlug ? `/categories?category=${categorySlug}` : "/categories";
+
   return (
     <div className="flex items-center gap-8">
       <Breadcrumb>
@@ -30,7 +38,7 @@ export function ArticleBreadcrumb({ category }: ArticleBreadcrumbProps) {
           </BreadcrumbSeparator>
           <BreadcrumbItem>
             <BreadcrumbLink asChild>
-              <Link href={`/categories`}>{category}</Link>
+              <Link href={categoryHref}>{category}</Link>
             </BreadcrumbLink>
           </BreadcrumbItem>
           <BreadcrumbSeparator className="text-primary text-[30px] [&>svg]:hidden">
@@ -38,7 +46,7 @@ export function ArticleBreadcrumb({ category }: ArticleBreadcrumbProps) {
           </BreadcrumbSeparator>
           <BreadcrumbItem>
             <BreadcrumbPage className="type-monospaced text-primary text-[30px]!">
-              01
+              {articleLabel}
             </BreadcrumbPage>
           </BreadcrumbItem>
         </BreadcrumbList>

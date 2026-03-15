@@ -3,6 +3,7 @@ import { Inter, Playfair_Display, Space_Mono } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { RootShell } from "@/components/layout";
+import { getSiteSettings } from "@/sanity/lib/loaders";
 
 const bodyFont = Inter({
   variable: "--font-body",
@@ -25,17 +26,19 @@ export const metadata: Metadata = {
   description: "Leading B2B cosmetics magazine and resource for industry professionals in Asia.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const settings = await getSiteSettings();
+
   return (
     <html lang="en" className={cn("font-body")}>
       <body
         className={`${bodyFont.variable} ${headingFont.variable} ${monoFont.variable} antialiased`}
       >
-        <RootShell>{children}</RootShell>
+        <RootShell socialLinks={settings?.socialLinks}>{children}</RootShell>
       </body>
     </html>
   );

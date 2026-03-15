@@ -54,12 +54,14 @@ const articleCardProjection = `{
 	title,
 	"slug": slug.current,
 	excerpt,
+	imageMode,
 	"image": coverImage${imageFields},
 	publishDate,
 	contentKinds,
 	isSponsored,
 	sponsoredMeta${sponsoredMetaFields},
 	"categories": categories[]->${categoryFields},
+	"categoryRefs": categories[]._ref,
 	"plainText": pt::text(body)
 }`;
 
@@ -95,11 +97,13 @@ const advertisementCardProjection = `{
 	sponsoredMeta${sponsoredMetaFields}
 }`;
 
-export const contentCardProjection = `select(
-	_type == "article" => ${articleCardProjection},
-	_type == "event" => ${eventCardProjection},
-	_type == "advertisement" => ${advertisementCardProjection}
-)`;
+export const contentCardProjection = `{
+	...select(
+		_type == "article" => ${articleCardProjection},
+		_type == "event" => ${eventCardProjection},
+		_type == "advertisement" => ${advertisementCardProjection}
+	)
+}`;
 
 const advertisementSlotFields = `{
 	slot,
@@ -205,12 +209,14 @@ export const articleBySlugQuery = `*[_type == "article" && slug.current == $slug
 	title,
 	"slug": slug.current,
 	excerpt,
+	imageMode,
 	"image": coverImage${imageFields},
 	publishDate,
 	contentKinds,
 	isSponsored,
 	sponsoredMeta${sponsoredMetaFields},
 	"categories": categories[]->${categoryFields},
+	"categoryRefs": categories[]._ref,
 	"plainText": pt::text(body),
 	body,
 	"relatedArticles": relatedArticles[]->${articleCardProjection},
@@ -238,12 +244,24 @@ export const eventBySlugQuery = `*[_type == "event" && slug.current == $slug][0]
 	seo${seoFields}
 }`;
 
-export const latestHomeContentQuery = `*[_type in ["article", "event"]] | order(coalesce(publishDate, startDate, _createdAt) desc)[0...5] ${contentCardProjection}`;
+export const latestHomeContentQuery = `*[_type == "article"] | order(coalesce(publishDate, _createdAt) desc)[0...5] ${articleCardProjection}`;
 
-export const popularHomeContentQuery = `*[_type in ["article", "event"]] | order(coalesce(publishDate, startDate, _createdAt) desc)[0...5] ${contentCardProjection}`;
+export const popularHomeContentQuery = `*[_type == "article"] | order(coalesce(viewCount, 0) desc, coalesce(publishDate, _createdAt) desc)[0...5] ${articleCardProjection}`;
 
-export const pressReleasesQuery = `*[_type == "article" && "pressRelease" in coalesce(contentKinds, [])] | order(coalesce(publishDate, _createdAt) desc)[0...4] ${articleCardProjection}`;
+export const pressReleasesQuery = `*[_type == "article" && "pressRelease" in coalesce(contentKinds, [])] | order(coalesce(publishDate, _createdAt) desc) ${articleCardProjection}`;
 
-export const ongoingEventsQuery = `*[_type == "event" && dateTime(startDate) <= now() && (!defined(endDate) || dateTime(endDate) >= now())] | order(dateTime(startDate) asc) ${eventCardProjection}`;
+export const ongoingEventsQuery = `*[_type == "event" && defined(startDate) && ((defined(endDate) && endDate >= $now) || (!defined(endDate) && startDate >= $now))] | order(startDate asc) ${eventCardProjection}`;
 
-export const pastEventsQuery = `*[_type == "event" && ((defined(endDate) && dateTime(endDate) < now()) || (!defined(endDate) && dateTime(startDate) < now()))] | order(coalesce(endDate, startDate) desc) ${eventCardProjection}`;
+export const pastEventsQuery = `*[_type == "event" && defined(startDate) && ((defined(endDate) && endDate < $now) || (!defined(endDate) && startDate < $now))] | order(coalesce(endDate, startDate) desc) ${eventCardProjection}`;
+
+// Query articles by category ref ID (works even when category docs are drafts/unpublished)
+export const articlesByCategoryRefQuery = `*[_type == "article" && $categoryId in categories[]._ref] | order(coalesce(publishDate, _createdAt) desc) ${articleCardProjection}`;
+
+export const allArticlesQuery = `*[_type == "article"] | order(coalesce(publishDate, _createdAt) desc) ${articleCardProjection}`;
+
+export const popularArticlesQuery = `*[_type == "article"] | order(coalesce(viewCount, 0) desc, coalesce(publishDate, _createdAt) desc) ${articleCardProjection}`;
+
+export const allNewsStoriesQuery = `*[_type == "article" && !("pressRelease" in coalesce(contentKinds, []))] | order(coalesce(publishDate, _createdAt) desc) ${articleCardProjection}`;
+
+// Query a few latest articles (for related articles fallback)
+export const latestArticlesQuery = `*[_type == "article" && slug.current != $excludeSlug] | order(coalesce(publishDate, _createdAt) desc)[0...2] ${articleCardProjection}`;

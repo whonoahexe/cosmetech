@@ -1,31 +1,40 @@
 "use client";
 
 import { ButtonGroup } from "@/components/ui/button-group";
-import { ALL_CATEGORIES } from "@/components/pages/home/highlighted-categories";
+import type { CategoryCardData } from "@/components/pages/home/category-card";
 import { FilterPill } from "./filter-pill";
 import { useSearchParams } from "next/navigation";
 import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 
-const SEARCH_TOPIC_OPTIONS = [
-  "Any topic",
-  "Consumer trends",
-  "Ingredients",
-  "Packaging innovation",
-  "Compliance",
-];
-
 const TIME_OPTIONS = ["Any Time", "Last 7 days", "Last 30 days", "This year"];
 
 import { useRouter } from "next/navigation";
 
-function CategoryHeroFiltersContent() {
+type CategoryHeroFiltersProps = {
+  categories?: CategoryCardData[];
+};
+
+function CategoryHeroFiltersContent({ categories = [] }: CategoryHeroFiltersProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
   const categoryParam = searchParams.get("category");
+  const timeParam = searchParams.get("time") ?? "Any Time";
 
   const selectedCategory =
-    ALL_CATEGORIES.find((c) => c.slug === categoryParam) || ALL_CATEGORIES[0];
+    categories.find((c) => c.slug === categoryParam) || categories[0];
+
+  if (!selectedCategory) return null;
+
+  const updateParam = (key: string, value: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (value === "Any Time" && key === "time") {
+      params.delete("time");
+    } else {
+      params.set(key, value);
+    }
+    router.push(`/categories?${params.toString()}`);
+  };
 
   return (
     <section className="flex flex-col items-center gap-8 py-8 mt-4">
@@ -41,21 +50,29 @@ function CategoryHeroFiltersContent() {
           <FilterPill
             label="In"
             value={selectedCategory.name}
-            options={ALL_CATEGORIES.map((category) => category.name)}
+            options={categories.map((category) => category.name)}
             onOptionSelect={(name) => {
-              const cat = ALL_CATEGORIES.find((c) => c.name === name);
-              if (cat) router.push(`/categories?category=${cat.slug}`);
+              const cat = categories.find((c) => c.name === name);
+              if (cat) {
+                const params = new URLSearchParams(searchParams.toString());
+                params.set("category", cat.slug ?? "");
+                router.push(`/categories?${params.toString()}`);
+              }
             }}
           />
-          <FilterPill label="In" value="Search Topics" options={SEARCH_TOPIC_OPTIONS} />
-          <FilterPill label="From" value="Any Time" options={TIME_OPTIONS} />
+          <FilterPill
+            label="From"
+            value={timeParam}
+            options={TIME_OPTIONS}
+            onOptionSelect={(value) => updateParam("time", value)}
+          />
         </ButtonGroup>
       </div>
     </section>
   );
 }
 
-export function CategoryHeroFilters() {
+export function CategoryHeroFilters({ categories }: CategoryHeroFiltersProps) {
   return (
     <Suspense
       fallback={
@@ -70,7 +87,7 @@ export function CategoryHeroFilters() {
         </section>
       }
     >
-      <CategoryHeroFiltersContent />
+      <CategoryHeroFiltersContent categories={categories} />
     </Suspense>
   );
 }

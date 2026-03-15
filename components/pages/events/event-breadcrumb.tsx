@@ -8,7 +8,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 
-export function EventBreadcrumb({ category }: { category: string }) {
+export function EventBreadcrumb({ category, uid }: { category: string; uid: string }) {
   return (
     <Breadcrumb>
       <BreadcrumbList className="type-monospaced text-primary text-[30px]! leading-6 tracking-[-1.4px]">
@@ -30,7 +30,7 @@ export function EventBreadcrumb({ category }: { category: string }) {
         </BreadcrumbSeparator>
         <BreadcrumbItem>
           <BreadcrumbPage className="type-monospaced text-primary text-[30px]!">
-            01
+            {uid}
           </BreadcrumbPage>
         </BreadcrumbItem>
       </BreadcrumbList>

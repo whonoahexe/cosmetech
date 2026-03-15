@@ -3,19 +3,13 @@ import { Mail } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { InputGroup, InputGroupAddon } from "@/components/ui/input-group";
 import Image from "next/image";
+import type { SocialLink } from "@/sanity/lib/types";
 
 const NAV_LINKS = [
   { label: "Home", href: "/" },
   { label: "Categories", href: "/categories" },
   { label: "News", href: "/news" },
   { label: "Sponsored", href: "/sponsored" },
-];
-
-const SOCIAL_LINKS = [
-  { label: "Facebook", href: "https://facebook.com" },
-  { label: "Instagram", href: "https://instagram.com" },
-  { label: "LinkedIn", href: "https://linkedin.com" },
-  { label: "Twitter", href: "https://twitter.com" },
 ];
 
 const COMPANY_LINKS = [
@@ -29,12 +23,25 @@ const LEGAL_LINKS = [
   { label: "Terms & Conditions", href: "/terms" },
 ];
 
-export const Footer = () => {
+const DEFAULT_SOCIAL_LINKS: SocialLink[] = [
+  { platform: "Facebook", label: "Facebook", href: "https://facebook.com" },
+  { platform: "Instagram", label: "Instagram", href: "https://instagram.com" },
+  { platform: "LinkedIn", label: "LinkedIn", href: "https://linkedin.com" },
+  { platform: "Twitter", label: "Twitter", href: "https://twitter.com" },
+];
+
+type FooterProps = {
+  socialLinks?: SocialLink[];
+};
+
+export const Footer = ({ socialLinks }: FooterProps) => {
+  const links = socialLinks && socialLinks.length > 0 ? socialLinks : DEFAULT_SOCIAL_LINKS;
+
   return (
     <footer className="w-full bg-primary text-primary-foreground px-6 md:px-14 py-28 mt-12">
       {/* 8-col grid */}
       <div className="grid grid-cols-8 gap-5 h-full min-h-144">
-        {/* Col 1–4: Brand + copyright */}
+        {/* Col 1-4: Brand + copyright */}
         <div className="col-span-4 flex flex-col justify-between">
           <Link href="/" className="select-none shrink-0">
             <Image
@@ -50,7 +57,7 @@ export const Footer = () => {
           </p>
         </div>
 
-        {/* Col 5–6: Nav links + FAQ + Socials */}
+        {/* Col 5-6: Nav links + FAQ + Socials */}
         <div className="col-span-2 flex flex-col justify-between">
           {/* Nav */}
           <ul className="flex flex-col gap-1">
@@ -67,31 +74,33 @@ export const Footer = () => {
           </ul>
 
           {/* FAQ */}
-          <Link
-            href="/faq"
-            className="type-paragraph-large-medium hover:opacity-70 transition-opacity uppercase"
-          >
-            FAQ
-          </Link>
+          <span>
+            <Link
+              href="/faq"
+              className="type-paragraph-large-medium uppercase hover:opacity-70 transition-opacity"
+            >
+              FAQ
+            </Link>
+          </span>
 
           {/* Socials */}
           <ul className="flex flex-col gap-1">
-            {SOCIAL_LINKS.map((link) => (
-              <li key={link.href}>
+            {links.map((link) => (
+              <li key={link.platform}>
                 <Link
                   href={link.href}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="type-paragraph-large-medium hover:opacity-70 transition-opacity uppercase"
                 >
-                  {link.label}
+                  {link.label ?? link.platform}
                 </Link>
               </li>
             ))}
           </ul>
         </div>
 
-        {/* Col 7–8: Company links, newsletter, legal */}
+        {/* Col 7-8: Company links, newsletter, legal */}
         <div className="col-span-2 flex flex-col justify-between">
           {/* Company links */}
           <ul className="flex flex-col gap-1">

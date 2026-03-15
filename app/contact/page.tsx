@@ -1,22 +1,22 @@
 import { ContactForm, ContactHeader, ContactLink } from "@/components/pages/contact";
 import { Separator } from "@/components/ui/separator";
+import { getContactPageData } from "@/sanity/lib/loaders";
+import { buildMetadata } from "@/lib/metadata";
+import type { Metadata } from "next";
 
-const ADVERTISING_POINTS = [
-  "Strategically placed display banners",
-  "Sponsored articles and content features",
-  "Sponsored newsletters",
-  "Custom email and SMS campaigns",
-  "Social media promotions",
-  "Event and partnership opportunities",
-];
+export async function generateMetadata(): Promise<Metadata> {
+  const data = await getContactPageData();
+  return buildMetadata(data?.seo, { title: "Contact | Cosmetech" });
+}
 
-const ADVERTISING_CONTACTS = [
-  { label: "sriram@cosmetech.co.in", href: "mailto:sriram@cosmetech.co.in" },
-  { label: "sales@cosmetech.co.in", href: "mailto:sales@cosmetech.co.in" },
-  { label: "call: +91 8879735111", href: "tel:+918879735111" },
-];
+export default async function ContactPage() {
+  const data = await getContactPageData();
 
-export default function ContactPage() {
+  const advertisingContacts = (data?.advertisingContacts ?? []).map((c) => ({
+    label: c.kind === "phone" ? `call: ${c.value}` : c.value,
+    href: c.kind === "phone" ? `tel:${c.value.replace(/\s/g, "")}` : `mailto:${c.value}`,
+  }));
+
   return (
     <div className="mx-auto my-16 flex w-full max-w-6xl flex-col py-10 md:py-16">
       <section className="space-y-4 px-0 md:px-8 lg:px-0">
@@ -44,7 +44,12 @@ export default function ContactPage() {
             editorial team at:
           </p>
 
-          <ContactLink href="mailto:editor@cosmetech.co.in" label="editor@cosmetech.co.in" />
+          {data?.editorialContactEmail && (
+            <ContactLink
+              href={`mailto:${data.editorialContactEmail}`}
+              label={data.editorialContactEmail}
+            />
+          )}
 
           <Separator />
         </div>
@@ -62,15 +67,10 @@ export default function ContactPage() {
               Whether you&apos;re launching a product, building brand awareness, or sharing industry
               expertise, we help position your content where it matters most.
             </p>
-            <ul className="type-paragraph-large list-disc space-y-0.5 pl-6">
-              {ADVERTISING_POINTS.map((point) => (
-                <li key={point}>{point}</li>
-              ))}
-            </ul>
           </div>
 
           <div className="flex flex-wrap items-center gap-x-16 gap-y-4">
-            {ADVERTISING_CONTACTS.map((contact) => (
+            {advertisingContacts.map((contact) => (
               <ContactLink key={contact.label} href={contact.href} label={contact.label} />
             ))}
           </div>

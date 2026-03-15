@@ -1,36 +1,77 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CosmeTech
 
-## Getting Started
+Next.js + Sanity publication site.
 
-First, run the development server:
+## Setup
+
+1. Copy `.env.example` into `.env.local`.
+2. Add required tokens and keys.
+3. Start local dev:
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Seed Baseline Content
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Populate fixed starter docs into Sanity:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run sanity:seed-categories
+npm run sanity:seed-events
+```
 
-## Learn More
+## AI Excerpt Automation
 
-To learn more about Next.js, take a look at the following resources:
+This repo now supports publish-time excerpt generation for articles.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Endpoint: `POST /api/ai/excerpts`
+- Auth: `x-webhook-secret` header must match `SANITY_EXCERPT_WEBHOOK_SECRET`
+- Input: Sanity webhook payload with one or more article IDs
+- Output: Updates each article `excerpt` to a punchy 24-34 word, two-sentence summary
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Behavior:
 
-## Deploy on Vercel
+- If `GEMINI_API_KEY` exists, it uses Gemini Flash to generate excerpt text.
+- If AI is unavailable, it falls back to deterministic 30-word excerpting from title/body text.
+- It only patches documents when content is actually different.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Suggested Sanity Webhook
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Configure a Sanity webhook for article create/update events:
+
+- URL: `https://<your-domain>/api/ai/excerpts`
+- Method: `POST`
+- Header: `x-webhook-secret: <SANITY_EXCERPT_WEBHOOK_SECRET>`
+- Projection payload example:
+
+```json
+{
+	"_id": _id
+}
+```
+
+### Backfill Existing Articles
+
+Run once to refresh legacy excerpts:
+
+```bash
+npm run ai:backfill-excerpts
+```
+
+## Image Quality Boost
+
+`SanityImage` now routes all images through a central loader with quality controls.
+
+- Default mode (`NEXT_PUBLIC_IMAGE_ENHANCE_MODE=sanity`):
+  - Adds width-aware transforms
+  - Applies `auto=format`, `fit=max`, `q=80`, and responsive variants
+- Optional mode (`cloudinary`):
+  - Uses Cloudinary fetch URLs for sharpening/contrast boosts on top of responsive delivery
+- Fallback mode (`off`):
+  - Uses source image URL directly
+
+Switch modes with env vars, no component rewrites needed.
+
+The enhancement is applied by converting source URLs before rendering (instead of passing a loader function prop), which avoids Next.js RSC function-serialization runtime errors.

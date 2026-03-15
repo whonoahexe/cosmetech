@@ -1,7 +1,11 @@
 import { client } from "./client";
 import {
   aboutPageQuery,
+  allArticlesQuery,
+  allNewsStoriesQuery,
+  popularArticlesQuery,
   articleBySlugQuery,
+  articlesByCategoryRefQuery,
   categoriesQuery,
   categoryBySlugQuery,
   contactPageQuery,
@@ -9,6 +13,7 @@ import {
   eventsPageQuery,
   faqPageQuery,
   homePageQuery,
+  latestArticlesQuery,
   newsPageQuery,
   ongoingEventsQuery,
   pastEventsQuery,
@@ -121,9 +126,15 @@ export const getHomePageData = async () => {
     return null;
   }
 
-  const [latestItemsRaw, popularItemsRaw] = await Promise.all([
+  const now = new Date().toISOString();
+  const needsEventsFallback = !homePage.highlightedEvents || homePage.highlightedEvents.length === 0;
+
+  const [latestItemsRaw, popularItemsRaw, fallbackEvents] = await Promise.all([
     client.fetch<RawContentCard[]>(latestHomeContentQuery),
     client.fetch<RawContentCard[]>(popularHomeContentQuery),
+    needsEventsFallback
+      ? client.fetch<EventCard[]>(ongoingEventsQuery, { now })
+      : Promise.resolve([] as EventCard[]),
   ]);
 
   const latestItems = applyAdvertisementSlots(
@@ -143,6 +154,9 @@ export const getHomePageData = async () => {
     sponsoredItems: enrichContentCards(homePage.sponsoredItems),
     latestItems,
     popularItems,
+    highlightedEvents: (homePage.highlightedEvents?.length ?? 0) > 0
+      ? homePage.highlightedEvents
+      : fallbackEvents.slice(0, 5),
   };
 
   return data;
@@ -155,13 +169,17 @@ export const getNewsPageData = async () => {
     return null;
   }
 
-  const pressReleases = await client.fetch<RawArticleCard[]>(pressReleasesQuery);
+  const [pressReleases, allNewsStories] = await Promise.all([
+    client.fetch<RawArticleCard[]>(pressReleasesQuery),
+    client.fetch<RawArticleCard[]>(allNewsStoriesQuery),
+  ]);
 
   const data: NewsPageData = {
     ...newsPage,
     featuredBanner: newsPage.featuredBanner ? enrichContentCard(newsPage.featuredBanner) : null,
     highlightedStories: enrichContentCards(newsPage.highlightedStories),
     pressReleases: pressReleases.map(enrichArticleCard),
+    allNewsStories: allNewsStories.map(enrichArticleCard),
   };
 
   return data;
@@ -170,17 +188,17 @@ export const getNewsPageData = async () => {
 export const getEventsPageData = async () => {
   const eventsPage = await client.fetch<EventsPageDocument | null>(eventsPageQuery);
 
-  if (!eventsPage) {
-    return null;
-  }
+  const now = new Date().toISOString();
 
   const [ongoingEvents, pastEvents] = await Promise.all([
-    client.fetch<EventCard[]>(ongoingEventsQuery),
-    client.fetch<EventCard[]>(pastEventsQuery),
+    client.fetch<EventCard[]>(ongoingEventsQuery, { now }),
+    client.fetch<EventCard[]>(pastEventsQuery, { now }),
   ]);
 
   const data: EventsPageData = {
-    ...eventsPage,
+    _id: eventsPage?._id ?? "events-page.fallback",
+    pageDescription: eventsPage?.pageDescription,
+    seo: eventsPage?.seo,
     ongoingEvents,
     pastEvents,
   };
@@ -201,6 +219,22 @@ export const getPrivacyPolicyPageData = async () =>
 export const getTermsPageData = async () => client.fetch<LegalPageData | null>(termsPageQuery);
 
 export const getCategories = async () => client.fetch<CategoryPageData[]>(categoriesQuery);
+
+export const getArticlesByCategory = async (categoryId: string) => {
+  const articles = await client.fetch<RawArticleCard[]>(articlesByCategoryRefQuery, { categoryId });
+  return articles.map(enrichArticleCard);
+};
+
+export const getAllArticles = async (sort: "latest" | "popular" = "latest") => {
+  const query = sort === "popular" ? popularArticlesQuery : allArticlesQuery;
+  const articles = await client.fetch<RawArticleCard[]>(query);
+  return articles.map(enrichArticleCard);
+};
+
+export const getLatestArticles = async (excludeSlug = "") => {
+  const articles = await client.fetch<RawArticleCard[]>(latestArticlesQuery, { excludeSlug });
+  return articles.map(enrichArticleCard);
+};
 
 export const getArticlePageData = async (slug: string) =>
   client.fetch<RawArticlePageData | null>(articleBySlugQuery, { slug }).then((article) => {

@@ -1,5 +1,6 @@
 export * from "./events-header";
 export * from "./events-section";
+export * from "./events-view";
 export * from "./event-hero";
 export * from "./event-title";
 export * from "./event-breadcrumb";

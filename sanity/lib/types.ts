@@ -53,13 +53,16 @@ export type ArticleCard = {
   title: string;
   slug?: string;
   excerpt?: string;
+  imageMode?: "generated" | "custom";
   image?: SanityImage;
   publishDate?: string;
   readTime?: number;
+  viewCount?: number;
   contentKinds?: ArticleContentKind[];
   isSponsored?: boolean;
   sponsoredMeta?: SponsoredMeta;
-  categories?: CategorySummary[];
+  categories?: (CategorySummary | null)[];
+  categoryRefs?: string[];
 };
 
 export type EventCard = {
@@ -140,6 +143,7 @@ export type NewsPageDocument = {
 
 export type NewsPageData = NewsPageDocument & {
   pressReleases: ArticleCard[];
+  allNewsStories: ArticleCard[];
 };
 
 export type EventsPageDocument = {

@@ -32,10 +32,24 @@ export const articleType = defineType({
       rows: 4,
     }),
     defineField({
+      name: "imageMode",
+      title: "Cover image source",
+      type: "string",
+      options: {
+        list: [
+          { title: "AI Generated", value: "generated" },
+          { title: "Custom Upload", value: "custom" },
+        ],
+        layout: "radio",
+      },
+      initialValue: "custom",
+    }),
+    defineField({
       name: "coverImage",
       title: "Cover image",
       type: "image",
       options: { hotspot: true },
+      hidden: ({ parent }) => parent?.imageMode !== "custom",
     }),
     defineField({
       name: "publishDate",
@@ -97,6 +111,14 @@ export const articleType = defineType({
       name: "seo",
       title: "SEO",
       type: "seo",
+    }),
+    defineField({
+      name: "viewCount",
+      title: "View count",
+      type: "number",
+      initialValue: 0,
+      readOnly: true,
+      hidden: true,
     }),
   ],
 });

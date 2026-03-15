@@ -1,27 +1,29 @@
-import { ArrowDown } from "lucide-react";
+export const revalidate = 60;
 
-import {
-  EventsHeader,
-  EventsSection,
-  ONGOING_EVENTS,
-  PAST_EVENTS,
-} from "@/components/pages/events";
-import { Button } from "@/components/ui/button";
+import { EventsView } from "@/components/pages/events";
+import { getEventsPageData } from "@/sanity/lib/loaders";
+import { buildMetadata } from "@/lib/metadata";
+import { toEventCardData } from "@/lib/mappers";
+import type { Metadata } from "next";
 
-export default function EventsPage() {
+export async function generateMetadata(): Promise<Metadata> {
+  const data = await getEventsPageData();
+  return buildMetadata(data?.seo, { title: "Events | Cosmetech" });
+}
+
+export default async function EventsPage() {
+  const data = await getEventsPageData();
+
+  const ongoingEvents = (data?.ongoingEvents ?? []).map(toEventCardData);
+  const pastEvents = (data?.pastEvents ?? []).map(toEventCardData);
+
   return (
     <div className="mt-4 mb-12 flex flex-col gap-4">
-      <EventsHeader />
-
-      <EventsSection title="Ongoing" events={ONGOING_EVENTS} />
-      <EventsSection title="Past Events" events={PAST_EVENTS} />
-
-      <div className="flex items-center justify-center py-4">
-        <Button variant="default" size="lg" className="h-12 rounded-full px-8">
-          Load More
-          <ArrowDown className="size-4" />
-        </Button>
-      </div>
+      <EventsView
+        description={data?.pageDescription}
+        ongoingEvents={ongoingEvents}
+        pastEvents={pastEvents}
+      />
     </div>
   );
 }
