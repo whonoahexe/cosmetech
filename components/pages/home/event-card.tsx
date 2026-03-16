@@ -42,12 +42,12 @@ function EventCardList({
   className,
 }: EventCardProps) {
   const inner = (
-    <article className={cn("flex items-center gap-5 group", className)}>
-      <div className="relative h-60 w-109 shrink-0 overflow-hidden rounded-3xl bg-muted">
-        <SanityImage image={image ?? null} alt={title} fill sizes="220px" />
+    <article className={cn("flex flex-col sm:flex-row sm:items-center gap-5 group", className)}>
+      <div className="relative h-48 w-full sm:h-60 sm:w-56 xl:w-109 shrink-0 overflow-hidden rounded-3xl bg-muted">
+        <SanityImage image={image ?? null} alt={title} fill sizes="(max-width: 640px) 100vw, (max-width: 1280px) 224px, 436px" />
       </div>
 
-      <div className="flex min-h-60 flex-1 flex-col justify-between py-4">
+      <div className="flex xl:min-h-60 flex-1 flex-col justify-between py-4">
         <div className="flex items-center gap-2.5">
           <Badge variant="secondary">{category ?? location}</Badge>
           {isSponsored && <Badge variant="default">Sponsored</Badge>}

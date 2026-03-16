@@ -1,3 +1,4 @@
+import { PageTransition } from "@/components/page-transition";
 import { ContactForm, ContactHeader, ContactLink } from "@/components/pages/contact";
 import { Separator } from "@/components/ui/separator";
 import { getContactPageData } from "@/sanity/lib/loaders";
@@ -18,6 +19,7 @@ export default async function ContactPage() {
   }));
 
   return (
+    <PageTransition>
     <div className="mx-auto my-16 flex w-full max-w-6xl flex-col py-10 md:py-16">
       <section className="space-y-4 px-0 md:px-8 lg:px-0">
         <div className="grid gap-8 py-16 lg:grid-cols-2 lg:gap-12">
@@ -79,5 +81,6 @@ export default async function ContactPage() {
         </div>
       </section>
     </div>
+    </PageTransition>
   );
 }

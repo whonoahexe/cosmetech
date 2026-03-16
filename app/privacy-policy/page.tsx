@@ -1,3 +1,4 @@
+import { PageTransition } from "@/components/page-transition";
 import { LegalPageLayout } from "@/components/shared/legal-page-layout";
 import { getPrivacyPolicyPageData } from "@/sanity/lib/loaders";
 import { buildMetadata } from "@/lib/metadata";
@@ -12,13 +13,15 @@ export default async function PrivacyPolicyPage() {
   const data = await getPrivacyPolicyPageData();
 
   return (
-    <LegalPageLayout
-      label="Legal"
-      title={data?.pageTitle ?? "Privacy Policy"}
-      body={data?.body}
-      ctaText="Have a privacy concern?"
-      ctaHref="/contact"
-      ctaLabel="Contact us"
-    />
+    <PageTransition>
+      <LegalPageLayout
+        label="Legal"
+        title={data?.pageTitle ?? "Privacy Policy"}
+        body={data?.body}
+        ctaText="Have a privacy concern?"
+        ctaHref="/contact"
+        ctaLabel="Contact us"
+      />
+    </PageTransition>
   );
 }

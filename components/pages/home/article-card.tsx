@@ -48,7 +48,7 @@ function ArticleCardNewsHorizontal({
     <article className={cn("grid grid-cols-1 gap-5 lg:grid-cols-8", className)}>
       <Link
         href={slug ? `/article/${slug}` : "#"}
-        className="relative block h-111 overflow-hidden rounded-3xl bg-[#D9D9D9] lg:col-span-4 transition-opacity hover:opacity-90"
+        className="relative block aspect-[4/3] xl:h-111 xl:aspect-auto overflow-hidden rounded-3xl bg-[#D9D9D9] lg:col-span-4 transition-opacity hover:opacity-90"
       >
         <ArticleCoverImage
           image={image}
@@ -96,7 +96,7 @@ function ArticleCardFeatured({
     <article className={cn("flex flex-col gap-6", className)}>
       <Link
         href={slug ? `/article/${slug}` : "#"}
-        className="relative block w-full overflow-hidden rounded-3xl bg-[#D9D9D9] transition-opacity hover:opacity-90 aspect-1123/600"
+        className="relative block w-full overflow-hidden rounded-3xl bg-[#D9D9D9] transition-opacity hover:opacity-90 aspect-[4/3] xl:aspect-1123/600"
       >
         <ArticleCoverImage image={image} generatedImageUrl={generatedImageUrl} alt={title} fill sizes="100vw" />
       </Link>
@@ -137,7 +137,7 @@ function ArticleCardGrid({
     <article className={cn("flex flex-col gap-4", className)}>
       <Link
         href={slug ? `/article/${slug}` : "#"}
-        className="relative block w-full overflow-hidden rounded-3xl bg-[#D9D9D9] transition-opacity hover:opacity-90 aspect-square"
+        className="relative block w-full overflow-hidden rounded-3xl bg-[#D9D9D9] transition-opacity hover:opacity-90 aspect-[4/3] xl:aspect-square"
       >
         <ArticleCoverImage image={image} generatedImageUrl={generatedImageUrl} alt={title} fill sizes={isLargeGrid ? "50vw" : "25vw"} />
       </Link>
@@ -151,21 +151,24 @@ function ArticleCardGrid({
           <ReadTimeBadge readTime={readTime} />
         </div>
 
-        {isLargeGrid ? (
-          <Link href={slug ? `/article/${slug}` : "#"} className="w-fit hover:underline">
-            <h2 className="type-heading-1 text-foreground">{title}</h2>
-          </Link>
-        ) : (
-          <Link href={slug ? `/article/${slug}` : "#"} className="w-fit hover:underline">
-            <h3 className="type-heading-3 text-foreground">{title}</h3>
-          </Link>
-        )}
+        <Link href={slug ? `/article/${slug}` : "#"} className="w-fit hover:underline">
+          <h3
+            className={cn(
+              "text-foreground type-heading-3",
+              isLargeGrid && "xl:type-heading-1"
+            )}
+          >
+            {title}
+          </h3>
+        </Link>
 
         {excerpt && (
           <p
             className={cn(
-              "text-muted-foreground",
-              isLargeGrid ? "type-paragraph-large-medium" : "type-paragraph-medium"
+              "text-muted-foreground type-paragraph-medium line-clamp-2",
+              isLargeGrid
+                ? "xl:type-paragraph-large-medium xl:line-clamp-3"
+                : "xl:line-clamp-none"
             )}
           >
             {excerpt}

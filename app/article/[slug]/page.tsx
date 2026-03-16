@@ -1,3 +1,4 @@
+import { PageTransition } from "@/components/page-transition";
 import { notFound } from "next/navigation";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -50,7 +51,8 @@ export default async function ArticlePage({ params }: Props) {
     cmsRelated.length > 0 ? cmsRelated : (await getLatestArticles(slug)).map(toArticleCardData);
 
   return (
-    <div className="flex flex-col mt-4 gap-4 mb-32">
+    <PageTransition>
+    <div className="flex flex-col mt-4 gap-4 mb-16 md:mb-24 lg:mb-32">
       <ArticleViewTracker slug={slug} />
       <ArticleHero image={data.image} generatedImageUrl={generatedImageUrl} title={data.title} />
       <ArticleHeader
@@ -60,7 +62,7 @@ export default async function ArticlePage({ params }: Props) {
         readTime={data.readTime ?? 0}
       />
 
-      <section className="relative py-16 lg:px-32 xl:px-64">
+      <section className="relative py-8 px-4 sm:px-6 md:py-12 lg:py-16 lg:px-32 xl:px-64">
         <div className="mx-auto w-full max-w-6xl">
           <ArticleBreadcrumb
             category={breadcrumbCategory}
@@ -68,7 +70,7 @@ export default async function ArticlePage({ params }: Props) {
             articleLabel={breadcrumbLeaf}
           />
 
-          <div className="lg:pr-20 pt-16">
+          <div className="pt-8 md:pt-12 lg:pr-20 lg:pt-16">
             <ArticleContent body={data.body} />
 
             <Separator className="my-16" />
@@ -78,5 +80,6 @@ export default async function ArticlePage({ params }: Props) {
         </div>
       </section>
     </div>
+    </PageTransition>
   );
 }

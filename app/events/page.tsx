@@ -1,5 +1,6 @@
 export const revalidate = 60;
 
+import { PageTransition } from "@/components/page-transition";
 import { EventsView } from "@/components/pages/events";
 import { getEventsPageData } from "@/sanity/lib/loaders";
 import { buildMetadata } from "@/lib/metadata";
@@ -18,12 +19,14 @@ export default async function EventsPage() {
   const pastEvents = (data?.pastEvents ?? []).map(toEventCardData);
 
   return (
-    <div className="mt-4 mb-12 flex flex-col gap-4">
-      <EventsView
-        description={data?.pageDescription}
-        ongoingEvents={ongoingEvents}
-        pastEvents={pastEvents}
-      />
-    </div>
+    <PageTransition>
+      <div className="mt-4 mb-12 flex flex-col gap-4">
+        <EventsView
+          description={data?.pageDescription}
+          ongoingEvents={ongoingEvents}
+          pastEvents={pastEvents}
+        />
+      </div>
+    </PageTransition>
   );
 }

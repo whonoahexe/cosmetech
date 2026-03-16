@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { Footer } from "./footer";
 import { Navbar } from "./navbar";
@@ -13,6 +14,10 @@ type RootShellProps = {
 export function RootShell({ children, socialLinks }: RootShellProps) {
   const pathname = usePathname();
   const isStudioRoute = pathname.startsWith("/studio");
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [pathname]);
 
   if (isStudioRoute) {
     return <>{children}</>;

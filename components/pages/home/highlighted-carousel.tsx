@@ -94,8 +94,8 @@ export function HighlightedCarousel({ slides }: HighlightedCarouselProps) {
 
           return (
             <CarouselItem key={slide._id} className="pl-0">
-              <div className="relative w-full min-h-95 rounded-[24px] overflow-hidden bg-[#d9d9d9] h-150">
-                {/* Background image area entirely linked */}
+              <div className="relative w-full rounded-[24px] overflow-hidden bg-[#d9d9d9] h-[300px] md:h-[420px] lg:h-[520px] xl:h-150">
+                {/* Background image */}
                 <Link href={href} className="absolute inset-0 z-0">
                   <ArticleCoverImage
                     image={slide.image}
@@ -108,15 +108,18 @@ export function HighlightedCarousel({ slides }: HighlightedCarouselProps) {
                   />
                 </Link>
 
+                {/* Gradient overlay — ensures text legibility on any image */}
+                <div className="absolute inset-0 z-[1] bg-gradient-to-t from-black/70 via-black/30 to-transparent pointer-events-none" />
+
                 {/* Article details */}
-                <div className="absolute bottom-0 left-0 right-0 flex flex-col items-center gap-3 pb-16 text-center pointer-events-none">
+                <div className="absolute bottom-0 left-0 right-0 z-[2] flex flex-col items-center gap-2 px-4 pb-10 md:pb-12 lg:pb-14 xl:pb-16 text-center pointer-events-none">
                   {/* Metadata row */}
                   <div className="flex items-center gap-3 pointer-events-auto">
                     <Badge>{category}</Badge>
                     {readTime && (
                       <>
-                        <span className="text-foreground type-paragraph-medium">•</span>
-                        <span className="text-muted-foreground type-paragraph-mini">
+                        <span className="text-white type-paragraph-medium">•</span>
+                        <span className="text-white/70 type-paragraph-mini">
                           {readTime} min read
                         </span>
                       </>
@@ -124,13 +127,13 @@ export function HighlightedCarousel({ slides }: HighlightedCarouselProps) {
                   </div>
 
                   {/* Title */}
-                  <Link href={href} className="pointer-events-auto hover:underline">
-                    <h2 className="text-foreground type-heading-2">{slide.title}</h2>
+                  <Link href={href} className="pointer-events-auto hover:underline max-w-2xl">
+                    <h2 className="text-white type-heading-2">{slide.title}</h2>
                   </Link>
 
-                  {/* Excerpt */}
+                  {/* Excerpt — visible from md up */}
                   {slide.excerpt && (
-                    <p className="text-muted-foreground type-paragraph-medium max-w-130 pointer-events-auto">
+                    <p className="hidden md:block text-white/80 type-paragraph-medium max-w-lg pointer-events-auto">
                       {slide.excerpt}
                     </p>
                   )}
@@ -142,7 +145,7 @@ export function HighlightedCarousel({ slides }: HighlightedCarouselProps) {
       </CarouselContent>
 
       {/* Dot pagination */}
-      <div className="absolute bottom-13 left-0 right-0 z-10 flex items-center justify-center gap-1.5 pointer-events-none">
+      <div className="absolute bottom-8 lg:bottom-10 xl:bottom-13 left-0 right-0 z-10 flex items-center justify-center gap-1.5 pointer-events-none">
         {Array.from({ length: count }).map((_, i) => (
           <button
             key={i}

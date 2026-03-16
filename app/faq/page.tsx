@@ -1,3 +1,4 @@
+import { PageTransition } from "@/components/page-transition";
 import { getFaqPageData } from "@/sanity/lib/loaders";
 import { buildMetadata } from "@/lib/metadata";
 import { FaqPageContent } from "@/components/pages/faq/faq-page-content";
@@ -21,5 +22,5 @@ export default async function FaqPage() {
     })),
   }));
 
-  return <FaqPageContent categories={categories} />;
+  return <PageTransition><FaqPageContent categories={categories} /></PageTransition>;
 }

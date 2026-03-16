@@ -24,20 +24,20 @@ export function EventsSection({
 
   return (
     <section className="space-y-4">
-      <div className="flex items-end gap-6 py-4">
-        <h2 className="type-heading-1 text-foreground">{title}</h2>
+      <div className="flex items-end gap-4 py-4 md:gap-6">
+        <h2 className="type-heading-2 text-foreground md:type-heading-1">{title}</h2>
         <Button
           variant="outline"
-          className="h-9 w-16 rounded-full"
+          className="h-9 w-10 rounded-full md:w-16"
           aria-label={`${title} controls`}
         >
           <ArrowDown className="size-4" />
         </Button>
       </div>
 
-      <div className="grid grid-cols-8 gap-x-5 gap-y-8 py-4">
+      <div className="grid grid-cols-1 gap-y-8 py-4 xl:grid-cols-2 xl:gap-x-5">
         {visibleEvents.map((event) => (
-          <div key={`${title}-${event.title}-${event.date}`} className="col-span-8 xl:col-span-4">
+          <div key={`${title}-${event.title}-${event.date}`}>
             <EventCard {...event} variant="list" />
           </div>
         ))}

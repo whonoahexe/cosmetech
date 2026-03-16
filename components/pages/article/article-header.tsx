@@ -9,7 +9,7 @@ type ArticleHeaderProps = {
 
 export function ArticleHeader({ title, excerpt, category, readTime }: ArticleHeaderProps) {
   return (
-    <section className="flex flex-col items-center gap-3 py-8 text-center">
+    <section className="flex flex-col items-center gap-3 px-4 py-6 text-center sm:px-6 md:py-8 lg:px-0">
       <h1 className="type-heading-2 text-foreground">{title}</h1>
       <p className="type-paragraph-medium max-w-130 text-muted-foreground">{excerpt}</p>
       <div className="flex items-center justify-center gap-2">

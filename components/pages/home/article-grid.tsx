@@ -73,16 +73,16 @@ export function ArticleGridContent({
         </Button>
       </div>
 
-      {/* 8-col grid */}
-      <div className="grid grid-cols-8 gap-5 py-4">
-        <div className="col-span-2 flex flex-col gap-5">
+      {/* responsive grid: 1-col stacked → 2-4-2 at xl */}
+      <div className="grid grid-cols-1 gap-5 py-4 xl:grid-cols-8">
+        <div className="order-2 xl:order-none xl:col-span-2 flex flex-col gap-5">
           {leftTop && <ArticleCard {...leftTop} colSpan={2} />}
           {leftBottom && <ArticleCard {...leftBottom} colSpan={2} />}
         </div>
 
-        <div className="col-span-4">{center && <ArticleCard {...center} colSpan={4} />}</div>
+        <div className="order-first xl:order-none xl:col-span-4">{center && <ArticleCard {...center} colSpan={4} />}</div>
 
-        <div className="col-span-2 flex flex-col gap-5">
+        <div className="order-3 xl:order-none xl:col-span-2 flex flex-col gap-5">
           {rightTop && <ArticleCard {...rightTop} colSpan={2} />}
           {rightBottom && <ArticleCard {...rightBottom} colSpan={2} />}
         </div>
@@ -99,15 +99,15 @@ export function ArticleGrid(props: ArticleGridProps) {
           <div className="flex items-end gap-6 py-4">
             <Skeleton className="h-12 w-48 rounded-md" />
           </div>
-          <div className="grid grid-cols-8 gap-5 py-4">
-            <div className="col-span-2 flex flex-col gap-5">
+          <div className="grid grid-cols-1 gap-5 py-4 xl:grid-cols-8">
+            <div className="order-2 xl:order-none xl:col-span-2 flex flex-col gap-5">
               <Skeleton className="h-100 w-full rounded-[30px]" />
               <Skeleton className="h-100 w-full rounded-[30px]" />
             </div>
-            <div className="col-span-4">
+            <div className="order-first xl:order-none xl:col-span-4">
               <Skeleton className="h-205 w-full rounded-[30px]" />
             </div>
-            <div className="col-span-2 flex flex-col gap-5">
+            <div className="order-3 xl:order-none xl:col-span-2 flex flex-col gap-5">
               <Skeleton className="h-100 w-full rounded-[30px]" />
               <Skeleton className="h-100 w-full rounded-[30px]" />
             </div>

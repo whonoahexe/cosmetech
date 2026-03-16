@@ -1,3 +1,4 @@
+import { PageTransition } from "@/components/page-transition";
 import { notFound } from "next/navigation";
 import {
   EventAbout,
@@ -54,7 +55,8 @@ export default async function EventPage({ params }: Props) {
   const relatedEvents = (data.relatedEvents ?? []).map(toEventCardData);
 
   return (
-    <div className="flex flex-col mt-4 gap-4 mb-32">
+    <PageTransition>
+    <div className="flex flex-col mt-4 gap-4 mb-16 md:mb-24 lg:mb-32">
       <EventHero image={data.image} title={data.title} />
       <EventTitle
         title={data.title}
@@ -65,11 +67,11 @@ export default async function EventPage({ params }: Props) {
         isVirtual={data.location?.toLowerCase() === "virtual"}
       />
 
-      <section className="relative py-8 lg:px-32 xl:px-64">
+      <section className="relative py-8 px-4 sm:px-6 md:py-12 lg:py-8 lg:px-32 xl:px-64">
         <div className="mx-auto w-full max-w-6xl">
           <EventBreadcrumb category={category} uid={slug} />
 
-          <div className="lg:pr-20 pt-16 space-y-16">
+          <div className="pt-8 md:pt-12 lg:pr-20 lg:pt-16 space-y-16">
             <EventDetails
               date={dateStr}
               time={timeStr}
@@ -99,5 +101,6 @@ export default async function EventPage({ params }: Props) {
         </div>
       </section>
     </div>
+    </PageTransition>
   );
 }

@@ -39,7 +39,7 @@ function CategoryHeroFiltersContent({ categories = [] }: CategoryHeroFiltersProp
   return (
     <section className="flex flex-col items-center gap-8 py-8 mt-4">
       <div className="flex max-w-2xl flex-col items-center gap-4 text-center">
-        <h1 className="type-heading-1 text-foreground px-14">{selectedCategory.name}</h1>
+        <h1 className="type-heading-1 text-foreground px-4 md:px-14">{selectedCategory.name}</h1>
         <p className="type-paragraph-large-medium text-muted-foreground">
           {selectedCategory.description}
         </p>

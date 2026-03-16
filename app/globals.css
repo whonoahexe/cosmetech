@@ -309,6 +309,28 @@ body {
   overflow: scroll !important;
 }
 
+/* Responsive typography scaling */
+
+@media (max-width: 639px) {
+  :root {
+    --type-heading-1-font-size: 26px;
+    --type-heading-1-line-height: 30px;
+    --type-heading-2-font-size: 20px;
+    --type-heading-2-line-height: 24px;
+    --type-heading-3-font-size: 18px;
+    --type-heading-3-line-height: 22px;
+  }
+}
+
+@media (min-width: 640px) and (max-width: 1279px) {
+  :root {
+    --type-heading-1-font-size: 34px;
+    --type-heading-1-line-height: 38px;
+    --type-heading-2-font-size: 24px;
+    --type-heading-2-line-height: 28px;
+  }
+}
+
 /* Typography */
 
 .type-heading-1,
@@ -451,4 +473,21 @@ body {
   line-height: var(--type-caption-line-height);
   letter-spacing: var(--type-caption-letter-spacing);
   font-weight: var(--type-caption-font-weight);
+}
+
+/* Responsive typography variants for article grid */
+@media (min-width: 1280px) {
+  .xl\:type-heading-1 {
+    font-size: var(--type-heading-1-font-size);
+    line-height: var(--type-heading-1-line-height);
+    letter-spacing: var(--type-heading-1-letter-spacing);
+    font-weight: var(--type-heading-1-font-weight);
+  }
+
+  .xl\:type-paragraph-large-medium {
+    font-size: var(--type-paragraph-large-font-size);
+    line-height: var(--type-paragraph-large-line-height);
+    letter-spacing: var(--type-paragraph-large-letter-spacing);
+    font-weight: var(--type-paragraph-large-medium-font-weight);
+  }
 }

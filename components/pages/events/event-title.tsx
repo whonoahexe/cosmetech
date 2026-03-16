@@ -11,7 +11,7 @@ interface EventTitleProps {
 
 export function EventTitle({ title, category, date, excerpt, isSponsored, isVirtual }: EventTitleProps) {
   return (
-    <section className="flex flex-col items-center gap-3 py-8 text-center">
+    <section className="flex flex-col items-center gap-3 px-4 py-6 text-center sm:px-6 md:py-8 lg:px-0">
       <div className="flex items-center justify-center gap-2">
         <Badge variant="secondary">{category}</Badge>
         {isSponsored && <Badge variant="default">Sponsored</Badge>}
