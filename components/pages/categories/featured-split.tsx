@@ -11,12 +11,12 @@ export function FeaturedSplitSection({
 }: FeaturedSplitSectionProps) {
   return (
     <section className="py-4">
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-8">
-        <div className="lg:col-span-5">
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-8">
+        <div className="xl:col-span-5">
           <ArticleCard {...featuredArticle} variant="featured" colSpan={4} />
         </div>
 
-        <div className="flex flex-col gap-6 lg:col-span-3">
+        <div className="flex flex-col gap-6 xl:col-span-3">
           {sideArticles.map((article, index) => (
             <ArticleCard
               key={article.title}

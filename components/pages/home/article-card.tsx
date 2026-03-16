@@ -96,7 +96,7 @@ function ArticleCardFeatured({
     <article className={cn("flex flex-col gap-6", className)}>
       <Link
         href={slug ? `/article/${slug}` : "#"}
-        className="relative block w-full overflow-hidden rounded-3xl bg-[#D9D9D9] transition-opacity hover:opacity-90 aspect-1123/600"
+        className="relative block w-full overflow-hidden rounded-3xl bg-[#D9D9D9] transition-opacity hover:opacity-90 aspect-[4/3] xl:aspect-1123/600"
       >
         <ArticleCoverImage image={image} generatedImageUrl={generatedImageUrl} alt={title} fill sizes="100vw" />
       </Link>

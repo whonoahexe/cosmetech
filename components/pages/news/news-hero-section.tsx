@@ -53,7 +53,7 @@ export function NewsHeroSection({ featuredBanner }: NewsHeroSectionProps) {
         {/* Gradient overlay for text legibility */}
         <div className="absolute inset-0 z-[1] bg-gradient-to-r from-background/90 via-background/60 to-transparent" />
 
-        <div className="pointer-events-none absolute left-8 top-8 z-10 flex max-w-130 flex-col gap-4 md:left-18 md:top-18">
+        <div className="pointer-events-none absolute left-5 top-5 z-10 flex max-w-[85%] flex-col gap-3 sm:left-8 sm:top-8 md:left-18 md:top-18 md:max-w-130 md:gap-4">
           <Link href={href} className="pointer-events-auto hover:underline">
             <h2 className="type-heading-1 text-foreground">{featuredBanner.title}</h2>
           </Link>
@@ -72,7 +72,7 @@ export function NewsHeroSection({ featuredBanner }: NewsHeroSectionProps) {
           </div>
 
           {featuredBanner.excerpt && (
-            <p className="type-paragraph-medium text-foreground md:text-muted-foreground">
+            <p className="hidden type-paragraph-medium text-foreground sm:block md:text-muted-foreground">
               {featuredBanner.excerpt}
             </p>
           )}

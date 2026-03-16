@@ -9,8 +9,8 @@ type ArticleHeroProps = {
 
 export function ArticleHero({ image, generatedImageUrl, title }: ArticleHeroProps) {
   return (
-    <section className="py-4">
-      <div className="relative h-65 w-full rounded-3xl bg-[#D9D9D9] md:h-105 lg:h-150 overflow-hidden">
+    <section className="px-2 py-4 sm:px-0">
+      <div className="relative h-50 w-full rounded-2xl bg-[#D9D9D9] sm:h-65 sm:rounded-3xl md:h-105 lg:h-150 overflow-hidden">
         <ArticleCoverImage
           image={image}
           generatedImageUrl={generatedImageUrl}

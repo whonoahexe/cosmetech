@@ -31,24 +31,41 @@ export function EventsHeader({
   onPastOnlyToggle,
 }: EventsHeaderProps) {
   return (
-    <section className="grid grid-cols-8 gap-5 py-8">
+    <section className="grid grid-cols-8 gap-5 py-6 md:py-8">
       <div className="col-span-8 flex max-w-230 flex-col gap-4 xl:col-span-5">
         <h1 className="type-heading-1 text-foreground">EVENTS</h1>
 
-        <div className="flex flex-wrap items-center gap-3 py-4">
+        <div className="flex flex-col gap-3 py-2 sm:flex-row sm:flex-wrap sm:items-center sm:py-4">
           <Button
             variant={pastOnly ? "default" : "outline"}
             size="sm"
-            className={cn("h-10 rounded-full px-6", !pastOnly && "border-secondary")}
+            className={cn("h-10 rounded-full px-6 w-fit", !pastOnly && "border-secondary")}
             onClick={onPastOnlyToggle}
           >
             <Clock className="size-4" />
             Past Events
           </Button>
 
-          <span className="type-heading-4 text-foreground">&bull;</span>
+          <span className="hidden type-heading-4 text-foreground sm:inline">&bull;</span>
 
-          <ButtonGroup>
+          {/* Mobile: individual wrapping buttons */}
+          <div className="flex flex-wrap gap-2 sm:hidden">
+            {TAG_BUTTONS.map(({ tag, label, icon }) => (
+              <Button
+                key={tag}
+                variant={activeTag === tag ? "default" : "outline"}
+                size="sm"
+                className="h-10 rounded-full px-4"
+                onClick={() => onTagToggle(tag)}
+              >
+                {icon}
+                {label}
+              </Button>
+            ))}
+          </div>
+
+          {/* sm+: joined ButtonGroup */}
+          <ButtonGroup className="hidden sm:flex">
             {TAG_BUTTONS.map(({ tag, label, icon }) => (
               <Button
                 key={tag}
@@ -66,7 +83,7 @@ export function EventsHeader({
       </div>
 
       {description && (
-        <p className="type-paragraph-large-medium col-span-8 max-w-166 text-foreground xl:col-span-3 xl:pt-2">
+        <p className="type-paragraph-large-medium col-span-8 max-w-full text-foreground md:max-w-166 xl:col-span-3 xl:pt-2">
           {description}
         </p>
       )}

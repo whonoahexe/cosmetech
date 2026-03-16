@@ -24,11 +24,11 @@ export function EventsSection({
 
   return (
     <section className="space-y-4">
-      <div className="flex items-end gap-6 py-4">
-        <h2 className="type-heading-1 text-foreground">{title}</h2>
+      <div className="flex items-end gap-4 py-4 md:gap-6">
+        <h2 className="type-heading-2 text-foreground md:type-heading-1">{title}</h2>
         <Button
           variant="outline"
-          className="h-9 w-16 rounded-full"
+          className="h-9 w-10 rounded-full md:w-16"
           aria-label={`${title} controls`}
         >
           <ArrowDown className="size-4" />
