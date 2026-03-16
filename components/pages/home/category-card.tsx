@@ -16,9 +16,7 @@ interface CategoryCardProps extends CategoryCardData {
 
 export function CategoryCard({ name, description, image, slug, className }: CategoryCardProps) {
   const CardContent = (
-    <div
-      className={cn("relative w-full h-full rounded-3xl overflow-hidden bg-[#D9D9D9]", className)}
-    >
+    <div className={cn("relative w-full h-full rounded-3xl overflow-hidden bg-muted", className)}>
       <SanityImage image={image ?? null} alt={name} fill sizes="(max-width: 768px) 100vw, 33vw" />
 
       {/* Text overlay */}

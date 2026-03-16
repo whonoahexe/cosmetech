@@ -42,7 +42,7 @@ function resolveCategory(card: ArticleCard): string {
 
 export function toArticleCardData(card: ArticleCard): ArticleCardData {
   const category = resolveCategory(card);
-  const useGenerated = card.imageMode !== "custom";
+  const useGenerated = card.imageMode === "generated";
   return {
     slug: card.slug,
     image: useGenerated ? undefined : card.image,
