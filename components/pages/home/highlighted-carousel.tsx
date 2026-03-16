@@ -145,7 +145,7 @@ export function HighlightedCarousel({ slides }: HighlightedCarouselProps) {
       </CarouselContent>
 
       {/* Dot pagination */}
-      <div className="absolute bottom-4 md:bottom-5 lg:bottom-6 xl:bottom-13 left-0 right-0 z-10 flex items-center justify-center gap-1.5 pointer-events-none">
+      <div className="absolute bottom-8 lg:bottom-10 xl:bottom-13 left-0 right-0 z-10 flex items-center justify-center gap-1.5 pointer-events-none">
         {Array.from({ length: count }).map((_, i) => (
           <button
             key={i}

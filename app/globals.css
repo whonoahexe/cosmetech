@@ -474,3 +474,20 @@ body {
   letter-spacing: var(--type-caption-letter-spacing);
   font-weight: var(--type-caption-font-weight);
 }
+
+/* Responsive typography variants for article grid */
+@media (min-width: 1280px) {
+  .xl\:type-heading-1 {
+    font-size: var(--type-heading-1-font-size);
+    line-height: var(--type-heading-1-line-height);
+    letter-spacing: var(--type-heading-1-letter-spacing);
+    font-weight: var(--type-heading-1-font-weight);
+  }
+
+  .xl\:type-paragraph-large-medium {
+    font-size: var(--type-paragraph-large-font-size);
+    line-height: var(--type-paragraph-large-line-height);
+    letter-spacing: var(--type-paragraph-large-letter-spacing);
+    font-weight: var(--type-paragraph-large-medium-font-weight);
+  }
+}

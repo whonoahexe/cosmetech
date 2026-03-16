@@ -41,7 +41,6 @@ export const Footer = ({ socialLinks }: FooterProps) => {
     <footer className="w-full bg-primary text-primary-foreground px-6 md:px-14 py-12 xl:py-28 mt-12">
       {/* 1-col (mobile) → 2-col (sm) → 4-2-2 (xl) */}
       <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 xl:grid-cols-8 xl:gap-5 xl:min-h-144">
-
         {/* Brand + copyright — full-width until xl */}
         <div className="col-span-full sm:col-span-2 xl:col-span-4 flex flex-col justify-between gap-8 xl:gap-0">
           <div className="flex flex-col gap-6">
@@ -51,13 +50,9 @@ export const Footer = ({ socialLinks }: FooterProps) => {
                 alt="Cosmetech Logo"
                 width={640}
                 height={96}
-                className="h-auto w-36 sm:w-48 xl:w-64 object-contain brightness-0 invert"
+                className="h-auto w-36 sm:w-48 xl:w-120 object-contain brightness-0 invert"
               />
             </Link>
-            <p className="type-paragraph-medium text-primary-foreground/70 max-w-xs xl:max-w-sm">
-              The leading source for cosmetic technology, formulation science,
-              and beauty industry innovation.
-            </p>
           </div>
           <p className="type-paragraph-small text-primary-foreground/50 uppercase tracking-wider">
             © 2026 Cosmetech, Inc. All rights reserved.
@@ -67,7 +62,9 @@ export const Footer = ({ socialLinks }: FooterProps) => {
         {/* Nav + FAQ + Socials */}
         <div className="col-span-1 xl:col-span-2 flex flex-col gap-8 xl:justify-between xl:gap-0">
           <div className="flex flex-col gap-1">
-            <p className="type-paragraph-mini uppercase tracking-widest text-primary-foreground/50 mb-2">Navigate</p>
+            <p className="type-paragraph-mini uppercase tracking-widest text-primary-foreground/50 mb-2">
+              Navigate
+            </p>
             {NAV_LINKS.map((link) => (
               <Link
                 key={link.href}
@@ -86,7 +83,9 @@ export const Footer = ({ socialLinks }: FooterProps) => {
           </div>
 
           <div className="flex flex-col gap-1">
-            <p className="type-paragraph-mini uppercase tracking-widest text-primary-foreground/50 mb-2">Follow Us</p>
+            <p className="type-paragraph-mini uppercase tracking-widest text-primary-foreground/50 mb-2">
+              Follow Us
+            </p>
             {links.map((link) => (
               <Link
                 key={link.platform}
@@ -104,7 +103,9 @@ export const Footer = ({ socialLinks }: FooterProps) => {
         {/* Company + Newsletter + Legal */}
         <div className="col-span-1 xl:col-span-2 flex flex-col gap-8 xl:justify-between xl:gap-0">
           <div className="flex flex-col gap-1">
-            <p className="type-paragraph-mini uppercase tracking-widest text-primary-foreground/50 mb-2">Company</p>
+            <p className="type-paragraph-mini uppercase tracking-widest text-primary-foreground/50 mb-2">
+              Company
+            </p>
             {COMPANY_LINKS.map((link) => (
               <Link
                 key={link.href}
@@ -117,7 +118,9 @@ export const Footer = ({ socialLinks }: FooterProps) => {
           </div>
 
           <div className="flex flex-col gap-3">
-            <p className="type-paragraph-mini uppercase tracking-widest text-primary-foreground/50">Newsletter</p>
+            <p className="type-paragraph-mini uppercase tracking-widest text-primary-foreground/50">
+              Newsletter
+            </p>
             <p className="type-paragraph-small text-primary-foreground/70">
               Stay in the loop with the latest industry news.
             </p>
@@ -135,7 +138,9 @@ export const Footer = ({ socialLinks }: FooterProps) => {
           </div>
 
           <div className="flex flex-col gap-1">
-            <p className="type-paragraph-mini uppercase tracking-widest text-primary-foreground/50 mb-2">Legal</p>
+            <p className="type-paragraph-mini uppercase tracking-widest text-primary-foreground/50 mb-2">
+              Legal
+            </p>
             {LEGAL_LINKS.map((link) => (
               <Link
                 key={link.href}
@@ -147,7 +152,6 @@ export const Footer = ({ socialLinks }: FooterProps) => {
             ))}
           </div>
         </div>
-
       </div>
     </footer>
   );

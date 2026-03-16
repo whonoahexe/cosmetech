@@ -151,23 +151,24 @@ function ArticleCardGrid({
           <ReadTimeBadge readTime={readTime} />
         </div>
 
-        {isLargeGrid ? (
-          <Link href={slug ? `/article/${slug}` : "#"} className="w-fit hover:underline">
-            <h2 className="type-heading-1 text-foreground">{title}</h2>
-          </Link>
-        ) : (
-          <Link href={slug ? `/article/${slug}` : "#"} className="w-fit hover:underline">
-            <h3 className="type-heading-3 text-foreground">{title}</h3>
-          </Link>
-        )}
+        <Link href={slug ? `/article/${slug}` : "#"} className="w-fit hover:underline">
+          <h3
+            className={cn(
+              "text-foreground type-heading-3",
+              isLargeGrid && "xl:type-heading-1"
+            )}
+          >
+            {title}
+          </h3>
+        </Link>
 
         {excerpt && (
           <p
             className={cn(
-              "text-muted-foreground",
+              "text-muted-foreground type-paragraph-medium line-clamp-2",
               isLargeGrid
-                ? "type-paragraph-large-medium line-clamp-3 xl:line-clamp-none"
-                : "type-paragraph-medium line-clamp-2 xl:line-clamp-none"
+                ? "xl:type-paragraph-large-medium xl:line-clamp-3"
+                : "xl:line-clamp-none"
             )}
           >
             {excerpt}

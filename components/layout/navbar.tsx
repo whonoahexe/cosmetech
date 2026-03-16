@@ -62,9 +62,7 @@ function ResultGroup({
           <span className="text-sm font-medium text-foreground truncate leading-snug group-hover:text-foreground">
             {result.title}
           </span>
-          <span className="text-xs text-muted-foreground shrink-0 capitalize">
-            {result.label}
-          </span>
+          <span className="text-xs text-muted-foreground shrink-0 capitalize">{result.label}</span>
         </Link>
       ))}
     </div>
@@ -84,22 +82,22 @@ function SearchDropdown({
 
   return (
     <div className="py-1 max-h-[420px] overflow-y-auto divide-y divide-border/50">
-      {searching && (
-        <p className="px-4 py-3 text-sm text-muted-foreground">Searching…</p>
-      )}
+      {searching && <p className="px-4 py-3 text-sm text-muted-foreground">Searching…</p>}
 
       {!searching && !hasResults && (
         <p className="px-4 py-3 text-sm text-muted-foreground">No results found</p>
       )}
 
-      {!searching && hasResults && RESULT_GROUPS.map((group) => (
-        <ResultGroup
-          key={group.label}
-          label={group.label}
-          items={results.filter((r) => group.types.includes(r.type))}
-          onSelect={onSelect}
-        />
-      ))}
+      {!searching &&
+        hasResults &&
+        RESULT_GROUPS.map((group) => (
+          <ResultGroup
+            key={group.label}
+            label={group.label}
+            items={results.filter((r) => group.types.includes(r.type))}
+            onSelect={onSelect}
+          />
+        ))}
     </div>
   );
 }
@@ -139,28 +137,38 @@ export const Navbar = () => {
 
   // Debounced fetch — desktop
   useEffect(() => {
-    if (!desktopQuery.trim()) { setDesktopResults([]); return; }
+    if (!desktopQuery.trim()) {
+      setDesktopResults([]);
+      return;
+    }
     setDesktopSearching(true);
     const timer = setTimeout(async () => {
       try {
         const res = await fetch(`/api/search?q=${encodeURIComponent(desktopQuery.trim())}`);
         const data = await res.json();
         setDesktopResults(data.results ?? []);
-      } finally { setDesktopSearching(false); }
+      } finally {
+        setDesktopSearching(false);
+      }
     }, 300);
     return () => clearTimeout(timer);
   }, [desktopQuery]);
 
   // Debounced fetch — mobile
   useEffect(() => {
-    if (!mobileQuery.trim()) { setMobileResults([]); return; }
+    if (!mobileQuery.trim()) {
+      setMobileResults([]);
+      return;
+    }
     setMobileSearching(true);
     const timer = setTimeout(async () => {
       try {
         const res = await fetch(`/api/search?q=${encodeURIComponent(mobileQuery.trim())}`);
         const data = await res.json();
         setMobileResults(data.results ?? []);
-      } finally { setMobileSearching(false); }
+      } finally {
+        setMobileSearching(false);
+      }
     }, 300);
     return () => clearTimeout(timer);
   }, [mobileQuery]);
@@ -205,7 +213,7 @@ export const Navbar = () => {
             alt="Cosmetech Logo"
             width={310}
             height={48}
-            className="w-[130px] md:w-[180px] xl:w-[310px] h-auto object-contain"
+            className="w-[200px] xl:w-[310px] h-auto object-contain"
           />
         </Link>
 
@@ -339,7 +347,7 @@ export const Navbar = () => {
             aria-label="Search"
             onClick={() => setMobileOpen((v) => !v)}
           >
-            {mobileOpen ? <X className="size-5" /> : <Search className="size-5" />}
+            {mobileOpen ? <X className="size-6" /> : <Search className="size-6" />}
           </Button>
 
           <DropdownMenu open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
@@ -424,9 +432,9 @@ export const Navbar = () => {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ type: "spring", stiffness: 300, damping: 28 }}
-            className="md:hidden overflow-hidden border-b border-border"
+            className="md:hidden overflow-hidden"
           >
-            <div className="px-6 py-3 flex flex-col gap-2">
+            <div className="px-6 py-2 flex flex-col gap-2">
               <div className="relative shadow-sm rounded-full">
                 <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground pointer-events-none" />
                 <Input
@@ -434,11 +442,14 @@ export const Navbar = () => {
                   value={mobileQuery}
                   onChange={(e) => setMobileQuery(e.target.value)}
                   onKeyDown={(e) => {
-                    if (e.key === "Enter") { goToFirstResult(mobileResults); closeMobile(); }
+                    if (e.key === "Enter") {
+                      goToFirstResult(mobileResults);
+                      closeMobile();
+                    }
                     if (e.key === "Escape") closeMobile();
                   }}
                   placeholder="Discover anything"
-                  className="pl-9 rounded-full border-border bg-input"
+                  className="pl-9 rounded-full border-border bg-input py-4"
                   autoFocus
                 />
               </div>

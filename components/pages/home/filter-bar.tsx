@@ -25,16 +25,7 @@ import {
 } from "lucide-react";
 import type { CategoryCardData } from "./category-card";
 
-const ICONS = [
-  FlaskConical,
-  Flower,
-  Box,
-  Microscope,
-  FileCheck,
-  ArrowUp,
-  Megaphone,
-  Sparkle,
-];
+const ICONS = [FlaskConical, Flower, Box, Microscope, FileCheck, ArrowUp, Megaphone, Sparkle];
 
 const SORT_OPTIONS = ["Latest", "Popular", "Sponsored"];
 
@@ -68,9 +59,10 @@ function FilterBarContent({ categories = [] }: { categories?: CategoryCardData[]
   const sortParam = searchParams.get("sort");
 
   // Default to Latest if not specified or invalid
-  const sortOption = (
-    SORT_OPTIONS.includes(sortParam as string) ? sortParam : "Latest"
-  ) as "Latest" | "Popular" | "Sponsored";
+  const sortOption = (SORT_OPTIONS.includes(sortParam as string) ? sortParam : "Latest") as
+    | "Latest"
+    | "Popular"
+    | "Sponsored";
 
   const setSortOption = (value: string) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -103,8 +95,8 @@ function FilterBarContent({ categories = [] }: { categories?: CategoryCardData[]
           <Zap />
           {sortOption === "Latest" ? "The Latest" : sortOption}
         </Button>
-        <p className="hidden md:block shrink-0 type-heading-4">•</p>
-        <div className="hidden md:block overflow-x-auto">
+        <p className="hidden xl:block shrink-0 type-heading-4">•</p>
+        <div className="hidden xl:block overflow-x-auto">
           <ButtonGroup className="shrink-0">
             {categoriesWithIcons.map((cat) => (
               <Button key={cat.slug} variant="outline" size="lg" className="px-6" asChild>
