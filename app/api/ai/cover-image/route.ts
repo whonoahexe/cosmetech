@@ -1,3 +1,5 @@
+export const maxDuration = 60;
+
 const hfToken = process.env.HF_TOKEN;
 
 export async function GET(request: Request) {
@@ -29,7 +31,9 @@ export async function GET(request: Request) {
   );
 
   if (!hfResponse.ok) {
-    return new Response("Image generation failed", { status: 502 });
+    const errorText = await hfResponse.text();
+    console.error("HF image generation failed", hfResponse.status, errorText);
+    return new Response(`Image generation failed: ${hfResponse.status} ${errorText}`, { status: 502 });
   }
 
   const imageBuffer = await hfResponse.arrayBuffer();
