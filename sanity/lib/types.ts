@@ -106,7 +106,7 @@ export type AgendaItem = {
 
 export type AdvertisementSlot = {
   slot: number;
-  advertisement: AdvertisementCard | null;
+  advertisement: ContentCard | null;
 };
 
 export type SiteSettings = {
@@ -124,7 +124,7 @@ export type HomePageDocument = {
   popularAdSlots?: AdvertisementSlot[];
   sponsoredItems?: ContentCard[];
   highlightedCategories?: CategorySummary[];
-  highlightedEvents?: EventCard[];
+  highlightedEvents?: ContentCard[];
   seo?: Seo;
 };
 
@@ -149,12 +149,14 @@ export type NewsPageData = NewsPageDocument & {
 export type EventsPageDocument = {
   _id: string;
   pageDescription?: string;
+  ongoingAdSlots?: AdvertisementSlot[];
+  pastAdSlots?: AdvertisementSlot[];
   seo?: Seo;
 };
 
-export type EventsPageData = EventsPageDocument & {
-  ongoingEvents: EventCard[];
-  pastEvents: EventCard[];
+export type EventsPageData = Omit<EventsPageDocument, "ongoingAdSlots" | "pastAdSlots"> & {
+  ongoingEvents: ContentCard[];
+  pastEvents: ContentCard[];
 };
 
 export type AboutPageData = {

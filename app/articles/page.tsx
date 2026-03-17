@@ -1,6 +1,6 @@
 import { PageTransition } from "@/components/page-transition";
 import { AllArticlesSection } from "@/components/pages/categories";
-import { getAllArticles } from "@/sanity/lib/loaders";
+import { getAllArticles, getSponsoredArticles } from "@/sanity/lib/loaders";
 import { toArticleCardData } from "@/lib/mappers";
 import { buildMetadata } from "@/lib/metadata";
 import type { Metadata } from "next";
@@ -22,15 +22,12 @@ export async function generateMetadata({ searchParams }: Props): Promise<Metadat
 export default async function ArticlesPage({ searchParams }: Props) {
   const { sort } = await searchParams;
 
-  const sanitySort = sort === "Popular" ? "popular" : "latest";
-  const rawArticles = await getAllArticles(sanitySort);
-
-  const filtered =
+  const rawArticles =
     sort === "Sponsored"
-      ? rawArticles.filter((a) => a.isSponsored)
-      : rawArticles;
+      ? await getSponsoredArticles()
+      : await getAllArticles(sort === "Popular" ? "popular" : "latest");
 
-  const articles = filtered.map(toArticleCardData);
+  const articles = rawArticles.map(toArticleCardData);
   const heading = SORT_LABELS[sort ?? ""] ?? "The Latest";
 
   return (

@@ -4,7 +4,7 @@ import { PageTransition } from "@/components/page-transition";
 import { EventsView } from "@/components/pages/events";
 import { getEventsPageData } from "@/sanity/lib/loaders";
 import { buildMetadata } from "@/lib/metadata";
-import { toEventCardData } from "@/lib/mappers";
+import { toContentEventCardData } from "@/lib/mappers";
 import type { Metadata } from "next";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -15,8 +15,8 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function EventsPage() {
   const data = await getEventsPageData();
 
-  const ongoingEvents = (data?.ongoingEvents ?? []).map(toEventCardData);
-  const pastEvents = (data?.pastEvents ?? []).map(toEventCardData);
+  const ongoingEvents = (data?.ongoingEvents ?? []).map(toContentEventCardData);
+  const pastEvents = (data?.pastEvents ?? []).map(toContentEventCardData);
 
   return (
     <PageTransition>

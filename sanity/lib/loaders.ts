@@ -22,6 +22,7 @@ import {
   pressReleasesQuery,
   privacyPolicyPageQuery,
   siteSettingsQuery,
+  sponsoredArticlesQuery,
   termsPageQuery,
   latestHomeContentQuery,
 } from "./queries";
@@ -52,9 +53,10 @@ type RawArticlePageData = ArticlePageData & {
   plainText?: string;
   relatedArticles?: RawArticleCard[];
 };
-type RawHomePageDocument = Omit<HomePageDocument, "carouselItems" | "sponsoredItems"> & {
+type RawHomePageDocument = Omit<HomePageDocument, "carouselItems" | "sponsoredItems" | "highlightedEvents"> & {
   carouselItems?: RawContentCard[];
   sponsoredItems?: RawContentCard[];
+  highlightedEvents?: RawContentCard[];
 };
 type RawNewsPageDocument = Omit<NewsPageDocument, "featuredBanner" | "highlightedStories"> & {
   featuredBanner?: RawContentCard | null;
@@ -112,7 +114,7 @@ const applyAdvertisementSlots = (
       continue;
     }
 
-    next[slotIndex] = slot.advertisement;
+    next[slotIndex] = enrichContentCard(slot.advertisement as RawContentCard);
   }
 
   return next.filter((item): item is ContentCard => Boolean(item));
@@ -130,9 +132,10 @@ export const getHomePageData = async () => {
   const now = new Date().toISOString();
   const needsEventsFallback = !homePage.highlightedEvents || homePage.highlightedEvents.length === 0;
 
-  const [latestItemsRaw, popularItemsRaw, fallbackEvents] = await Promise.all([
+  const [latestItemsRaw, popularItemsRaw, sponsoredArticlesRaw, fallbackEvents] = await Promise.all([
     client.fetch<RawContentCard[]>(latestHomeContentQuery),
     client.fetch<RawContentCard[]>(popularHomeContentQuery),
+    client.fetch<RawArticleCard[]>(sponsoredArticlesQuery),
     needsEventsFallback
       ? client.fetch<EventCard[]>(ongoingEventsQuery, { now })
       : Promise.resolve([] as EventCard[]),
@@ -149,14 +152,23 @@ export const getHomePageData = async () => {
     5
   );
 
+  // Merge CMS-curated sponsored items with auto-fetched sponsored articles, deduplicating by _id
+  const curatedSponsored = enrichContentCards(homePage.sponsoredItems);
+  const autoSponsored = sponsoredArticlesRaw.map(enrichArticleCard) as ContentCard[];
+  const seenIds = new Set(curatedSponsored.map((item) => item._id));
+  const mergedSponsored = [
+    ...curatedSponsored,
+    ...autoSponsored.filter((item) => !seenIds.has(item._id)),
+  ];
+
   const data: HomePageData = {
     ...homePage,
     carouselItems: enrichContentCards(homePage.carouselItems),
-    sponsoredItems: enrichContentCards(homePage.sponsoredItems),
+    sponsoredItems: mergedSponsored,
     latestItems,
     popularItems,
     highlightedEvents: (homePage.highlightedEvents?.length ?? 0) > 0
-      ? homePage.highlightedEvents
+      ? enrichContentCards(homePage.highlightedEvents)
       : fallbackEvents.slice(0, 5),
   };
 
@@ -191,10 +203,21 @@ export const getEventsPageData = async () => {
 
   const now = new Date().toISOString();
 
-  const [ongoingEvents, pastEvents] = await Promise.all([
+  const [ongoingEventsRaw, pastEventsRaw] = await Promise.all([
     client.fetch<EventCard[]>(ongoingEventsQuery, { now }),
     client.fetch<EventCard[]>(pastEventsQuery, { now }),
   ]);
+
+  const ongoingEvents = applyAdvertisementSlots(
+    ongoingEventsRaw,
+    eventsPage?.ongoingAdSlots,
+    Math.max(ongoingEventsRaw.length, 5)
+  );
+  const pastEvents = applyAdvertisementSlots(
+    pastEventsRaw,
+    eventsPage?.pastAdSlots,
+    Math.max(pastEventsRaw.length, 5)
+  );
 
   const data: EventsPageData = {
     _id: eventsPage?._id ?? "events-page.fallback",
@@ -232,6 +255,11 @@ export const searchContent = async (q: string) => {
     qWild: q.trim() + "*",
   });
   return enrichContentCards(results);
+};
+
+export const getSponsoredArticles = async () => {
+  const articles = await client.fetch<RawArticleCard[]>(sponsoredArticlesQuery);
+  return articles.map(enrichArticleCard);
 };
 
 export const getAllArticles = async (sort: "latest" | "popular" = "latest") => {

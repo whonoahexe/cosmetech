@@ -1,4 +1,4 @@
-import { defineField, defineType } from "sanity";
+import { defineArrayMember, defineField, defineType } from "sanity";
 
 export const eventsPageType = defineType({
   name: "eventsPage",
@@ -14,6 +14,20 @@ export const eventsPageType = defineType({
       title: "Page description",
       type: "text",
       rows: 4,
+    }),
+    defineField({
+      name: "ongoingAdSlots",
+      title: "Ongoing section advertisement swaps",
+      type: "array",
+      of: [defineArrayMember({ type: "advertisementSlot" })],
+      validation: (rule) => rule.max(5),
+    }),
+    defineField({
+      name: "pastAdSlots",
+      title: "Past events section advertisement swaps",
+      type: "array",
+      of: [defineArrayMember({ type: "advertisementSlot" })],
+      validation: (rule) => rule.max(5),
     }),
     defineField({
       name: "seo",

@@ -79,6 +79,40 @@ export function toCategoryCardData(cat: CategorySummary): CategoryCardData {
   };
 }
 
+export function toContentEventCardData(card: ContentCard): EventCardData {
+  if (card._type === "event") {
+    return toEventCardData(card);
+  }
+
+  if (card._type === "article") {
+    const category = resolveCategory(card);
+    return {
+      title: card.title,
+      location: "",
+      date: formatDate(card.publishDate),
+      category,
+      excerpt: card.excerpt,
+      image: card.image,
+      isVirtual: false,
+      isSponsored: card.isSponsored,
+      href: card.slug ? `/article/${card.slug}` : undefined,
+    };
+  }
+
+  // advertisement
+  return {
+    title: card.title,
+    location: "",
+    date: "",
+    category: card.advertiser,
+    excerpt: card.excerpt,
+    image: card.image,
+    isVirtual: false,
+    isSponsored: true,
+    href: card.destinationUrl,
+  };
+}
+
 export function toContentCardData(card: ContentCard): ArticleCardData {
   if (card._type === "article") {
     return toArticleCardData(card);
@@ -87,6 +121,7 @@ export function toContentCardData(card: ContentCard): ArticleCardData {
   if (card._type === "event") {
     return {
       slug: card.slug,
+      href: card.slug ? `/events/${card.slug}` : undefined,
       image: card.image,
       category: card.eventTags?.[0] ?? "Event",
       isSponsored: card.isSponsored,
@@ -98,6 +133,7 @@ export function toContentCardData(card: ContentCard): ArticleCardData {
   // advertisement
   return {
     slug: undefined,
+    href: card.destinationUrl,
     image: card.image,
     category: card.advertiser ?? "Sponsored",
     isSponsored: true,

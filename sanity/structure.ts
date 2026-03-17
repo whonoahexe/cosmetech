@@ -49,7 +49,27 @@ export const structure: StructureResolver = (S) =>
       S.divider(),
       S.documentTypeListItem("article").title("Articles"),
       S.documentTypeListItem("event").title("Events"),
-      S.documentTypeListItem("advertisement").title("Advertisements"),
+      S.listItem()
+        .title("Advertisements")
+        .id("advertisements")
+        .child(
+          S.list()
+            .title("Advertisements")
+            .items([
+              S.listItem()
+                .title("All Advertisements")
+                .id("all-advertisements")
+                .child(S.documentTypeList("advertisement").title("All Advertisements")),
+              S.listItem()
+                .title("Sponsored Articles")
+                .id("sponsored-articles")
+                .child(
+                  S.documentList()
+                    .title("Sponsored Articles")
+                    .filter('_type == "article" && isSponsored == true')
+                ),
+            ])
+        ),
       S.divider(),
       S.listItem()
         .title("Categories")

@@ -9,8 +9,8 @@ import { PageTransition } from "@/components/page-transition";
 import { getHomePageData, getCategories } from "@/sanity/lib/loaders";
 import { buildMetadata } from "@/lib/metadata";
 import { FALLBACK_CATEGORIES, PLACEHOLDER_EVENTS } from "@/lib/constants";
-import { toContentCardData, toEventCardData, toCategoryCardData } from "@/lib/mappers";
-import type { ContentCard } from "@/sanity/lib/types";
+import { toContentCardData, toContentEventCardData, toCategoryCardData } from "@/lib/mappers";
+
 import type { Metadata } from "next";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -21,17 +21,15 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function Home() {
   const [data, categories] = await Promise.all([getHomePageData(), getCategories()]);
 
-  const articleSlides = (data?.carouselItems ?? []).filter(
-    (item): item is Extract<ContentCard, { _type: "article" }> => item._type === "article"
-  );
-  const alternateSlides = articleSlides.slice(3, 6);
+  const allSlides = (data?.carouselItems ?? []).filter(Boolean);
+  const alternateSlides = allSlides.slice(3, 6);
   const carouselSlides = (
-    alternateSlides.length >= 3 ? alternateSlides : articleSlides.slice(0, 3)
+    alternateSlides.length >= 3 ? alternateSlides : allSlides.slice(0, 3)
   ).slice(0, 3);
   const latestArticles = (data?.latestItems ?? []).filter(Boolean).map(toContentCardData);
   const popularArticles = (data?.popularItems ?? []).filter(Boolean).map(toContentCardData);
   const sponsoredArticles = (data?.sponsoredItems ?? []).filter(Boolean).map(toContentCardData);
-  const rawHighlightedEvents = (data?.highlightedEvents ?? []).filter(Boolean).map(toEventCardData);
+  const rawHighlightedEvents = (data?.highlightedEvents ?? []).filter(Boolean).map(toContentEventCardData);
   const highlightedEvents =
     rawHighlightedEvents.length > 0 ? rawHighlightedEvents : PLACEHOLDER_EVENTS;
 

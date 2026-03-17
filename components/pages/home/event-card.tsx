@@ -49,7 +49,7 @@ function EventCardList({
 
       <div className="flex xl:min-h-60 flex-1 flex-col justify-between py-4">
         <div className="flex items-center gap-2.5">
-          <Badge variant="secondary">{category ?? location}</Badge>
+          {(category || location) && <Badge variant="secondary">{category ?? location}</Badge>}
           {isSponsored && <Badge variant="default">Sponsored</Badge>}
           <span className="type-paragraph text-foreground">&bull;</span>
           <span className="type-paragraph-mini text-muted-foreground whitespace-nowrap">
@@ -113,7 +113,7 @@ function EventCardStacked({
 
           {/* Metadata row */}
           <div className="flex items-center gap-3 flex-wrap justify-center">
-            <Badge variant="secondary">{country}</Badge>
+            {country && <Badge variant="secondary">{country}</Badge>}
             {isVirtual && <Badge variant="default">Virtual</Badge>}
             {isSponsored && <Badge>Sponsored</Badge>}
             <span className="type-paragraph-medium text-foreground">•</span>

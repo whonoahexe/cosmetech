@@ -58,7 +58,12 @@ export const homePageType = defineType({
       name: "highlightedEvents",
       title: "Highlighted events",
       type: "array",
-      of: [defineArrayMember({ type: "reference", to: [{ type: "event" }] })],
+      of: [
+        defineArrayMember({
+          type: "reference",
+          to: [{ type: "event" }, { type: "advertisement" }],
+        }),
+      ],
       validation: (rule) => rule.max(5),
     }),
     defineField({

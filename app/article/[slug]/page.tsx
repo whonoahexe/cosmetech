@@ -60,6 +60,7 @@ export default async function ArticlePage({ params }: Props) {
         excerpt={data.excerpt ?? ""}
         category={category}
         readTime={data.readTime ?? 0}
+        isSponsored={data.isSponsored}
       />
 
       <section className="relative py-8 px-4 sm:px-6 md:py-12 lg:py-16 lg:px-32 xl:px-64">

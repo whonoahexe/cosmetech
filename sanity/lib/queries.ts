@@ -107,7 +107,7 @@ export const contentCardProjection = `{
 
 const advertisementSlotFields = `{
 	slot,
-	"advertisement": advertisement->${advertisementCardProjection}
+	"advertisement": advertisement->${contentCardProjection}
 }`;
 
 export const siteSettingsQuery = `*[_type == "siteSettings"][0]{
@@ -125,7 +125,7 @@ export const homePageQuery = `*[_type == "homePage"][0]{
 	popularAdSlots[]${advertisementSlotFields},
 	"sponsoredItems": sponsoredItems[]->${contentCardProjection},
 	highlightedCategories[]->${categoryFields},
-	"highlightedEvents": highlightedEvents[]->${eventCardProjection},
+	"highlightedEvents": highlightedEvents[]->${contentCardProjection},
 	seo${seoFields}
 }`;
 
@@ -140,6 +140,8 @@ export const newsPageQuery = `*[_type == "newsPage"][0]{
 export const eventsPageQuery = `*[_type == "eventsPage"][0]{
 	_id,
 	pageDescription,
+	ongoingAdSlots[]${advertisementSlotFields},
+	pastAdSlots[]${advertisementSlotFields},
 	seo${seoFields}
 }`;
 
@@ -265,6 +267,8 @@ export const allNewsStoriesQuery = `*[_type == "article" && !("pressRelease" in 
 
 // Query a few latest articles (for related articles fallback)
 export const latestArticlesQuery = `*[_type == "article" && slug.current != $excludeSlug] | order(coalesce(publishDate, _createdAt) desc)[0...2] ${articleCardProjection}`;
+
+export const sponsoredArticlesQuery = `*[_type == "article" && isSponsored == true] | order(coalesce(publishDate, _createdAt) desc) ${articleCardProjection}`;
 
 // $qWild must be pre-computed in JS as q + "*" — concatenation is not supported inside score()
 export const searchQuery = `*[

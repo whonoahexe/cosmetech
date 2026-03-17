@@ -13,9 +13,12 @@ export const advertisementSlotType = defineType({
     }),
     defineField({
       name: "advertisement",
-      title: "Advertisement",
+      title: "Swap with",
       type: "reference",
-      to: [{ type: "advertisement" }],
+      to: [{ type: "advertisement" }, { type: "article" }, { type: "event" }],
+      options: {
+        filter: '_type != "article" || isSponsored == true',
+      },
       validation: (rule) => rule.required(),
     }),
   ],
