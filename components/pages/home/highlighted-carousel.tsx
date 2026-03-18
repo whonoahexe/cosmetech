@@ -50,7 +50,7 @@ type HighlightedCarouselProps = {
 };
 
 export function HighlightedCarousel({ slides }: HighlightedCarouselProps) {
-  const plugin = useRef(Autoplay({ delay: 4000, stopOnInteraction: true }));
+  const plugin = useRef(Autoplay({ delay: 4000, stopOnInteraction: false }));
   const [api, setApi] = useState<CarouselApi>();
   const [current, setCurrent] = useState(0);
   const [count, setCount] = useState(0);
@@ -79,7 +79,7 @@ export function HighlightedCarousel({ slides }: HighlightedCarouselProps) {
       setApi={setApi}
       className="w-full"
       onMouseEnter={plugin.current.stop}
-      onMouseLeave={plugin.current.reset}
+      onMouseLeave={() => plugin.current.play()}
     >
       <CarouselContent className="ml-0 my-4 ">
         {slides.map((slide) => {

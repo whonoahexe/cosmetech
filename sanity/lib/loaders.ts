@@ -303,8 +303,8 @@ export const getCategoryPageData = async (slug: string) => {
     heroArticle: category.heroArticle
       ? enrichArticleCard(category.heroArticle as RawArticleCard)
       : undefined,
-    highlightedArticles: ((category.highlightedArticles as RawArticleCard[] | undefined) || []).map(
-      enrichArticleCard
+    highlightedArticles: (category.highlightedArticles ?? []).map((item) =>
+      item._type === "article" ? enrichArticleCard(item as RawArticleCard) : item
     ),
   };
 };

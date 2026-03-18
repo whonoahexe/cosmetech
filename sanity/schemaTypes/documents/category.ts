@@ -38,21 +38,16 @@ export const categoryType = defineType({
     }),
     defineField({
       name: "highlightedArticles",
-      title: "Highlighted articles",
+      title: "Highlighted articles / ads",
+      description: "Articles and advertisements to feature in this category section.",
       type: "array",
       of: [
         defineArrayMember({
           type: "reference",
-          to: [{ type: "article" }],
-          options: {
-            filter: ({ document }) => ({
-              filter: "references($catId)",
-              params: { catId: document._id },
-            }),
-          },
+          to: [{ type: "article" }, { type: "advertisement" }],
         }),
       ],
-      validation: (rule) => rule.max(4),
+      validation: (rule) => rule.max(8),
     }),
   ],
 });

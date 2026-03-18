@@ -122,6 +122,7 @@ export type HomePageDocument = {
   carouselItems?: ContentCard[];
   latestAdSlots?: AdvertisementSlot[];
   popularAdSlots?: AdvertisementSlot[];
+  latestStripItems?: ContentCard[];
   sponsoredItems?: ContentCard[];
   highlightedCategories?: CategorySummary[];
   highlightedEvents?: ContentCard[];
@@ -204,7 +205,7 @@ export type CategoryPageData = {
   slug?: string;
   description?: string;
   heroArticle?: ArticleCard;
-  highlightedArticles?: ArticleCard[];
+  highlightedArticles?: ContentCard[];
 };
 
 export type ArticlePageData = ArticleCard & {

@@ -123,6 +123,7 @@ export const homePageQuery = `*[_type == "homePage"][0]{
 	"carouselItems": carouselItems[]->${contentCardProjection},
 	latestAdSlots[]${advertisementSlotFields},
 	popularAdSlots[]${advertisementSlotFields},
+	"latestStripItems": latestStripItems[]->${contentCardProjection},
 	"sponsoredItems": sponsoredItems[]->${contentCardProjection},
 	highlightedCategories[]->${categoryFields},
 	"highlightedEvents": highlightedEvents[]->${contentCardProjection},
@@ -193,7 +194,7 @@ export const categoriesQuery = `*[_type == "category"] | order(title asc) {
 	"slug": slug.current,
 	description,
 	"heroArticle": heroArticle->${articleCardProjection},
-	"highlightedArticles": highlightedArticles[]->${articleCardProjection}
+	"highlightedArticles": highlightedArticles[]->${contentCardProjection}
 }`;
 
 export const categoryBySlugQuery = `*[_type == "category" && slug.current == $slug][0]{
@@ -202,7 +203,7 @@ export const categoryBySlugQuery = `*[_type == "category" && slug.current == $sl
 	"slug": slug.current,
 	description,
 	"heroArticle": heroArticle->${articleCardProjection},
-	"highlightedArticles": highlightedArticles[]->${articleCardProjection}
+	"highlightedArticles": highlightedArticles[]->${contentCardProjection}
 }`;
 
 export const articleBySlugQuery = `*[_type == "article" && slug.current == $slug][0]{

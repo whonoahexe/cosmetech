@@ -5,10 +5,10 @@ import {
   FeaturedSplitSection,
 } from "@/components/pages/categories";
 import { getCategoryPageData, getCategories, getArticlesByCategory } from "@/sanity/lib/loaders";
-import { toArticleCardData, toCategoryCardData } from "@/lib/mappers";
+import { toArticleCardData, toContentCardData, toCategoryCardData } from "@/lib/mappers";
 import { FALLBACK_CATEGORIES } from "@/lib/constants";
 import { buildMetadata } from "@/lib/metadata";
-import type { ArticleCard } from "@/sanity/lib/types";
+import type { ArticleCard, ContentCard } from "@/sanity/lib/types";
 import type { Metadata } from "next";
 
 type Props = { searchParams: Promise<{ category?: string; time?: string }> };
@@ -27,11 +27,12 @@ function getTimeCutoff(time: string | undefined): Date | null {
   return null;
 }
 
-function filterByTime(articles: ArticleCard[], time: string | undefined): ArticleCard[] {
+function filterByTime(items: ContentCard[], time: string | undefined): ContentCard[] {
   const cutoff = getTimeCutoff(time);
-  if (!cutoff) return articles;
-  return articles.filter((a) => {
-    const date = a.publishDate ? new Date(a.publishDate) : null;
+  if (!cutoff) return items;
+  return items.filter((item) => {
+    if (item._type !== "article") return true; // ads always pass through
+    const date = item.publishDate ? new Date(item.publishDate) : null;
     return date && date >= cutoff;
   });
 }
@@ -58,25 +59,25 @@ export default async function CategoriesPage({ searchParams }: Props) {
   const categoryData = selectedSlug ? await getCategoryPageData(selectedSlug) : null;
 
   let rawFeaturedArticle = categoryData?.heroArticle ?? null;
-  let rawAllArticles: ArticleCard[] = (categoryData?.highlightedArticles ?? []) as ArticleCard[];
+  let rawAllItems: ContentCard[] = categoryData?.highlightedArticles ?? [];
 
   // Fall back to direct article query by category ref ID when CMS data is unavailable
-  if (!rawFeaturedArticle && selectedSlug) {
+  if (!rawFeaturedArticle && rawAllItems.length === 0 && selectedSlug) {
     const categoryId = `category.${selectedSlug}`;
     const directArticles = await getArticlesByCategory(categoryId);
     rawFeaturedArticle = directArticles[0] ?? null;
-    rawAllArticles = directArticles.slice(1);
+    rawAllItems = directArticles.slice(1);
   }
 
   // Apply time filter before mapping
-  const filteredRawAll = filterByTime(rawAllArticles, time);
+  const filteredRawAll = filterByTime(rawAllItems, time);
   const filteredFeatured =
     rawFeaturedArticle && filterByTime([rawFeaturedArticle], time).length > 0
       ? rawFeaturedArticle
       : null;
 
   const featuredArticle = filteredFeatured ? toArticleCardData(filteredFeatured) : null;
-  const allArticles = filteredRawAll.map(toArticleCardData);
+  const allArticles = filteredRawAll.map(toContentCardData);
   const sideArticles = allArticles.slice(0, 4);
 
   return (

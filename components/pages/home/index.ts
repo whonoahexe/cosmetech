@@ -7,6 +7,7 @@ export type { ArticleFilter } from "./article-grid";
 export { HighlightedCategories } from "./highlighted-categories";
 export { CategoryCard } from "./category-card";
 export type { CategoryCardData } from "./category-card";
+export { AdStrip } from "./ad-strip";
 export { UpcomingEvents } from "./upcoming-events";
 export { EventCard } from "./event-card";
 export type { EventCardData } from "./event-card";
