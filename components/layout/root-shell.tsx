@@ -16,7 +16,9 @@ export function RootShell({ children, socialLinks }: RootShellProps) {
   const isStudioRoute = pathname.startsWith("/studio");
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    if (!window.location.hash) {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
   }, [pathname]);
 
   if (isStudioRoute) {

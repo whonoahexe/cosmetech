@@ -9,7 +9,7 @@ const NAV_LINKS = [
   { label: "Home", href: "/" },
   { label: "Categories", href: "/categories" },
   { label: "News", href: "/news" },
-  { label: "Sponsored", href: "/sponsored" },
+  { label: "Sponsored", href: "/articles?sort=Latest" },
 ];
 
 const COMPANY_LINKS = [
