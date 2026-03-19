@@ -3,6 +3,7 @@ import { ContactForm, ContactHeader, ContactLink } from "@/components/pages/cont
 import { Separator } from "@/components/ui/separator";
 import { getContactPageData } from "@/sanity/lib/loaders";
 import { buildMetadata } from "@/lib/metadata";
+import { ScrollToHash } from "@/components/scroll-to-hash";
 import type { Metadata } from "next";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -20,6 +21,7 @@ export default async function ContactPage() {
 
   return (
     <PageTransition>
+    <ScrollToHash />
     <div className="mx-auto my-16 flex w-full max-w-6xl flex-col py-10 md:py-16">
       <section className="space-y-4 px-0 md:px-8 lg:px-0">
         <div className="grid gap-8 py-16 lg:grid-cols-2 lg:gap-12">
