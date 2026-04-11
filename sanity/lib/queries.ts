@@ -16,7 +16,12 @@ const imageFields = `{
 const seoFields = `{
 	title,
 	description,
-	"image": image${imageFields}
+	"image": image${imageFields},
+	keywords,
+	additionalMetaTags[]{
+		name,
+		content
+	}
 }`;
 
 const socialLinkFields = `{

@@ -13,10 +13,17 @@ export type SanityImage = {
   };
 } | null;
 
+export type SeoMetaTag = {
+  name: string;
+  content: string;
+};
+
 export type Seo = {
   title?: string;
   description?: string;
   image?: SanityImage;
+  keywords?: string[];
+  additionalMetaTags?: SeoMetaTag[];
 } | null;
 
 export type SocialLink = {
