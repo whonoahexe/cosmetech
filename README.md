@@ -13,6 +13,29 @@ npm install
 npm run dev
 ```
 
+## Contact + Newsletter (Resend)
+
+This repo now includes:
+
+- `POST /api/contact` for the contact form
+- `POST /api/newsletter` for footer newsletter signup
+
+Required env vars:
+
+- `RESEND_API_KEY`
+- `RESEND_FROM_EMAIL` (must use a verified Resend domain)
+- `RESEND_CONTACT_TO_EMAIL`
+
+Optional newsletter targeting:
+
+- `RESEND_NEWSLETTER_SEGMENT_ID`
+- `RESEND_NEWSLETTER_TOPIC_ID`
+
+Notes:
+
+- Contact submissions email your team inbox and set `replyTo` to the sender.
+- Newsletter signups create contacts in Resend (duplicate signup attempts are treated as success).
+
 ## Seed Baseline Content
 
 Populate fixed starter docs into Sanity:

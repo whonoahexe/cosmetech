@@ -53,7 +53,10 @@ type RawArticlePageData = ArticlePageData & {
   plainText?: string;
   relatedArticles?: RawArticleCard[];
 };
-type RawHomePageDocument = Omit<HomePageDocument, "carouselItems" | "sponsoredItems" | "highlightedEvents"> & {
+type RawHomePageDocument = Omit<
+  HomePageDocument,
+  "carouselItems" | "sponsoredItems" | "highlightedEvents"
+> & {
   carouselItems?: RawContentCard[];
   sponsoredItems?: RawContentCard[];
   highlightedEvents?: RawContentCard[];
@@ -130,16 +133,19 @@ export const getHomePageData = async () => {
   }
 
   const now = new Date().toISOString();
-  const needsEventsFallback = !homePage.highlightedEvents || homePage.highlightedEvents.length === 0;
+  const needsEventsFallback =
+    !homePage.highlightedEvents || homePage.highlightedEvents.length === 0;
 
-  const [latestItemsRaw, popularItemsRaw, sponsoredArticlesRaw, fallbackEvents] = await Promise.all([
-    client.fetch<RawContentCard[]>(latestHomeContentQuery),
-    client.fetch<RawContentCard[]>(popularHomeContentQuery),
-    client.fetch<RawArticleCard[]>(sponsoredArticlesQuery),
-    needsEventsFallback
-      ? client.fetch<EventCard[]>(ongoingEventsQuery, { now })
-      : Promise.resolve([] as EventCard[]),
-  ]);
+  const [latestItemsRaw, popularItemsRaw, sponsoredArticlesRaw, fallbackEvents] = await Promise.all(
+    [
+      client.fetch<RawContentCard[]>(latestHomeContentQuery),
+      client.fetch<RawContentCard[]>(popularHomeContentQuery),
+      client.fetch<RawArticleCard[]>(sponsoredArticlesQuery),
+      needsEventsFallback
+        ? client.fetch<EventCard[]>(ongoingEventsQuery, { now })
+        : Promise.resolve([] as EventCard[]),
+    ]
+  );
 
   const latestItems = applyAdvertisementSlots(
     enrichContentCards(latestItemsRaw),
@@ -167,9 +173,10 @@ export const getHomePageData = async () => {
     sponsoredItems: mergedSponsored,
     latestItems,
     popularItems,
-    highlightedEvents: (homePage.highlightedEvents?.length ?? 0) > 0
-      ? enrichContentCards(homePage.highlightedEvents)
-      : fallbackEvents.slice(0, 5),
+    highlightedEvents:
+      (homePage.highlightedEvents?.length ?? 0) > 0
+        ? enrichContentCards(homePage.highlightedEvents)
+        : fallbackEvents.slice(0, 5),
   };
 
   return data;

@@ -80,7 +80,9 @@ export function ArticleGridContent({
           {leftBottom && <ArticleCard {...leftBottom} colSpan={2} />}
         </div>
 
-        <div className="order-first xl:order-none xl:col-span-4">{center && <ArticleCard {...center} colSpan={4} />}</div>
+        <div className="order-first xl:order-none xl:col-span-4">
+          {center && <ArticleCard {...center} colSpan={4} />}
+        </div>
 
         <div className="order-3 xl:order-none xl:col-span-2 flex flex-col gap-5">
           {rightTop && <ArticleCard {...rightTop} colSpan={2} />}

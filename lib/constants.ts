@@ -19,7 +19,8 @@ export const FALLBACK_CATEGORIES: CategoryCardData[] = [
   },
   {
     name: "R&D",
-    description: "Research, clinical testing, and innovations powering the next generation of formulas.",
+    description:
+      "Research, clinical testing, and innovations powering the next generation of formulas.",
     slug: "r-and-d",
   },
   {
@@ -39,7 +40,8 @@ export const FALLBACK_CATEGORIES: CategoryCardData[] = [
   },
   {
     name: "AI & Technology",
-    description: "How machine learning, automation, and digital tools are reshaping the cosmetics space.",
+    description:
+      "How machine learning, automation, and digital tools are reshaping the cosmetics space.",
     slug: "ai-technology",
   },
 ];
@@ -47,12 +49,12 @@ export const FALLBACK_CATEGORIES: CategoryCardData[] = [
 /** Map from Sanity category ref ID slug to display name */
 export const CATEGORY_REF_TO_NAME: Record<string, string> = {
   "ingredients-formulation": "Ingredients & Formulation",
-  "fragrance": "Fragrance",
-  "packaging": "Packaging",
+  fragrance: "Fragrance",
+  packaging: "Packaging",
   "r-and-d": "R&D",
-  "regulations": "Regulations",
-  "springboard": "Springboard",
-  "marketing": "Marketing",
+  regulations: "Regulations",
+  springboard: "Springboard",
+  marketing: "Marketing",
   "ai-technology": "AI & Technology",
 };
 

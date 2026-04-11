@@ -116,7 +116,8 @@ export function HighlightedCarousel({ slides }: HighlightedCarouselProps) {
                   {/* Metadata row */}
                   <div className="flex items-center gap-3 pointer-events-auto">
                     <Badge>{category}</Badge>
-                    {(slide._type === "advertisement" || ("isSponsored" in slide && slide.isSponsored)) && (
+                    {(slide._type === "advertisement" ||
+                      ("isSponsored" in slide && slide.isSponsored)) && (
                       <Badge variant="secondary">Sponsored</Badge>
                     )}
                     {readTime && (

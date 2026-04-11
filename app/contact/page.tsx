@@ -21,68 +21,68 @@ export default async function ContactPage() {
 
   return (
     <PageTransition>
-    <ScrollToHash />
-    <div className="mx-auto my-16 flex w-full max-w-6xl flex-col py-10 md:py-16">
-      <section className="space-y-4 px-0 md:px-8 lg:px-0">
-        <div className="grid gap-8 py-16 lg:grid-cols-2 lg:gap-12">
-          <div className="space-y-12">
-            <ContactHeader title="Cosmetech / General Contact" />
-            <p className="type-paragraph-large text-foreground">
-              Have a question, idea, or collaboration in mind? Reach out to our team and we&apos;ll
-              make sure your enquiry finds the right person.
-            </p>
+      <ScrollToHash />
+      <div className="mx-auto my-16 flex w-full max-w-6xl flex-col py-10 md:py-16">
+        <section className="space-y-4 px-0 md:px-8 lg:px-0">
+          <div className="grid gap-8 py-16 lg:grid-cols-2 lg:gap-12">
+            <div className="space-y-12">
+              <ContactHeader title="Cosmetech / General Contact" />
+              <p className="type-paragraph-large text-foreground">
+                Have a question, idea, or collaboration in mind? Reach out to our team and
+                we&apos;ll make sure your enquiry finds the right person.
+              </p>
+            </div>
+
+            <ContactForm />
+
+            <div className="lg:col-span-2">
+              <Separator />
+            </div>
           </div>
 
-          <ContactForm />
+          <div className="space-y-16 py-16">
+            <ContactHeader title="Cosmetech / Editorial Contact" />
 
-          <div className="lg:col-span-2">
+            <p className="type-paragraph-large max-w-162 text-foreground">
+              Share your press releases, product launches, and industry announcements with our
+              editorial team at:
+            </p>
+
+            {data?.editorialContactEmail && (
+              <ContactLink
+                href={`mailto:${data.editorialContactEmail}`}
+                label={data.editorialContactEmail}
+              />
+            )}
+
             <Separator />
           </div>
-        </div>
 
-        <div className="space-y-16 py-16">
-          <ContactHeader title="Cosmetech / Editorial Contact" />
+          <div id="advertise" className="scroll-mt-28 space-y-16 py-16">
+            <ContactHeader title="Cosmetech / Why advertise with us?" />
 
-          <p className="type-paragraph-large max-w-162 text-foreground">
-            Share your press releases, product launches, and industry announcements with our
-            editorial team at:
-          </p>
+            <div className="max-w-324 space-y-4 text-foreground">
+              <p className="type-paragraph-large">
+                Advertising with CosmeTech enables targeted visibility across a highly relevant
+                professional audience. Our integrated print, digital, and event platforms allow your
+                message to reach qualified readers in a cost-effective and credible environment.
+              </p>
+              <p className="type-paragraph-large">
+                Whether you&apos;re launching a product, building brand awareness, or sharing
+                industry expertise, we help position your content where it matters most.
+              </p>
+            </div>
 
-          {data?.editorialContactEmail && (
-            <ContactLink
-              href={`mailto:${data.editorialContactEmail}`}
-              label={data.editorialContactEmail}
-            />
-          )}
+            <div className="flex flex-wrap items-center gap-x-16 gap-y-4">
+              {advertisingContacts.map((contact) => (
+                <ContactLink key={contact.label} href={contact.href} label={contact.label} />
+              ))}
+            </div>
 
-          <Separator />
-        </div>
-
-        <div id="advertise" className="scroll-mt-28 space-y-16 py-16">
-          <ContactHeader title="Cosmetech / Why advertise with us?" />
-
-          <div className="max-w-324 space-y-4 text-foreground">
-            <p className="type-paragraph-large">
-              Advertising with CosmeTech enables targeted visibility across a highly relevant
-              professional audience. Our integrated print, digital, and event platforms allow your
-              message to reach qualified readers in a cost-effective and credible environment.
-            </p>
-            <p className="type-paragraph-large">
-              Whether you&apos;re launching a product, building brand awareness, or sharing industry
-              expertise, we help position your content where it matters most.
-            </p>
+            <Separator />
           </div>
-
-          <div className="flex flex-wrap items-center gap-x-16 gap-y-4">
-            {advertisingContacts.map((contact) => (
-              <ContactLink key={contact.label} href={contact.href} label={contact.label} />
-            ))}
-          </div>
-
-          <Separator />
-        </div>
-      </section>
-    </div>
+        </section>
+      </div>
     </PageTransition>
   );
 }

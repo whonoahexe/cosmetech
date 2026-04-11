@@ -15,7 +15,10 @@ const writeClient = createClient({
 
 export async function POST(req: Request) {
   if (!writeToken) {
-    return NextResponse.json({ ok: false, error: "Missing SANITY_API_WRITE_TOKEN" }, { status: 500 });
+    return NextResponse.json(
+      { ok: false, error: "Missing SANITY_API_WRITE_TOKEN" },
+      { status: 500 }
+    );
   }
 
   let slug: string | undefined;
@@ -39,7 +42,11 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: false, error: "Article not found" }, { status: 404 });
   }
 
-  await writeClient.patch(article._id).setIfMissing({ viewCount: 0 }).inc({ viewCount: 1 }).commit();
+  await writeClient
+    .patch(article._id)
+    .setIfMissing({ viewCount: 0 })
+    .inc({ viewCount: 1 })
+    .commit();
 
   return NextResponse.json({ ok: true });
 }

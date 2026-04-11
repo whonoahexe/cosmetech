@@ -7,15 +7,9 @@ const components: PortableTextComponents = {
     normal: ({ children }) => (
       <p className="type-paragraph-large text-foreground mb-5">{children}</p>
     ),
-    h2: ({ children }) => (
-      <h2 className="type-heading-2 text-foreground mt-10 mb-4">{children}</h2>
-    ),
-    h3: ({ children }) => (
-      <h3 className="type-heading-3 text-foreground mt-8 mb-3">{children}</h3>
-    ),
-    h4: ({ children }) => (
-      <h4 className="type-heading-4 text-foreground mt-6 mb-2">{children}</h4>
-    ),
+    h2: ({ children }) => <h2 className="type-heading-2 text-foreground mt-10 mb-4">{children}</h2>,
+    h3: ({ children }) => <h3 className="type-heading-3 text-foreground mt-8 mb-3">{children}</h3>,
+    h4: ({ children }) => <h4 className="type-heading-4 text-foreground mt-6 mb-2">{children}</h4>,
     blockquote: ({ children }) => (
       <blockquote className="border-l-4 border-primary pl-6 my-6 italic type-paragraph-large text-foreground/70">
         {children}
@@ -39,9 +33,7 @@ const components: PortableTextComponents = {
     number: ({ children }) => <li>{children}</li>,
   },
   marks: {
-    strong: ({ children }) => (
-      <strong className="type-paragraph-large-bold">{children}</strong>
-    ),
+    strong: ({ children }) => <strong className="type-paragraph-large-bold">{children}</strong>,
     em: ({ children }) => <em>{children}</em>,
     link: ({ value, children }) => {
       const href = value?.href ?? "#";

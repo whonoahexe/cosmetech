@@ -37,7 +37,9 @@ function formatEventTime(startIso?: string, endIso?: string): string {
   if (!startIso) return "";
   const start = new Date(startIso);
   const fmt = (d: Date) =>
-    d.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit", hour12: true }).toUpperCase();
+    d
+      .toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit", hour12: true })
+      .toUpperCase();
   if (endIso) {
     return `${fmt(start)} – ${fmt(new Date(endIso))}`;
   }
@@ -56,51 +58,51 @@ export default async function EventPage({ params }: Props) {
 
   return (
     <PageTransition>
-    <div className="flex flex-col mt-4 gap-4 mb-16 md:mb-24 lg:mb-32">
-      <EventHero image={data.image} title={data.title} />
-      <EventTitle
-        title={data.title}
-        category={category}
-        date={dateStr}
-        excerpt={data.excerpt}
-        isSponsored={data.isSponsored}
-        isVirtual={data.location?.toLowerCase() === "virtual"}
-      />
+      <div className="flex flex-col mt-4 gap-4 mb-16 md:mb-24 lg:mb-32">
+        <EventHero image={data.image} title={data.title} />
+        <EventTitle
+          title={data.title}
+          category={category}
+          date={dateStr}
+          excerpt={data.excerpt}
+          isSponsored={data.isSponsored}
+          isVirtual={data.location?.toLowerCase() === "virtual"}
+        />
 
-      <section className="relative py-8 px-4 sm:px-6 md:py-12 lg:py-8 lg:px-32 xl:px-64">
-        <div className="mx-auto w-full max-w-6xl">
-          <EventBreadcrumb category={category} uid={slug} />
+        <section className="relative py-8 px-4 sm:px-6 md:py-12 lg:py-8 lg:px-32 xl:px-64">
+          <div className="mx-auto w-full max-w-6xl">
+            <EventBreadcrumb category={category} uid={slug} />
 
-          <div className="pt-8 md:pt-12 lg:pr-20 lg:pt-16 space-y-16">
-            <EventDetails
-              date={dateStr}
-              time={timeStr}
-              location={data.location ?? ""}
-              organizer={data.organizer ?? ""}
-              isVirtual={data.location?.toLowerCase() === "virtual"}
-              registrationUrl={data.registrationUrl ?? "#"}
-            />
+            <div className="pt-8 md:pt-12 lg:pr-20 lg:pt-16 space-y-16">
+              <EventDetails
+                date={dateStr}
+                time={timeStr}
+                location={data.location ?? ""}
+                organizer={data.organizer ?? ""}
+                isVirtual={data.location?.toLowerCase() === "virtual"}
+                registrationUrl={data.registrationUrl ?? "#"}
+              />
 
-            <Separator />
-            <EventAbout body={data.body} />
+              <Separator />
+              <EventAbout body={data.body} />
 
-            {data.agenda && data.agenda.length > 0 && (
-              <>
-                <Separator />
-                <EventAgenda agenda={data.agenda} />
-              </>
-            )}
+              {data.agenda && data.agenda.length > 0 && (
+                <>
+                  <Separator />
+                  <EventAgenda agenda={data.agenda} />
+                </>
+              )}
 
-            {relatedEvents.length > 0 && (
-              <>
-                <Separator />
-                <EventRelated events={relatedEvents} />
-              </>
-            )}
+              {relatedEvents.length > 0 && (
+                <>
+                  <Separator />
+                  <EventRelated events={relatedEvents} />
+                </>
+              )}
+            </div>
           </div>
-        </div>
-      </section>
-    </div>
+        </section>
+      </div>
     </PageTransition>
   );
 }

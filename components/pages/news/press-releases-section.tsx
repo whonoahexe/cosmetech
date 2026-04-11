@@ -34,7 +34,10 @@ export function PressReleasesSection({ pressReleases = [] }: PressReleasesSectio
 
       <div className="grid grid-cols-8 gap-5 py-4">
         {visibleReleases.map((article) => (
-          <div key={article.slug ?? article.title} className="col-span-8 md:col-span-4 xl:col-span-2">
+          <div
+            key={article.slug ?? article.title}
+            className="col-span-8 md:col-span-4 xl:col-span-2"
+          >
             <ArticleCard {...article} colSpan={2} />
           </div>
         ))}

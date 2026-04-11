@@ -76,10 +76,9 @@ async function main() {
 
     if (!force) {
       // Fetch current excerpt to skip unnecessary writes
-      const current = await client.fetch<{ excerpt?: string }>(
-        `*[_id == $id][0]{ excerpt }`,
-        { id: article._id }
-      );
+      const current = await client.fetch<{ excerpt?: string }>(`*[_id == $id][0]{ excerpt }`, {
+        id: article._id,
+      });
 
       if (normalizeForComparison(nextExcerpt) === normalizeForComparison(current?.excerpt)) {
         skipped++;

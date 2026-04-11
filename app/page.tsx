@@ -31,7 +31,9 @@ export default async function Home() {
   const popularArticles = (data?.popularItems ?? []).filter(Boolean).map(toContentCardData);
   const sponsoredArticles = (data?.sponsoredItems ?? []).filter(Boolean).map(toContentCardData);
   const stripItems = (data?.latestStripItems ?? []).filter(Boolean).map(toContentCardData);
-  const rawHighlightedEvents = (data?.highlightedEvents ?? []).filter(Boolean).map(toContentEventCardData);
+  const rawHighlightedEvents = (data?.highlightedEvents ?? [])
+    .filter(Boolean)
+    .map(toContentEventCardData);
   const highlightedEvents =
     rawHighlightedEvents.length > 0 ? rawHighlightedEvents : PLACEHOLDER_EVENTS;
 

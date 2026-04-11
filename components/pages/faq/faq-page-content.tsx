@@ -35,15 +35,9 @@ function FaqAccordionItem({
         className="group flex w-full items-start justify-between gap-6 py-6 text-left transition-colors hover:text-primary"
         aria-expanded={isOpen}
       >
-        <span className="type-paragraph-large-medium flex-1 leading-snug">
-          {item.question}
-        </span>
+        <span className="type-paragraph-large-medium flex-1 leading-snug">{item.question}</span>
         <span className="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full border border-current text-current transition-all duration-200">
-          {isOpen ? (
-            <Minus className="size-3.5" />
-          ) : (
-            <Plus className="size-3.5" />
-          )}
+          {isOpen ? <Minus className="size-3.5" /> : <Plus className="size-3.5" />}
         </span>
       </button>
 
@@ -102,9 +96,7 @@ export function FaqPageContent({ categories }: FaqPageContentProps) {
       {/* Page header */}
       <div className="px-0 pb-12 md:px-8 lg:px-0">
         <p className="type-monospaced mb-3 text-primary">FAQ</p>
-        <h1 className="type-heading-1 max-w-xl text-foreground">
-          Frequently asked questions
-        </h1>
+        <h1 className="type-heading-1 max-w-xl text-foreground">Frequently asked questions</h1>
       </div>
 
       <Separator />

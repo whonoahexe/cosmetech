@@ -52,7 +52,10 @@ export function ArticleBreadcrumb({
         </BreadcrumbList>
       </Breadcrumb>
 
-      <Button variant="outline" className="rounded-full border-primary px-3 text-primary w-10 md:w-12 lg:w-16">
+      <Button
+        variant="outline"
+        className="rounded-full border-primary px-3 text-primary w-10 md:w-12 lg:w-16"
+      >
         <Sparkles className="size-4" />
       </Button>
     </div>

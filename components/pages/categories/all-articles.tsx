@@ -12,7 +12,10 @@ type AllArticlesSectionProps = {
 
 const PAGE_SIZE = 8; // Two rows at md:grid-cols-4
 
-export function AllArticlesSection({ articles, heading = "All Articles" }: AllArticlesSectionProps) {
+export function AllArticlesSection({
+  articles,
+  heading = "All Articles",
+}: AllArticlesSectionProps) {
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
   const visibleArticles = useMemo(() => articles.slice(0, visibleCount), [articles, visibleCount]);

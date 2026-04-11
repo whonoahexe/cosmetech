@@ -14,7 +14,12 @@ export function ArticlePromo({ articles }: ArticlePromoProps) {
     <div className="space-y-8">
       <div className="flex items-end gap-4 md:gap-6">
         <h2 className="type-heading-2 md:type-heading-1 text-foreground">Related Articles</h2>
-        <Button variant="outline" size="icon" className="rounded-full shrink-0 w-10 md:w-12 lg:w-16" asChild>
+        <Button
+          variant="outline"
+          size="icon"
+          className="rounded-full shrink-0 w-10 md:w-12 lg:w-16"
+          asChild
+        >
           <Link href="/news">
             <ArrowUpRight className="size-4" />
           </Link>

@@ -5,10 +5,7 @@ type FeaturedSplitSectionProps = {
   sideArticles: ArticleCardData[];
 };
 
-export function FeaturedSplitSection({
-  featuredArticle,
-  sideArticles,
-}: FeaturedSplitSectionProps) {
+export function FeaturedSplitSection({ featuredArticle, sideArticles }: FeaturedSplitSectionProps) {
   return (
     <section className="py-4">
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-8">

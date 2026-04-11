@@ -22,13 +22,15 @@ export async function GET(req: Request) {
 
   const mapped: SearchResultItem[] = results.flatMap((r): SearchResultItem[] => {
     if (r._type === "event") {
-      return [{
-        id: r._id,
-        type: "event",
-        title: r.title,
-        href: r.slug ? `/events/${r.slug}` : "#",
-        label: r.eventTags?.[0] ?? "Event",
-      }];
+      return [
+        {
+          id: r._id,
+          type: "event",
+          title: r.title,
+          href: r.slug ? `/events/${r.slug}` : "#",
+          label: r.eventTags?.[0] ?? "Event",
+        },
+      ];
     }
 
     if (r._type === "article") {
@@ -43,13 +45,15 @@ export async function GET(req: Request) {
           return CATEGORY_REF_TO_NAME[ref.replace(/^category\./, "")] ?? "Article";
         })();
 
-      return [{
-        id: r._id,
-        type,
-        title: r.title,
-        href: r.slug ? `/article/${r.slug}` : "#",
-        label: category,
-      }];
+      return [
+        {
+          id: r._id,
+          type,
+          title: r.title,
+          href: r.slug ? `/article/${r.slug}` : "#",
+          label: category,
+        },
+      ];
     }
 
     return [];

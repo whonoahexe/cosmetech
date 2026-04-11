@@ -1,9 +1,7 @@
 import Link from "next/link";
-import { Mail } from "lucide-react";
-import { Input } from "@/components/ui/input";
-import { InputGroup, InputGroupAddon } from "@/components/ui/input-group";
 import Image from "next/image";
 import type { SocialLink } from "@/sanity/lib/types";
+import { FooterNewsletterForm } from "@/components/layout/footer-newsletter-form";
 
 const NAV_LINKS = [
   { label: "Home", href: "/" },
@@ -118,23 +116,7 @@ export const Footer = ({ socialLinks }: FooterProps) => {
           </div>
 
           <div className="flex flex-col gap-3">
-            <p className="type-paragraph-mini uppercase tracking-widest text-primary-foreground/50">
-              Newsletter
-            </p>
-            <p className="type-paragraph-small text-primary-foreground/70">
-              Stay in the loop with the latest industry news.
-            </p>
-            <InputGroup className="bg-input border-border rounded-lg">
-              <InputGroupAddon align="inline-start">
-                <Mail className="size-5 text-muted-foreground pr-1.5" />
-              </InputGroupAddon>
-              <Input
-                type="email"
-                placeholder="Enter your email"
-                className="bg-transparent border-0 shadow-none focus-visible:ring-0 text-foreground placeholder:text-muted-foreground"
-                aria-label="Newsletter email"
-              />
-            </InputGroup>
+            <FooterNewsletterForm />
           </div>
 
           <div className="flex flex-col gap-1">

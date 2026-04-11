@@ -9,10 +9,7 @@ interface HighlightedCategoriesProps {
   className?: string;
 }
 
-export function HighlightedCategories({
-  categories = [],
-  className,
-}: HighlightedCategoriesProps) {
+export function HighlightedCategories({ categories = [], className }: HighlightedCategoriesProps) {
   const [first, second, third, fourth] = categories.slice(0, 4);
 
   if (!first) return null;

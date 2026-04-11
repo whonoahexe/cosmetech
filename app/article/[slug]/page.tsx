@@ -52,35 +52,35 @@ export default async function ArticlePage({ params }: Props) {
 
   return (
     <PageTransition>
-    <div className="flex flex-col mt-4 gap-4 mb-16 md:mb-24 lg:mb-32">
-      <ArticleViewTracker slug={slug} />
-      <ArticleHero image={data.image} generatedImageUrl={generatedImageUrl} title={data.title} />
-      <ArticleHeader
-        title={data.title}
-        excerpt={data.excerpt ?? ""}
-        category={category}
-        readTime={data.readTime ?? 0}
-        isSponsored={data.isSponsored}
-      />
+      <div className="flex flex-col mt-4 gap-4 mb-16 md:mb-24 lg:mb-32">
+        <ArticleViewTracker slug={slug} />
+        <ArticleHero image={data.image} generatedImageUrl={generatedImageUrl} title={data.title} />
+        <ArticleHeader
+          title={data.title}
+          excerpt={data.excerpt ?? ""}
+          category={category}
+          readTime={data.readTime ?? 0}
+          isSponsored={data.isSponsored}
+        />
 
-      <section className="relative py-8 px-4 sm:px-6 md:py-12 lg:py-16 lg:px-32 xl:px-64">
-        <div className="mx-auto w-full max-w-6xl">
-          <ArticleBreadcrumb
-            category={breadcrumbCategory}
-            categorySlug={categorySlug}
-            articleLabel={breadcrumbLeaf}
-          />
+        <section className="relative py-8 px-4 sm:px-6 md:py-12 lg:py-16 lg:px-32 xl:px-64">
+          <div className="mx-auto w-full max-w-6xl">
+            <ArticleBreadcrumb
+              category={breadcrumbCategory}
+              categorySlug={categorySlug}
+              articleLabel={breadcrumbLeaf}
+            />
 
-          <div className="pt-8 md:pt-12 lg:pr-20 lg:pt-16">
-            <ArticleContent body={data.body} />
+            <div className="pt-8 md:pt-12 lg:pr-20 lg:pt-16">
+              <ArticleContent body={data.body} />
 
-            <Separator className="my-16" />
+              <Separator className="my-16" />
 
-            <ArticlePromo articles={promoArticles} />
+              <ArticlePromo articles={promoArticles} />
+            </div>
           </div>
-        </div>
-      </section>
-    </div>
+        </section>
+      </div>
     </PageTransition>
   );
 }

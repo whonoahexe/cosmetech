@@ -83,15 +83,12 @@ export default async function CategoriesPage({ searchParams }: Props) {
   return (
     <PageTransition>
       <div className="flex flex-col gap-4">
-      <CategoryHeroFilters categories={allCategories} />
-      {featuredArticle && (
-        <FeaturedSplitSection
-          featuredArticle={featuredArticle}
-          sideArticles={sideArticles}
-        />
-      )}
-      {allArticles.length > 0 && <AllArticlesSection articles={allArticles} />}
-    </div>
+        <CategoryHeroFilters categories={allCategories} />
+        {featuredArticle && (
+          <FeaturedSplitSection featuredArticle={featuredArticle} sideArticles={sideArticles} />
+        )}
+        {allArticles.length > 0 && <AllArticlesSection articles={allArticles} />}
+      </div>
     </PageTransition>
   );
 }

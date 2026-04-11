@@ -40,7 +40,11 @@ export function NewsHeroSection({ featuredBanner }: NewsHeroSectionProps) {
   return (
     <section className="py-4">
       <div className="group relative h-[260px] sm:h-[380px] md:h-[460px] xl:h-150 w-full overflow-hidden rounded-3xl bg-[#D9D9D9]">
-        <Link href={href} className="absolute inset-0 z-0" aria-label={`Read ${featuredBanner.title}`}>
+        <Link
+          href={href}
+          className="absolute inset-0 z-0"
+          aria-label={`Read ${featuredBanner.title}`}
+        >
           <ArticleCoverImage
             image={featuredBanner.image}
             generatedImageUrl={generatedImageUrl}
@@ -60,7 +64,9 @@ export function NewsHeroSection({ featuredBanner }: NewsHeroSectionProps) {
 
           <div className="pointer-events-auto flex items-center gap-2">
             <Badge variant="secondary">{category}</Badge>
-            {"isSponsored" in featuredBanner && featuredBanner.isSponsored && <Badge variant="default">Sponsored</Badge>}
+            {"isSponsored" in featuredBanner && featuredBanner.isSponsored && (
+              <Badge variant="default">Sponsored</Badge>
+            )}
             {readTime && (
               <>
                 <span className="type-paragraph text-foreground">&bull;</span>

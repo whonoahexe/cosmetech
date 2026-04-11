@@ -22,5 +22,9 @@ export default async function FaqPage() {
     })),
   }));
 
-  return <PageTransition><FaqPageContent categories={categories} /></PageTransition>;
+  return (
+    <PageTransition>
+      <FaqPageContent categories={categories} />
+    </PageTransition>
+  );
 }

@@ -21,8 +21,7 @@ function CategoryHeroFiltersContent({ categories = [] }: CategoryHeroFiltersProp
   const categoryParam = searchParams.get("category");
   const timeParam = searchParams.get("time") ?? "Any Time";
 
-  const selectedCategory =
-    categories.find((c) => c.slug === categoryParam) || categories[0];
+  const selectedCategory = categories.find((c) => c.slug === categoryParam) || categories[0];
 
   if (!selectedCategory) return null;
 

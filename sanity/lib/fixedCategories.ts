@@ -28,7 +28,8 @@ export const fixedCategories: FixedCategoryDefinition[] = [
     documentId: "category.r-and-d",
     title: "R&D",
     slug: "r-and-d",
-    description: "Research, clinical testing, and innovations powering the next generation of formulas.",
+    description:
+      "Research, clinical testing, and innovations powering the next generation of formulas.",
   },
   {
     documentId: "category.regulations",
@@ -52,7 +53,8 @@ export const fixedCategories: FixedCategoryDefinition[] = [
     documentId: "category.ai-technology",
     title: "AI & Technology",
     slug: "ai-technology",
-    description: "How machine learning, automation, and digital tools are reshaping the cosmetics space.",
+    description:
+      "How machine learning, automation, and digital tools are reshaping the cosmetics space.",
   },
 ];
 

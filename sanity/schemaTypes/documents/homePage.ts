@@ -38,7 +38,8 @@ export const homePageType = defineType({
     defineField({
       name: "latestStripItems",
       title: "Ad strip (after Latest section)",
-      description: "Sponsored articles and advertisements shown in the strip below the Latest/Popular section.",
+      description:
+        "Sponsored articles and advertisements shown in the strip below the Latest/Popular section.",
       type: "array",
       of: [
         defineArrayMember({

@@ -41,7 +41,8 @@ function ReadTimeBadge({ readTime }: { readTime?: number }) {
 }
 
 function ArticleCardNewsHorizontal(props: ArticleCardProps) {
-  const { image, generatedImageUrl, category, isSponsored, readTime, title, excerpt, className } = props;
+  const { image, generatedImageUrl, category, isSponsored, readTime, title, excerpt, className } =
+    props;
   const cardHref = resolveHref(props);
   return (
     <article className={cn("grid grid-cols-1 gap-5 lg:grid-cols-8", className)}>
@@ -81,7 +82,8 @@ function ArticleCardNewsHorizontal(props: ArticleCardProps) {
 }
 
 function ArticleCardFeatured(props: ArticleCardProps) {
-  const { image, generatedImageUrl, category, isSponsored, readTime, title, excerpt, className } = props;
+  const { image, generatedImageUrl, category, isSponsored, readTime, title, excerpt, className } =
+    props;
   const cardHref = resolveHref(props);
   return (
     <article className={cn("flex flex-col gap-6", className)}>
@@ -89,7 +91,13 @@ function ArticleCardFeatured(props: ArticleCardProps) {
         href={cardHref}
         className="relative block w-full overflow-hidden rounded-3xl bg-[#D9D9D9] transition-opacity hover:opacity-90 aspect-[4/3] xl:aspect-1123/600"
       >
-        <ArticleCoverImage image={image} generatedImageUrl={generatedImageUrl} alt={title} fill sizes="100vw" />
+        <ArticleCoverImage
+          image={image}
+          generatedImageUrl={generatedImageUrl}
+          alt={title}
+          fill
+          sizes="100vw"
+        />
       </Link>
 
       <div className="flex flex-col items-center gap-3 text-center">
@@ -111,7 +119,17 @@ function ArticleCardFeatured(props: ArticleCardProps) {
 }
 
 function ArticleCardGrid(props: ArticleCardProps) {
-  const { image, generatedImageUrl, category, isSponsored, readTime, title, excerpt, colSpan = 2, className } = props;
+  const {
+    image,
+    generatedImageUrl,
+    category,
+    isSponsored,
+    readTime,
+    title,
+    excerpt,
+    colSpan = 2,
+    className,
+  } = props;
   const cardHref = resolveHref(props);
   const isLargeGrid = colSpan >= 4;
 
@@ -121,7 +139,13 @@ function ArticleCardGrid(props: ArticleCardProps) {
         href={cardHref}
         className="relative block w-full overflow-hidden rounded-3xl bg-[#D9D9D9] transition-opacity hover:opacity-90 aspect-[4/3] xl:aspect-square"
       >
-        <ArticleCoverImage image={image} generatedImageUrl={generatedImageUrl} alt={title} fill sizes={isLargeGrid ? "50vw" : "25vw"} />
+        <ArticleCoverImage
+          image={image}
+          generatedImageUrl={generatedImageUrl}
+          alt={title}
+          fill
+          sizes={isLargeGrid ? "50vw" : "25vw"}
+        />
       </Link>
 
       <div className="flex flex-col gap-4 px-2">
@@ -134,12 +158,7 @@ function ArticleCardGrid(props: ArticleCardProps) {
         </div>
 
         <Link href={cardHref} className="w-fit hover:underline">
-          <h3
-            className={cn(
-              "text-foreground type-heading-3",
-              isLargeGrid && "xl:type-heading-1"
-            )}
-          >
+          <h3 className={cn("text-foreground type-heading-3", isLargeGrid && "xl:type-heading-1")}>
             {title}
           </h3>
         </Link>
@@ -148,9 +167,7 @@ function ArticleCardGrid(props: ArticleCardProps) {
           <p
             className={cn(
               "text-muted-foreground type-paragraph-medium line-clamp-2",
-              isLargeGrid
-                ? "xl:type-paragraph-large-medium xl:line-clamp-3"
-                : "xl:line-clamp-none"
+              isLargeGrid ? "xl:type-paragraph-large-medium xl:line-clamp-3" : "xl:line-clamp-none"
             )}
           >
             {excerpt}
@@ -162,7 +179,18 @@ function ArticleCardGrid(props: ArticleCardProps) {
 }
 
 function ArticleCardList(props: ArticleCardProps) {
-  const { image, generatedImageUrl, category, isSponsored, readTime, title, excerpt, showSeparator = false, showThumbnail = false, className } = props;
+  const {
+    image,
+    generatedImageUrl,
+    category,
+    isSponsored,
+    readTime,
+    title,
+    excerpt,
+    showSeparator = false,
+    showThumbnail = false,
+    className,
+  } = props;
   const href = resolveHref(props);
 
   return (

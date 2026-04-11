@@ -2,12 +2,7 @@ import type { ArticleCardData } from "@/components/pages/home/article-card";
 import { buildGeneratedImageUrl } from "@/lib/ai/images";
 import type { EventCardData } from "@/components/pages/home/event-card";
 import type { CategoryCardData } from "@/components/pages/home/category-card";
-import type {
-  ArticleCard,
-  EventCard,
-  ContentCard,
-  CategorySummary,
-} from "@/sanity/lib/types";
+import type { ArticleCard, EventCard, ContentCard, CategorySummary } from "@/sanity/lib/types";
 import { CATEGORY_REF_TO_NAME } from "@/lib/constants";
 
 function formatDate(iso?: string): string {
