@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import type { Seo } from "@/sanity/lib/types";
 
-const toMetadataOther = (metaTags: Seo["additionalMetaTags"]): NonNullable<Metadata["other"]> => {
+const toMetadataOther = (metaTags: NonNullable<Seo>["additionalMetaTags"]): NonNullable<Metadata["other"]> => {
   const other: NonNullable<Metadata["other"]> = {};
 
   for (const tag of metaTags || []) {
