@@ -1,5 +1,5 @@
 /**
- * Import SEO meta tags from the old WordPress site (Yoast) into Sanity.
+ * Import SEO meta tags + WordPress tags from the old WordPress site (Yoast) into Sanity.
  *
  * Usage:
  *   npx tsx scripts/import-seo-meta.ts [--force] [--dry-run]
@@ -34,16 +34,21 @@ if (!projectId || !writeToken) {
 
 const client = createClient({ projectId, dataset, apiVersion, token: writeToken, useCdn: false });
 
-const WP_API = "https://cosmetech.co.in/wp-json/wp/v2/posts";
+const WP_BASE = "https://cosmetech.co.in/wp-json/wp/v2";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-type WpPost = { slug: string; yoast_head: string };
+type WpPost = { slug: string; yoast_head: string; tags: number[] };
+
+type WpTag = { id: number; name: string };
+
+type MetaTag = { name: string; content: string };
 
 type ParsedSeo = {
   title?: string;
   description?: string;
   keywords?: string[];
+  additionalMetaTags?: MetaTag[];
 };
 
 type SanityArticle = {
@@ -52,7 +57,40 @@ type SanityArticle = {
   seo?: { title?: string; description?: string; keywords?: string[] } | null;
 };
 
-// ─── WordPress fetching ───────────────────────────────────────────────────────
+// ─── WordPress tag fetching ───────────────────────────────────────────────────
+
+async function fetchAllWpTags(): Promise<Map<number, string>> {
+  const tagMap = new Map<number, string>();
+  let page = 1;
+  let totalPages = 1;
+
+  while (page <= totalPages) {
+    const url = `${WP_BASE}/tags?per_page=100&page=${page}&_fields=id,name`;
+    const res = await fetch(url);
+
+    if (!res.ok) {
+      if (res.status === 400) break;
+      throw new Error(`WP tags API error: ${res.status} on page ${page}`);
+    }
+
+    if (page === 1) {
+      totalPages = parseInt(res.headers.get("X-WP-TotalPages") ?? "1", 10);
+      const total = res.headers.get("X-WP-Total") ?? "?";
+      console.log(`WP Tags API: ${total} tags across ${totalPages} pages.`);
+    }
+
+    const data = (await res.json()) as WpTag[];
+    for (const tag of data) {
+      tagMap.set(tag.id, decodeHtmlEntities(tag.name));
+    }
+    console.log(`  Fetched tags page ${page}/${totalPages} (${data.length} tags)`);
+    page++;
+  }
+
+  return tagMap;
+}
+
+// ─── WordPress post fetching ──────────────────────────────────────────────────
 
 async function fetchAllWpPosts(): Promise<WpPost[]> {
   const posts: WpPost[] = [];
@@ -60,23 +98,23 @@ async function fetchAllWpPosts(): Promise<WpPost[]> {
   let totalPages = 1;
 
   while (page <= totalPages) {
-    const url = `${WP_API}?per_page=100&page=${page}&_fields=slug,yoast_head`;
+    const url = `${WP_BASE}/posts?per_page=100&page=${page}&_fields=slug,yoast_head,tags`;
     const res = await fetch(url);
 
     if (!res.ok) {
-      if (res.status === 400) break; // WP returns 400 when page exceeds total
+      if (res.status === 400) break;
       throw new Error(`WP API error: ${res.status} on page ${page}`);
     }
 
     if (page === 1) {
       totalPages = parseInt(res.headers.get("X-WP-TotalPages") ?? "1", 10);
       const total = res.headers.get("X-WP-Total") ?? "?";
-      console.log(`WP API: ${total} posts across ${totalPages} pages.`);
+      console.log(`WP Posts API: ${total} posts across ${totalPages} pages.`);
     }
 
     const data = (await res.json()) as WpPost[];
     posts.push(...data);
-    console.log(`  Fetched page ${page}/${totalPages} (${data.length} posts)`);
+    console.log(`  Fetched posts page ${page}/${totalPages} (${data.length} posts)`);
     page++;
   }
 
@@ -102,6 +140,21 @@ function parseYoastHead(html: string): ParsedSeo {
       .filter(Boolean);
     if (kws.length > 0) seo.keywords = kws;
   }
+
+  // Capture additional named meta tags (e.g. robots, author, news_keywords)
+  // Exclude ones already handled above and noisy OG/Twitter properties
+  const SKIP_NAMES = new Set(["description", "keywords"]);
+  const additionalTags: MetaTag[] = [];
+  const metaNameRe = /<meta\s+name="([^"]+)"\s+content="([^"]*)"/g;
+  let m: RegExpExecArray | null;
+  while ((m = metaNameRe.exec(html)) !== null) {
+    const name = m[1].trim();
+    const content = decodeHtmlEntities(m[2].trim());
+    if (!SKIP_NAMES.has(name) && content) {
+      additionalTags.push({ name, content });
+    }
+  }
+  if (additionalTags.length > 0) seo.additionalMetaTags = additionalTags;
 
   return seo;
 }
@@ -155,16 +208,32 @@ function hasSeoData(seo?: SanityArticle["seo"]): boolean {
   return !!(seo.title || seo.description || (seo.keywords && seo.keywords.length > 0));
 }
 
+/** Merge two keyword arrays, deduplicating case-insensitively. */
+function mergeKeywords(a: string[], b: string[]): string[] {
+  const seen = new Set(a.map((k) => k.toLowerCase()));
+  const merged = [...a];
+  for (const kw of b) {
+    if (!seen.has(kw.toLowerCase())) {
+      seen.add(kw.toLowerCase());
+      merged.push(kw);
+    }
+  }
+  return merged;
+}
+
 // ─── Main ─────────────────────────────────────────────────────────────────────
 
 async function main() {
-  console.log(`\nSEO meta import — force=${force}, dry-run=${dryRun}\n`);
+  console.log(`\nSEO meta import (with WP tags) — force=${force}, dry-run=${dryRun}\n`);
 
-  const [wpPosts, sanityMap] = await Promise.all([
+  // Fetch WP tags, WP posts, and Sanity articles in parallel
+  const [tagMap, wpPosts, sanityMap] = await Promise.all([
+    fetchAllWpTags(),
     fetchAllWpPosts(),
     fetchAllSanityArticles(),
   ]);
 
+  console.log(`\nWP tag dictionary: ${tagMap.size} tags loaded.`);
   console.log(`\nMatching and patching...\n`);
 
   let matched = 0;
@@ -191,8 +260,16 @@ async function main() {
 
     const seo = parseYoastHead(post.yoast_head);
 
-    if (!seo.title && !seo.description) {
-      console.log(`  [skip-empty] ${post.slug} — no usable SEO data in yoast_head`);
+    // Resolve WP tag IDs → names and merge with Yoast keywords
+    const tagNames = (post.tags ?? [])
+      .map((id) => tagMap.get(id))
+      .filter((name): name is string => Boolean(name));
+
+    const allKeywords = mergeKeywords(seo.keywords ?? [], tagNames);
+    if (allKeywords.length > 0) seo.keywords = allKeywords;
+
+    if (!seo.title && !seo.description && !seo.keywords?.length && !seo.additionalMetaTags?.length) {
+      console.log(`  [skip-empty] ${post.slug} — no usable SEO data`);
       skipped++;
       continue;
     }
@@ -201,12 +278,24 @@ async function main() {
     if (seo.title) patch["seo.title"] = seo.title;
     if (seo.description) patch["seo.description"] = seo.description;
     if (seo.keywords && seo.keywords.length > 0) patch["seo.keywords"] = seo.keywords;
+    if (seo.additionalMetaTags && seo.additionalMetaTags.length > 0) {
+      patch["seo.additionalMetaTags"] = seo.additionalMetaTags.map((tag) => ({
+        _type: "metaTag",
+        _key: `${tag.name}-${Math.random().toString(36).slice(2, 7)}`,
+        name: tag.name,
+        content: tag.content,
+      }));
+    }
 
     if (dryRun) {
-      console.log(`  [dry-run] ${post.slug} → title: "${seo.title?.slice(0, 60)}..."`);
+      console.log(
+        `  [dry-run] ${post.slug}` +
+          (seo.title ? ` | title: "${seo.title.slice(0, 50)}..."` : "") +
+          (seo.keywords?.length ? ` | tags: [${seo.keywords.slice(0, 3).join(", ")}${seo.keywords.length > 3 ? ", ..." : ""}]` : "")
+      );
     } else {
       await client.patch(article._id).set(patch).commit();
-      console.log(`  [updated] ${post.slug}`);
+      console.log(`  [updated] ${post.slug} (${seo.keywords?.length ?? 0} keywords)`);
     }
 
     updated++;
@@ -215,6 +304,7 @@ async function main() {
   console.log(`
 Done.
   WP posts fetched : ${wpPosts.length}
+  WP tags loaded   : ${tagMap.size}
   Matched in Sanity: ${matched}
   Updated          : ${updated}
   Skipped (had SEO): ${skipped}
