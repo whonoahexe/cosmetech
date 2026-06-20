@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import {
-  createResendClient,
+  createResendApiClient,
   getNewsletterSegmentId,
   getNewsletterTopicId,
   isLikelyDuplicateContactError,
@@ -38,8 +38,9 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: false, error: "Valid email is required" }, { status: 400 });
   }
 
-  const resendResult = createResendClient();
+  const resendResult = createResendApiClient();
   if (!resendResult.ok) {
+    console.error("[newsletter] Failed to initialize Resend client:", resendResult.error);
     return NextResponse.json({ ok: false, error: resendResult.error }, { status: 500 });
   }
 
@@ -67,6 +68,7 @@ export async function POST(req: Request) {
   const { data, error } = await resendResult.resend.contacts.create(createPayload);
 
   if (error) {
+    console.error("[newsletter] Resend contact create failed:", error);
     if (isLikelyDuplicateContactError(error)) {
       return NextResponse.json({ ok: true, alreadySubscribed: true });
     }

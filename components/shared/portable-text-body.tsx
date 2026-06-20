@@ -2,6 +2,11 @@ import { PortableText, type PortableTextComponents } from "next-sanity";
 import { SanityImage } from "./sanity-image";
 import type { SanityImage as SanityImageType } from "@/sanity/lib/types";
 
+type PortableTextImageValue = SanityImageType & {
+  alt?: string;
+  width?: number;
+};
+
 const components: PortableTextComponents = {
   block: {
     normal: ({ children }) => (
@@ -51,13 +56,16 @@ const components: PortableTextComponents = {
   },
   types: {
     image: ({ value }) => {
-      const image = value as SanityImageType;
+      const image = value as PortableTextImageValue;
       if (!image?.asset?.url) return null;
+
+      const width = Math.min(Math.max(image.width ?? 100, 25), 100);
+
       return (
-        <figure className="my-8">
+        <figure className="my-8 mx-auto" style={{ width: `${width}%` }}>
           <SanityImage
             image={image}
-            alt={value.alt ?? ""}
+            alt={image.alt ?? ""}
             sizes="(max-width: 768px) 100vw, 800px"
             className="w-full rounded-2xl"
           />

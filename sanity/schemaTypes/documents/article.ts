@@ -98,7 +98,35 @@ export const articleType = defineType({
       name: "body",
       title: "Body",
       type: "array",
-      of: [defineArrayMember({ type: "block" }), defineArrayMember({ type: "image" })],
+      of: [
+        defineArrayMember({ type: "block" }),
+        defineArrayMember({
+          type: "image",
+          fields: [
+            defineField({
+              name: "alt",
+              title: "Alternative text",
+              type: "string",
+              description: "Describe the image for accessibility and SEO.",
+            }),
+            defineField({
+              name: "width",
+              title: "Width",
+              type: "number",
+              options: {
+                list: [
+                  { title: "Full width", value: 100 },
+                  { title: "Three quarters", value: 75 },
+                  { title: "Half width", value: 50 },
+                  { title: "Quarter width", value: 25 },
+                ],
+              },
+              initialValue: 100,
+              validation: (rule) => rule.min(25).max(100),
+            }),
+          ],
+        }),
+      ],
     }),
     defineField({
       name: "relatedArticles",

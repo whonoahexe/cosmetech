@@ -6,6 +6,10 @@ type RequiredResendEnv = {
   fromEmail: string;
 };
 
+type RequiredResendApiEnv = {
+  apiKey: string;
+};
+
 type ResendEnvResult =
   | {
       ok: true;
@@ -40,6 +44,30 @@ export function getRequiredResendEnv(): ResendEnvResult {
   };
 }
 
+type ResendApiEnvResult =
+  | {
+      ok: true;
+      value: RequiredResendApiEnv;
+    }
+  | {
+      ok: false;
+      error: string;
+    };
+
+export function getRequiredResendApiEnv(): ResendApiEnvResult {
+  const apiKey = getEnv("RESEND_API_KEY");
+  if (!apiKey) {
+    return { ok: false, error: "Missing RESEND_API_KEY" };
+  }
+
+  return {
+    ok: true,
+    value: {
+      apiKey,
+    },
+  };
+}
+
 export function createResendClient():
   | {
       ok: true;
@@ -59,6 +87,26 @@ export function createResendClient():
     ok: true,
     resend: new Resend(env.value.apiKey),
     fromEmail: env.value.fromEmail,
+  };
+}
+
+export function createResendApiClient():
+  | {
+      ok: true;
+      resend: Resend;
+    }
+  | {
+      ok: false;
+      error: string;
+    } {
+  const env = getRequiredResendApiEnv();
+  if (!env.ok) {
+    return env;
+  }
+
+  return {
+    ok: true,
+    resend: new Resend(env.value.apiKey),
   };
 }
 

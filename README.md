@@ -23,7 +23,7 @@ This repo now includes:
 Required env vars:
 
 - `RESEND_API_KEY`
-- `RESEND_FROM_EMAIL` (must use a verified Resend domain)
+- `RESEND_FROM_EMAIL` (required for contact form emails; must use a verified Resend domain)
 - `RESEND_CONTACT_TO_EMAIL`
 
 Optional newsletter targeting:
