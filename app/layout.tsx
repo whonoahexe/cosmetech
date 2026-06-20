@@ -24,6 +24,9 @@ const monoFont = Space_Mono({
 export const metadata: Metadata = {
   title: "Cosmetech",
   description: "Leading B2B cosmetics magazine and resource for industry professionals in Asia.",
+  verification: {
+    google: "ckpbXA7tZkgxB9hjVKgkOMtHpsajPreJjgtKb3Go5cE",
+  },
 };
 
 export default async function RootLayout({
