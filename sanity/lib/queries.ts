@@ -72,6 +72,13 @@ const agendaFields = `{
 	label
 }`;
 
+const articleAuthorFields = `{
+	image${imageFields},
+	name,
+	authority,
+	signature
+}`;
+
 const articleCardProjection = `{
 	_id,
 	_type,
@@ -246,6 +253,7 @@ export const articleBySlugQuery = `*[_type == "article" && slug.current == $slug
 	"categoryRefs": categories[]._ref,
 	"plainText": pt::text(body),
 	"body": body${bodyWithImages},
+	author${articleAuthorFields},
 	"relatedArticles": relatedArticles[]->${articleCardProjection},
 	seo${seoFields}
 }`;

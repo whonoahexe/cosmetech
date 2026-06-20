@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { Separator } from "@/components/ui/separator";
 import {
   ArticleBreadcrumb,
+  ArticleAuthorSection,
   ArticleContent,
   ArticleHeader,
   ArticleHero,
@@ -73,6 +74,8 @@ export default async function ArticlePage({ params }: Props) {
 
             <div className="pt-8 md:pt-12 lg:pr-20 lg:pt-16">
               <ArticleContent body={data.body} />
+
+              <ArticleAuthorSection author={data.author} />
 
               <Separator className="my-16" />
 

@@ -95,6 +95,11 @@ export const articleType = defineType({
       hidden: ({ parent }) => !parent?.isSponsored,
     }),
     defineField({
+      name: "author",
+      title: "Author",
+      type: "articleAuthor",
+    }),
+    defineField({
       name: "body",
       title: "Body",
       type: "array",

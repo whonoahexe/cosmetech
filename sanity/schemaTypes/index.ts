@@ -12,6 +12,7 @@ import { privacyPolicyPageType } from "./documents/privacyPolicyPage";
 import { siteSettingsType } from "./documents/siteSettings";
 import { termsPageType } from "./documents/termsPage";
 import { agendaItemType } from "./objects/agendaItem";
+import { articleAuthorType } from "./objects/articleAuthor";
 import { advertisementSlotType } from "./objects/advertisementSlot";
 import { contactMethodType } from "./objects/contactMethod";
 import { faqItemType } from "./objects/faqItem";
@@ -39,6 +40,7 @@ export const schemaTypes = [
   contactMethodType,
   faqItemType,
   faqSectionType,
+  articleAuthorType,
   seoType,
   socialLinkType,
   sponsoredMetaType,

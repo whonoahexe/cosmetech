@@ -54,6 +54,13 @@ export type SponsoredMeta = {
   sponsorUrl?: string;
 } | null;
 
+export type ArticleAuthor = {
+  image?: SanityImage;
+  name?: string;
+  authority?: string;
+  signature?: string;
+} | null;
+
 export type ArticleCard = {
   _id: string;
   _type: "article";
@@ -217,6 +224,7 @@ export type CategoryPageData = {
 
 export type ArticlePageData = ArticleCard & {
   body?: unknown[];
+  author?: ArticleAuthor;
   relatedArticles?: ArticleCard[];
   seo?: Seo;
 };
