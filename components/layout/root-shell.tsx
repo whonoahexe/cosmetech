@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { Footer } from "./footer";
 import { Navbar } from "./navbar";
+import { NewsletterPopup } from "./newsletter-popup";
 import type { SocialLink } from "@/sanity/lib/types";
 
 type RootShellProps = {
@@ -30,6 +31,7 @@ export function RootShell({ children, socialLinks }: RootShellProps) {
       <Navbar />
       <div className="px-6 md:px-14">{children}</div>
       <Footer socialLinks={socialLinks} />
+      <NewsletterPopup />
     </>
   );
 }
