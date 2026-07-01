@@ -47,7 +47,10 @@ import type {
   SiteSettings,
 } from "./types";
 
-type RawArticleCard = Extract<ContentCard, { _type: "article" }> & { plainText?: string };
+type RawArticleCard = Extract<ContentCard, { _type: "article" }> & {
+  plainText?: string;
+  wordCount?: number;
+};
 type RawContentCard = RawArticleCard | Extract<ContentCard, { _type: "event" }> | AdvertisementCard;
 type RawArticlePageData = ArticlePageData & {
   plainText?: string;
@@ -66,22 +69,21 @@ type RawNewsPageDocument = Omit<NewsPageDocument, "featuredBanner" | "highlighte
   highlightedStories?: RawContentCard[];
 };
 
-const estimateReadTime = (plainText?: string) => {
-  const wordCount = plainText?.trim().split(/\s+/).filter(Boolean).length ?? 0;
+const readTimeFromWordCount = (wordCount = 0) =>
+  wordCount > 0 ? Math.max(1, Math.ceil(wordCount / 225)) : undefined;
 
-  if (wordCount === 0) {
-    return undefined;
-  }
-
-  return Math.max(1, Math.ceil(wordCount / 225));
-};
+// Article-detail path: computes word count from the full body text it already loads.
+const estimateReadTime = (plainText?: string) =>
+  readTimeFromWordCount(plainText?.trim().split(/\s+/).filter(Boolean).length ?? 0);
 
 const enrichArticleCard = (article: RawArticleCard) => {
-  const { plainText, ...rest } = article;
+  const { plainText, wordCount, ...rest } = article;
 
   return {
     ...rest,
-    readTime: estimateReadTime(plainText),
+    // Cards carry a precomputed wordCount from GROQ (so lists don't ship every
+    // article's full body); fall back to plainText where a query still provides it.
+    readTime: readTimeFromWordCount(wordCount) ?? estimateReadTime(plainText),
   };
 };
 
@@ -123,31 +125,47 @@ const applyAdvertisementSlots = (
   return next.filter((item): item is ContentCard => Boolean(item));
 };
 
+// Cache published reads in Next's Data Cache. The Sanity webhook (/api/revalidate)
+// busts the matching tags on publish, so pages regenerate on content changes rather
+// than re-querying Sanity (and re-rendering on Vercel) on every single request.
+// Falls back to a 1-hour TTL if a webhook is ever missed.
+const cache = (tags: string[], revalidate: number = 3600) =>
+  ({ next: { tags, revalidate } }) as const;
+
+// Quantize "now" to the top of the hour so time-filtered queries share a stable
+// cache key within the window — otherwise a fresh millisecond timestamp per request
+// makes every fetch a cache miss.
+const stableNow = () => {
+  const d = new Date();
+  d.setMinutes(0, 0, 0);
+  return d.toISOString();
+};
+
 export const getSiteSettings = async () =>
-  client.fetch<SiteSettings | null>(
-    siteSettingsQuery,
-    {},
-    { next: { tags: ["site-settings"], revalidate: 300 } }
-  );
+  client.fetch<SiteSettings | null>(siteSettingsQuery, {}, cache(["site-settings"], 300));
 
 export const getHomePageData = async () => {
-  const homePage = await client.fetch<RawHomePageDocument | null>(homePageQuery);
+  const homePage = await client.fetch<RawHomePageDocument | null>(
+    homePageQuery,
+    {},
+    cache(["home"])
+  );
 
   if (!homePage) {
     return null;
   }
 
-  const now = new Date().toISOString();
+  const now = stableNow();
   const needsEventsFallback =
     !homePage.highlightedEvents || homePage.highlightedEvents.length === 0;
 
   const [latestItemsRaw, popularItemsRaw, sponsoredArticlesRaw, fallbackEvents] = await Promise.all(
     [
-      client.fetch<RawContentCard[]>(latestHomeContentQuery),
-      client.fetch<RawContentCard[]>(popularHomeContentQuery),
-      client.fetch<RawArticleCard[]>(sponsoredArticlesQuery),
+      client.fetch<RawContentCard[]>(latestHomeContentQuery, {}, cache(["home"])),
+      client.fetch<RawContentCard[]>(popularHomeContentQuery, {}, cache(["home"])),
+      client.fetch<RawArticleCard[]>(sponsoredArticlesQuery, {}, cache(["home"])),
       needsEventsFallback
-        ? client.fetch<EventCard[]>(ongoingEventsQuery, { now })
+        ? client.fetch<EventCard[]>(ongoingEventsQuery, { now }, cache(["home", "events"]))
         : Promise.resolve([] as EventCard[]),
     ]
   );
@@ -188,15 +206,15 @@ export const getHomePageData = async () => {
 };
 
 export const getNewsPageData = async () => {
-  const newsPage = await client.fetch<RawNewsPageDocument | null>(newsPageQuery);
+  const newsPage = await client.fetch<RawNewsPageDocument | null>(newsPageQuery, {}, cache(["news"]));
 
   if (!newsPage) {
     return null;
   }
 
   const [pressReleases, allNewsStories] = await Promise.all([
-    client.fetch<RawArticleCard[]>(pressReleasesQuery),
-    client.fetch<RawArticleCard[]>(allNewsStoriesQuery),
+    client.fetch<RawArticleCard[]>(pressReleasesQuery, {}, cache(["news"])),
+    client.fetch<RawArticleCard[]>(allNewsStoriesQuery, {}, cache(["news"])),
   ]);
 
   const data: NewsPageData = {
@@ -211,13 +229,17 @@ export const getNewsPageData = async () => {
 };
 
 export const getEventsPageData = async () => {
-  const eventsPage = await client.fetch<EventsPageDocument | null>(eventsPageQuery);
+  const eventsPage = await client.fetch<EventsPageDocument | null>(
+    eventsPageQuery,
+    {},
+    cache(["events"])
+  );
 
-  const now = new Date().toISOString();
+  const now = stableNow();
 
   const [ongoingEventsRaw, pastEventsRaw] = await Promise.all([
-    client.fetch<EventCard[]>(ongoingEventsQuery, { now }),
-    client.fetch<EventCard[]>(pastEventsQuery, { now }),
+    client.fetch<EventCard[]>(ongoingEventsQuery, { now }, cache(["events"])),
+    client.fetch<EventCard[]>(pastEventsQuery, { now }, cache(["events"])),
   ]);
 
   const ongoingEvents = applyAdvertisementSlots(
@@ -242,27 +264,37 @@ export const getEventsPageData = async () => {
   return data;
 };
 
-export const getAboutPageData = async () => client.fetch<AboutPageData | null>(aboutPageQuery);
+export const getAboutPageData = async () =>
+  client.fetch<AboutPageData | null>(aboutPageQuery, {}, cache(["pages"]));
 
 export const getContactPageData = async () =>
-  client.fetch<ContactPageData | null>(contactPageQuery);
+  client.fetch<ContactPageData | null>(contactPageQuery, {}, cache(["pages"]));
 
-export const getFaqPageData = async () => client.fetch<FaqPageData | null>(faqPageQuery);
+export const getFaqPageData = async () =>
+  client.fetch<FaqPageData | null>(faqPageQuery, {}, cache(["pages"]));
 
 export const getPrivacyPolicyPageData = async () =>
-  client.fetch<LegalPageData | null>(privacyPolicyPageQuery);
+  client.fetch<LegalPageData | null>(privacyPolicyPageQuery, {}, cache(["pages"]));
 
-export const getTermsPageData = async () => client.fetch<LegalPageData | null>(termsPageQuery);
+export const getTermsPageData = async () =>
+  client.fetch<LegalPageData | null>(termsPageQuery, {}, cache(["pages"]));
 
-export const getCategories = async () => client.fetch<CategoryPageData[]>(categoriesQuery);
+export const getCategories = async () =>
+  client.fetch<CategoryPageData[]>(categoriesQuery, {}, cache(["categories"]));
 
 export const getArticlesByCategory = async (categoryId: string) => {
-  const articles = await client.fetch<RawArticleCard[]>(articlesByCategoryRefQuery, { categoryId });
+  const articles = await client.fetch<RawArticleCard[]>(
+    articlesByCategoryRefQuery,
+    { categoryId },
+    cache(["categories", "articles"])
+  );
   return articles.map(enrichArticleCard);
 };
 
 export const searchContent = async (q: string) => {
   if (!q.trim()) return [];
+  // Not cached: the query string is user-supplied and unbounded, so caching would
+  // just fill the Data Cache with single-use entries.
   const results = await client.fetch<RawContentCard[]>(searchQuery, {
     qWild: q.trim() + "*",
   });
@@ -270,23 +302,29 @@ export const searchContent = async (q: string) => {
 };
 
 export const getSponsoredArticles = async () => {
-  const articles = await client.fetch<RawArticleCard[]>(sponsoredArticlesQuery);
+  const articles = await client.fetch<RawArticleCard[]>(sponsoredArticlesQuery, {}, cache(["articles"]));
   return articles.map(enrichArticleCard);
 };
 
 export const getAllArticles = async (sort: "latest" | "popular" = "latest") => {
   const query = sort === "popular" ? popularArticlesQuery : allArticlesQuery;
-  const articles = await client.fetch<RawArticleCard[]>(query);
+  const articles = await client.fetch<RawArticleCard[]>(query, {}, cache(["articles"]));
   return articles.map(enrichArticleCard);
 };
 
 export const getLatestArticles = async (excludeSlug = "") => {
-  const articles = await client.fetch<RawArticleCard[]>(latestArticlesQuery, { excludeSlug });
+  const articles = await client.fetch<RawArticleCard[]>(
+    latestArticlesQuery,
+    { excludeSlug },
+    cache(["articles"])
+  );
   return articles.map(enrichArticleCard);
 };
 
 export const getArticlePageData = async (slug: string) =>
-  client.fetch<RawArticlePageData | null>(articleBySlugQuery, { slug }).then((article) => {
+  client
+    .fetch<RawArticlePageData | null>(articleBySlugQuery, { slug }, cache(["articles", `article:${slug}`]))
+    .then((article) => {
     if (!article) {
       return null;
     }
@@ -301,10 +339,14 @@ export const getArticlePageData = async (slug: string) =>
   });
 
 export const getEventPageData = async (slug: string) =>
-  client.fetch<EventPageData | null>(eventBySlugQuery, { slug });
+  client.fetch<EventPageData | null>(eventBySlugQuery, { slug }, cache(["events", `event:${slug}`]));
 
 export const getCategoryPageData = async (slug: string) => {
-  const category = await client.fetch<CategoryPageData | null>(categoryBySlugQuery, { slug });
+  const category = await client.fetch<CategoryPageData | null>(
+    categoryBySlugQuery,
+    { slug },
+    cache(["categories", `category:${slug}`])
+  );
 
   if (!category) {
     return null;

@@ -104,6 +104,7 @@ export function toContentEventCardData(card: ContentCard): EventCardData {
     image: card.image,
     isVirtual: false,
     isSponsored: true,
+    isAdvertisement: true,
     href: card.destinationUrl,
   };
 }
@@ -132,6 +133,7 @@ export function toContentCardData(card: ContentCard): ArticleCardData {
     image: card.image,
     category: card.advertiser ?? "Sponsored",
     isSponsored: true,
+    isAdvertisement: true,
     title: card.title,
     excerpt: card.excerpt,
   };

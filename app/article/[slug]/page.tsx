@@ -8,6 +8,7 @@ import {
   ArticleHeader,
   ArticleHero,
   ArticlePromo,
+  ArticleShare,
   ArticleViewTracker,
 } from "@/components/pages/article";
 import { getArticlePageData, getLatestArticles } from "@/sanity/lib/loaders";
@@ -23,7 +24,15 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const data = await getArticlePageData(slug);
   if (!data) return {};
-  return buildMetadata(data.seo, { title: data.title });
+  const { generatedImageUrl } = toArticleCardData(data);
+  const ogImage = data.image?.asset?.url ?? generatedImageUrl;
+  return buildMetadata(data.seo, {
+    title: data.title,
+    description: data.excerpt,
+    image: ogImage,
+    url: `/article/${slug}`,
+    type: "article",
+  });
 }
 
 export default async function ArticlePage({ params }: Props) {
@@ -71,6 +80,10 @@ export default async function ArticlePage({ params }: Props) {
               categorySlug={categorySlug}
               articleLabel={breadcrumbLeaf}
             />
+
+            <div className="mt-6">
+              <ArticleShare title={data.title} />
+            </div>
 
             <div className="pt-8 md:pt-12 lg:pr-20 lg:pt-16">
               <ArticleContent body={data.body} />

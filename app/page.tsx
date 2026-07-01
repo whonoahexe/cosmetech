@@ -30,7 +30,10 @@ export default async function Home() {
   const latestArticles = (data?.latestItems ?? []).filter(Boolean).map(toContentCardData);
   const popularArticles = (data?.popularItems ?? []).filter(Boolean).map(toContentCardData);
   const sponsoredArticles = (data?.sponsoredItems ?? []).filter(Boolean).map(toContentCardData);
-  const stripItems = (data?.latestStripItems ?? []).filter(Boolean).map(toContentCardData);
+  const stripItems = (data?.latestStripItems ?? [])
+    .filter(Boolean)
+    .filter((item) => item._type === "advertisement")
+    .map(toContentCardData);
   const rawHighlightedEvents = (data?.highlightedEvents ?? [])
     .filter(Boolean)
     .map(toContentEventCardData);

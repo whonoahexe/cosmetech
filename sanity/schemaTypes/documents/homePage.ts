@@ -39,12 +39,12 @@ export const homePageType = defineType({
       name: "latestStripItems",
       title: "Ad strip (after Latest section)",
       description:
-        "Sponsored articles and advertisements shown in the strip below the Latest/Popular section.",
+        "Dedicated advertisements shown as full-width banners in the strip below the Latest/Popular section.",
       type: "array",
       of: [
         defineArrayMember({
           type: "reference",
-          to: [{ type: "article" }, { type: "advertisement" }],
+          to: [{ type: "advertisement" }],
         }),
       ],
       validation: (rule) => rule.max(6),

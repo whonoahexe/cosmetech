@@ -1,6 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { ArticleCoverImage } from "@/components/shared/article-cover-image";
+import { SanityImage } from "@/components/shared/sanity-image";
 import type { SanityImage as SanityImageType } from "@/sanity/lib/types";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
@@ -12,6 +13,7 @@ export interface ArticleCardData {
   generatedImageUrl?: string;
   category: string;
   isSponsored?: boolean;
+  isAdvertisement?: boolean;
   readTime?: number;
   title: string;
   excerpt?: string;
@@ -243,8 +245,49 @@ function ArticleCardList(props: ArticleCardProps) {
   );
 }
 
+// Aspect ratio of each variant's image frame — used to render dedicated ads
+// as image-only tiles that slot into the same layout.
+const AD_ASPECT: Record<NonNullable<ArticleCardProps["variant"]>, string> = {
+  grid: "aspect-[4/3] xl:aspect-square",
+  featured: "aspect-[4/3] xl:aspect-1123/600",
+  "news-horizontal": "aspect-[4/3] xl:aspect-video",
+  list: "aspect-[4/3]",
+};
+
+function ArticleCardAd(props: ArticleCardProps) {
+  const { image, title, variant = "grid", className } = props;
+  const href = resolveHref(props);
+
+  return (
+    <Link
+      href={href}
+      target={props.href ? "_blank" : undefined}
+      rel={props.href ? "noopener noreferrer sponsored" : undefined}
+      className={cn(
+        "relative block w-full overflow-hidden rounded-3xl bg-[#D9D9D9] transition-opacity hover:opacity-90",
+        AD_ASPECT[variant],
+        className
+      )}
+    >
+      {image && (
+        <SanityImage
+          image={image}
+          alt={title}
+          fill
+          sizes="50vw"
+          className="object-cover object-center"
+        />
+      )}
+    </Link>
+  );
+}
+
 export function ArticleCard(props: ArticleCardProps) {
   const { variant = "grid" } = props;
+
+  if (props.isAdvertisement) {
+    return <ArticleCardAd {...props} />;
+  }
 
   switch (variant) {
     case "news-horizontal":

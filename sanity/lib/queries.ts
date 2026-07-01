@@ -93,7 +93,7 @@ const articleCardProjection = `{
 	sponsoredMeta${sponsoredMetaFields},
 	"categories": categories[]->${categoryFields},
 	"categoryRefs": categories[]._ref,
-	"plainText": pt::text(body)
+	"wordCount": length(string::split(pt::text(body), " "))
 }`;
 
 const eventCardProjection = `{
@@ -289,8 +289,11 @@ export const ongoingEventsQuery = `*[_type == "event" && defined(startDate) && (
 
 export const pastEventsQuery = `*[_type == "event" && defined(startDate) && ((defined(endDate) && endDate < $now) || (!defined(endDate) && startDate < $now))] | order(coalesce(endDate, startDate) desc) ${eventCardProjection}`;
 
-// Query articles by category ref ID (works even when category docs are drafts/unpublished)
-export const articlesByCategoryRefQuery = `*[_type == "article" && $categoryId in categories[]._ref] | order(coalesce(publishDate, _createdAt) desc) ${articleCardProjection}`;
+// Query articles whose PRIMARY category (first ref) is this category. Matching the
+// first ref keeps a category page in sync with the badge each article shows site-wide
+// (see resolveCategory), so multi-tagged articles only appear under their primary
+// category — not every category they're loosely tagged with.
+export const articlesByCategoryRefQuery = `*[_type == "article" && categories[0]._ref == $categoryId] | order(coalesce(publishDate, _createdAt) desc) ${articleCardProjection}`;
 
 export const allArticlesQuery = `*[_type == "article"] | order(coalesce(publishDate, _createdAt) desc) ${articleCardProjection}`;
 

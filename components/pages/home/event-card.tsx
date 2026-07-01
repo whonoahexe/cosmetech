@@ -19,6 +19,7 @@ export interface EventCardData {
   image?: SanityImageType;
   isVirtual?: boolean;
   isSponsored?: boolean;
+  isAdvertisement?: boolean;
   href?: string;
 }
 
@@ -150,8 +151,74 @@ function EventCardStacked({
   );
 }
 
+function EventCardAd({
+  image,
+  title,
+  href,
+  variant = "stacked",
+  tilt = 0,
+  onHoverStart,
+  onHoverEnd,
+  className,
+}: EventCardProps) {
+  const cover = image && (
+    <SanityImage image={image} alt={title} fill sizes="300px" className="object-cover object-center" />
+  );
+
+  // List variant (events page) — static image tile, no tilt/hover motion.
+  if (variant === "list") {
+    const tile = (
+      <div
+        className={cn(
+          "relative h-48 w-full sm:h-60 sm:w-56 xl:w-109 overflow-hidden rounded-3xl bg-muted",
+          className
+        )}
+      >
+        {cover}
+      </div>
+    );
+    return href ? (
+      <Link href={href} target="_blank" rel="noopener noreferrer sponsored">
+        {tile}
+      </Link>
+    ) : (
+      tile
+    );
+  }
+
+  // Stacked (fan) variant — same tilt + hover animation as EventCardStacked.
+  const card = (
+    <motion.div
+      className={cn("cursor-pointer", className)}
+      initial={{ rotate: tilt }}
+      animate={{ rotate: tilt }}
+      whileHover={{ rotate: 0, y: -48 }}
+      transition={{ type: "spring", stiffness: 280, damping: 22 }}
+      onHoverStart={onHoverStart}
+      onHoverEnd={onHoverEnd}
+      style={{ originX: 0.5, originY: 0.5 }}
+    >
+      <div className="relative w-75 h-95 overflow-hidden rounded-[24px] border border-border bg-[#D9D9D9]">
+        {cover}
+      </div>
+    </motion.div>
+  );
+
+  return href ? (
+    <Link href={href} target="_blank" rel="noopener noreferrer sponsored">
+      {card}
+    </Link>
+  ) : (
+    card
+  );
+}
+
 export function EventCard(props: EventCardProps) {
   const { variant = "stacked" } = props;
+
+  if (props.isAdvertisement) {
+    return <EventCardAd {...props} />;
+  }
 
   if (variant === "list") {
     return <EventCardList {...props} />;

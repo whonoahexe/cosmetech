@@ -21,7 +21,10 @@ const monoFont = Space_Mono({
   weight: ["400", "700"],
 });
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://cosmetech.co.in";
+
 export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
   title: "Cosmetech",
   description: "Leading B2B cosmetics magazine and resource for industry professionals in Asia.",
   verification: {

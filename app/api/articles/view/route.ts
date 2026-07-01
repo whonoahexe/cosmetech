@@ -33,17 +33,10 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: false, error: "Missing slug" }, { status: 400 });
   }
 
-  const article = await writeClient.fetch<{ _id: string } | null>(
-    `*[_type == "article" && slug.current == $slug][0]{ _id }`,
-    { slug }
-  );
-
-  if (!article) {
-    return NextResponse.json({ ok: false, error: "Article not found" }, { status: 404 });
-  }
-
+  // Patch by query in a single request (no separate _id lookup). A non-matching
+  // slug is simply a no-op, which is fine for a fire-and-forget view counter.
   await writeClient
-    .patch(article._id)
+    .patch({ query: `*[_type == "article" && slug.current == $slug]`, params: { slug } })
     .setIfMissing({ viewCount: 0 })
     .inc({ viewCount: 1 })
     .commit();

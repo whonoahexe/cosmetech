@@ -13,7 +13,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
-const STORAGE_KEY = "cosmetech-newsletter-popup-dismissed";
 const OPEN_DELAY_MS = 1500;
 
 export function NewsletterPopup() {
@@ -25,26 +24,12 @@ export function NewsletterPopup() {
   useEffect(() => {
     if (pathname !== "/") return;
 
-    let dismissed = false;
-    try {
-      dismissed = window.localStorage.getItem(STORAGE_KEY) === "true";
-    } catch {
-      dismissed = false;
-    }
-
-    if (dismissed) return;
-
     const timer = window.setTimeout(() => setOpen(true), OPEN_DELAY_MS);
     return () => window.clearTimeout(timer);
   }, [pathname]);
 
   function dismiss() {
     setOpen(false);
-    try {
-      window.localStorage.setItem(STORAGE_KEY, "true");
-    } catch {
-      // ignore storage errors (e.g. private browsing)
-    }
   }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
@@ -78,12 +63,6 @@ export function NewsletterPopup() {
 
       setStatus("success");
       setFeedback("Thanks for joining. Check your inbox soon.");
-
-      try {
-        window.localStorage.setItem(STORAGE_KEY, "true");
-      } catch {
-        // ignore storage errors
-      }
 
       window.setTimeout(() => setOpen(false), 1800);
     } catch {

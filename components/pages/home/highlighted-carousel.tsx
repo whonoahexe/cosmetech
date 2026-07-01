@@ -86,6 +86,7 @@ export function HighlightedCarousel({ slides }: HighlightedCarouselProps) {
           const href = getSlideHref(slide);
           const category = getSlideCategory(slide);
           const readTime = getSlideReadTime(slide);
+          const isAd = slide._type === "advertisement";
 
           const generatedImageUrl =
             slide._type === "article" && slide.imageMode !== "custom"
@@ -96,7 +97,12 @@ export function HighlightedCarousel({ slides }: HighlightedCarouselProps) {
             <CarouselItem key={slide._id} className="pl-0">
               <div className="relative w-full rounded-[24px] overflow-hidden bg-[#d9d9d9] h-[300px] md:h-[420px] lg:h-[520px] xl:h-150">
                 {/* Background image */}
-                <Link href={href} className="absolute inset-0 z-0">
+                <Link
+                  href={href}
+                  target={isAd ? "_blank" : undefined}
+                  rel={isAd ? "noopener noreferrer sponsored" : undefined}
+                  className="absolute inset-0 z-0"
+                >
                   <ArticleCoverImage
                     image={slide.image}
                     generatedImageUrl={generatedImageUrl}
@@ -108,6 +114,9 @@ export function HighlightedCarousel({ slides }: HighlightedCarouselProps) {
                   />
                 </Link>
 
+                {/* Dedicated ads show the image only — no overlay, no text */}
+                {isAd ? null : (
+                  <>
                 {/* Gradient overlay — ensures text legibility on any image */}
                 <div className="absolute inset-0 z-[1] bg-gradient-to-t from-black/70 via-black/30 to-transparent pointer-events-none" />
 
@@ -116,8 +125,7 @@ export function HighlightedCarousel({ slides }: HighlightedCarouselProps) {
                   {/* Metadata row */}
                   <div className="flex items-center gap-3 pointer-events-auto">
                     <Badge>{category}</Badge>
-                    {(slide._type === "advertisement" ||
-                      ("isSponsored" in slide && slide.isSponsored)) && (
+                    {"isSponsored" in slide && slide.isSponsored && (
                       <Badge variant="secondary">Sponsored</Badge>
                     )}
                     {readTime && (
@@ -142,6 +150,8 @@ export function HighlightedCarousel({ slides }: HighlightedCarouselProps) {
                     </p>
                   )}
                 </div>
+                  </>
+                )}
               </div>
             </CarouselItem>
           );

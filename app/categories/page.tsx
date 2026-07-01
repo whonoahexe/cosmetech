@@ -55,18 +55,39 @@ export default async function CategoriesPage({ searchParams }: Props) {
   const selectedCategory = allCategories.find((c) => c.slug === slug) ?? allCategories[0];
   const selectedSlug = selectedCategory?.slug;
 
-  // Try fetching CMS-configured category data first
+  // CMS-curated hero + highlighted list (curation may be missing or partial)
   const categoryData = selectedSlug ? await getCategoryPageData(selectedSlug) : null;
 
-  let rawFeaturedArticle = categoryData?.heroArticle ?? null;
-  let rawAllItems: ContentCard[] = categoryData?.highlightedArticles ?? [];
+  // Always pull the full set of articles in this category so the page shows all
+  // of them — not just whatever was hand-curated on the category document.
+  const categoryRefId = selectedSlug ? `category.${selectedSlug}` : "";
+  const directArticles = selectedSlug ? await getArticlesByCategory(categoryRefId) : [];
 
-  // Fall back to direct article query by category ref ID when CMS data is unavailable
-  if (!rawFeaturedArticle && rawAllItems.length === 0 && selectedSlug) {
-    const categoryId = `category.${selectedSlug}`;
-    const directArticles = await getArticlesByCategory(categoryId);
-    rawFeaturedArticle = directArticles[0] ?? null;
-    rawAllItems = directArticles.slice(1);
+  // Keep the category page pure: an article may only appear here if its primary
+  // (first) category is this one. Applies to curated items too, so a mistaken
+  // highlight/hero from another category can't leak in. Non-articles (curated
+  // events/ads) pass through.
+  const isPrimaryCategory = (item: ContentCard) =>
+    item._type !== "article" || item.categoryRefs?.[0] === categoryRefId;
+
+  const curatedHero =
+    categoryData?.heroArticle && isPrimaryCategory(categoryData.heroArticle)
+      ? categoryData.heroArticle
+      : null;
+  const rawFeaturedArticle = curatedHero ?? directArticles[0] ?? null;
+
+  // Curated highlights first, then backfill with the remaining category
+  // articles — excluding the hero and de-duping by _id.
+  const seenIds = new Set<string>();
+  if (rawFeaturedArticle?._id) seenIds.add(rawFeaturedArticle._id);
+
+  const curatedHighlights = (categoryData?.highlightedArticles ?? []).filter(isPrimaryCategory);
+
+  const rawAllItems: ContentCard[] = [];
+  for (const item of [...curatedHighlights, ...directArticles]) {
+    if (!item?._id || seenIds.has(item._id)) continue;
+    seenIds.add(item._id);
+    rawAllItems.push(item);
   }
 
   // Apply time filter before mapping
