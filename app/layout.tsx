@@ -27,6 +27,15 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: "Cosmetech",
   description: "Leading B2B cosmetics magazine and resource for industry professionals in Asia.",
+  manifest: "/site.webmanifest",
+  icons: {
+    icon: [
+      { url: "/favicon.ico", type: "image/x-icon" },
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+    ],
+    apple: [{ url: "/apple-touch-icon.png", sizes: "180x180" }],
+  },
   verification: {
     google: "ckpbXA7tZkgxB9hjVKgkOMtHpsajPreJjgtKb3Go5cE",
   },
