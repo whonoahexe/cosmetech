@@ -18,7 +18,7 @@ export function AdStrip({ items }: AdStripProps) {
           href={item.href ?? "#"}
           target="_blank"
           rel="noopener noreferrer sponsored"
-          className="relative block h-28 w-full overflow-hidden rounded-2xl border bg-card shadow-sm sm:h-32 lg:h-36"
+          className="relative block aspect-[1920/200] w-full overflow-hidden rounded-2xl border bg-card shadow-sm"
         >
           <SanityImage
             image={item.image!}
