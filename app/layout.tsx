@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { Inter, Playfair_Display, Space_Mono } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
@@ -53,6 +54,17 @@ export default async function RootLayout({
       <body
         className={`${bodyFont.variable} ${headingFont.variable} ${monoFont.variable} antialiased`}
       >
+        <Script
+          src="https://www.googletagmanager.com/gtag/js?id=G-S2DRKPH0P6"
+          strategy="afterInteractive"
+        />
+        <Script id="google-tag-config" strategy="afterInteractive">
+          {`window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);} 
+gtag('js', new Date());
+
+gtag('config', 'G-S2DRKPH0P6');`}
+        </Script>
         <RootShell socialLinks={settings?.socialLinks}>{children}</RootShell>
       </body>
     </html>
