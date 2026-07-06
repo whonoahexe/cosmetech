@@ -248,7 +248,7 @@ function ArticleCardList(props: ArticleCardProps) {
 // Aspect ratio of each variant's image frame — used to render dedicated ads
 // as image-only tiles that slot into the same layout.
 const AD_ASPECT: Record<NonNullable<ArticleCardProps["variant"]>, string> = {
-  grid: "aspect-[4/3] xl:aspect-square",
+  grid: "aspect-square",
   featured: "aspect-[4/3] xl:aspect-1123/600",
   "news-horizontal": "aspect-[4/3] xl:aspect-video",
   list: "aspect-[4/3]",
