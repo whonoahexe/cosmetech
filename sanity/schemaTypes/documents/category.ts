@@ -25,6 +25,14 @@ export const categoryType = defineType({
       rows: 3,
     }),
     defineField({
+      name: "image",
+      title: "Card image",
+      description:
+        "Shown on the homepage Categories cards. Landscape photos work best. If left empty, a built-in default photo is used.",
+      type: "image",
+      options: { hotspot: true },
+    }),
+    defineField({
       name: "heroArticle",
       title: "Hero article",
       type: "reference",

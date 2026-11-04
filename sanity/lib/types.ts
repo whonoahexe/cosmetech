@@ -46,6 +46,7 @@ export type CategorySummary = {
   title: string;
   slug?: string;
   description?: string;
+  image?: SanityImage;
 };
 
 export type SponsoredMeta = {
