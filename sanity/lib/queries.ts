@@ -64,7 +64,8 @@ const categoryFields = `{
 	_id,
 	title,
 	"slug": slug.current,
-	description
+	description,
+	image${imageFields}
 }`;
 
 const agendaFields = `{

@@ -70,6 +70,7 @@ export function toCategoryCardData(cat: CategorySummary): CategoryCardData {
   return {
     name: cat.title,
     description: cat.description ?? "",
+    image: cat.image,
     slug: cat.slug,
   };
 }
